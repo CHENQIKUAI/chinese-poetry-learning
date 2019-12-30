@@ -22,7 +22,7 @@ class Signin extends Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} labelCol={labelCol} wrapperCol={wrapperCol}>
-                    <FormItem label={nameLabel} wrapp>
+                    <FormItem label={nameLabel}>
                         {getFieldDecorator(nameField, {
                             rules: [
                                 {
@@ -47,8 +47,7 @@ class Signin extends Component {
                         )}
                     </FormItem>
                     <Button htmlType="submit">登录</Button>
-                </Form>)
-                    signin
+                </Form>
             </div>
         )
     }

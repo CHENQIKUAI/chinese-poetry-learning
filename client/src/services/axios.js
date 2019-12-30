@@ -20,7 +20,7 @@ export default function ajax(url, data = {}, type = 'GET') {
                 data = { ...data, token };
             }
             promise = axios.post(url, data)
-        }
+        }   
         // 2. 如果成功了, 调用resolve(value)
         promise.then(response => {
             resolve(response.data)

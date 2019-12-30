@@ -16,19 +16,39 @@ const EXPIRESIN = config.EXPIRESIN;
 //需要生成token， 在注册和登录业务中
 router.post('/', async (req, res, next) => {
 
+    let year_first_grade = undefined;
+
+    const type = req.body.type;
+    const username = req.body.username;
+    const password = req.body.password;
+
+    if (type) {
+        const grade = req.body.grade;
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        if (month > 9) {
+            year_first_grade = year - grade + 1;
+        } else {
+            year_first_grade = year - grade;
+        }
+    }
+
     const user = {
-        _id: req.body.username,
-        username: req.body.username,
-        password: req.body.password,
-        year_first_grade: req.body.year_first_grade,
-        type: req.body.type,
+        _id: username,
+        username,
+        password,
+        year_first_grade,
+        type,
     }
 
     const theUser = await userModel.findById(user._id);
 
+
     if (theUser === null) {//如果用户不存在，则将数据存入数据库，并且生成token
         //1. 则将数据存入数据库
         const createdUser = await userModel.create(user);
+        console.log(createdUser);
 
         //2. 并且生成token
         const payload = { username: user.username };
