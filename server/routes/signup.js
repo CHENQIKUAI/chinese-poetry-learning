@@ -15,58 +15,90 @@ const EXPIRESIN = config.EXPIRESIN;
 
 //需要生成token， 在注册和登录业务中
 router.post('/', async (req, res, next) => {
+    
+    try {
+        let year_first_grade = undefined;
 
-    let year_first_grade = undefined;
-
-    const type = req.body.type;
-    const username = req.body.username;
-    const password = req.body.password;
-
-    if (type) {
+        const username = req.body.username;
+        const password = req.body.password;
         const grade = req.body.grade;
+
         const date = new Date();
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
+
+
         if (month > 9) {
             year_first_grade = year - grade + 1;
         } else {
             year_first_grade = year - grade;
         }
-    }
 
-    const user = {
-        _id: username,
-        username,
-        password,
-        year_first_grade,
-        type,
-    }
+        console.error({ grade })
 
-    const theUser = await userModel.findById(user._id);
+        const user = {
+            _id: username,
+            username,
+            password,
+            year_first_grade,
+            type: 1,
+        }
 
+        const theUser = await userModel.findById(user._id);
 
-    if (theUser === null) {//如果用户不存在，则将数据存入数据库，并且生成token
-        //1. 则将数据存入数据库
-        const createdUser = await userModel.create(user);
-        console.log(createdUser);
+        if (theUser === null) {//如果用户不存在，则将数据存入数据库，并且生成token
+            //1. 则将数据存入数据库
+            const createdUser = await userModel.create(user);
+            console.log(createdUser);
 
-        //2. 并且生成token
-        const payload = { username: user.username };
-        jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
-            //3. 返回token
-            res.json({
-                ...SUCCESS_MSG
-                ,
-                token
+            //2. 并且生成token
+            const payload = { username: user.username };
+            jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
+                //3. 返回token
+                res.json({
+                    ...SUCCESS_MSG
+                    ,
+                    token
+                });
             });
-        });
 
-    } else {//如果用户名存在，则返回错误信息
-        res.status(422).send({
+        } else {//如果用户名存在，则返回错误信息
+            res.send({
+                ...FAIL_MSG,
+                message: '用户名已被使用',
+            });
+        }
+    } catch (e) {
+
+        console.log(e);
+
+
+        res.json({
             ...FAIL_MSG,
-            message: '用户名已被使用',
-        });
+            message: "后端错误!!!!!!!!!!!!"
+        })
     }
+
+});
+
+
+
+router.post('/checkUsername', (req, res, next) => {
+    const username = req.body.username;
+    userModel.findOne({ username }).then((result) => {
+        if (result !== null) {
+            res.json({
+                ...SUCCESS_MSG,
+                result: true,
+            })
+        } else {
+            res.json({
+                ...FAIL_MSG,
+                result: false,
+            })
+        }
+    })
+
 });
 
 

@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const sha1 = require("sha1")
 
-
 // users
 const userSchema = mongoose.Schema({
     _id: { type: String },

@@ -35,14 +35,14 @@ router.post('/', async (req, res, next) => {
                 });
             });
         } else {
-            res.status(422).json({
+            res.json({
                 ...FAIL_MSG,
                 message: '密码或账号错误'
             })
         }
 
     } else {
-        res.status(422).send({
+        res.send({
             ...FAIL_MSG,
             message: '用户名不存在'
         });

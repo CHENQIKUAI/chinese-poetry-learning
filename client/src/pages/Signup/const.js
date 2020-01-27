@@ -3,13 +3,15 @@ export const nameField = "name";
 export const nameRequiredMessage = "请输入昵称";
 export const namePlaceholder = "请输入昵称";
 
-
 export const passwordLabel = "密码"
 export const passwordField = "password";
 export const passwordRequiredMessage = "请输入密码";
 export const passwordPlaceholder = "请输入密码";
 
-
+export const passwordConfirmLable = "确认密码";
+export const passwordConfirmField = "passwordConfirm";
+export const passwordConfirmRequiredMessage = "请输入密码";
+export const passwordConfirmPlaceholder = "请输入密码";
 
 export const typeLabel = "类型"
 export const typeField = "type"
@@ -100,3 +102,4 @@ export const gradeOptions = [
 
 export const submitName = "注册"
 
+export const SIGNUP_SUCCESS_MESSAGE = "注册成功，已登录!"

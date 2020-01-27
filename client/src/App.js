@@ -21,7 +21,7 @@ function App() {
             <Route path={SIGNUP_PATH} component={Signup} />
             <Route path={SIGNIN_PATH} component={Signin} />
             <Route path={SIGNOUT_PATH} component={Signout} />
-            <Route path={HOME_PATH} component={Home} />
+            <Route path={HOME_PATH} exact component={Home} />
          </Switch>
       </Router >
    );
