@@ -1,0 +1,21 @@
+.my-menu {
+
+    .nav-text {
+        text-align: center;
+    }
+
+    .ant-menu-item-selected {
+        .nav-text::before {
+            visibility: visible;
+        }
+    }
+
+    .nav-text::before {
+        position: relative;
+        content: '·';
+        margin-right: 10px;
+        visibility: hidden;
+    }
+
+
+}

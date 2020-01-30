@@ -1,19 +1,20 @@
 import React, { Component } from "react";
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, message } from 'antd';
 import { getToken } from "../../utils/token";
 import { profile } from "../../services/HomeService";
 import { Button } from "antd";
 import { SIGNOUT_PATH } from "../../constants/const";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+} from "react-router-dom";
+import MyMenu from "../Menu/MyMenu"
 import "./Home.less"
 
 const { Header, Content, Footer, Sider } = Layout;
 
 class Home extends Component {
-
-    state = {
-        msg: null
-    }
-
 
     UNSAFE_componentWillMount() {
         this.checkToken();
@@ -23,16 +24,11 @@ class Home extends Component {
     async componentDidMount() {
         const ret = await profile();
 
-        const msg = JSON.stringify(ret);
-        this.setState({
-            msg
-        })
-
         if (ret.code === -1) {
             this.props.history.push("/signin");
+            message.error("请先登录")
         }
     }
-
 
     checkToken = () => {
         const token = getToken();
@@ -41,11 +37,9 @@ class Home extends Component {
         }
     }
 
-
     handleSignout = () => {
         this.props.history.push(SIGNOUT_PATH)
     }
-
 
     render() {
         return (
@@ -60,34 +54,27 @@ class Home extends Component {
                         console.log(collapsed, type);
                     }}
                 >
-                    <div className="logo" />
-                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-                        <Menu.Item key="1">
-                            <Icon type="user" />
-                            <span className="nav-text">nav 1</span>
-                        </Menu.Item>
-                        <Menu.Item key="2">
-                            <Icon type="video-camera" />
-                            <span className="nav-text">nav 2</span>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <Icon type="upload" />
-                            <span className="nav-text">nav 3</span>
-                        </Menu.Item>
-                        <Menu.Item key="4">
-                            <Icon type="user" />
-                            <span className="nav-text">nav 4</span>
-                        </Menu.Item>
-                    </Menu>
+                    <div className="sider-logo" >
+                        中小学生古诗词学习系统
+                    </div>
+                    <MyMenu history={this.props.history} />
                 </Sider>
                 <Layout>
-                    <Header style={{ background: '#fff', padding: 0 }} />
-                    <Button onClick={this.handleSignout}>退出</Button>
-
+                    <Header style={{ background: '#fff', padding: 0 }}>
+                        <Button onClick={this.handleSignout}>退出</Button>
+                    </Header>
                     <Content style={{ margin: '24px 16px 0' }}>
-                        <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>content</div>
+                        <div style={{ padding: 24, background: '#fff', height: "100%" }}>
+                            <Router>
+                                <Switch>
+                                    <Route path="/hello" render={() => <h1>65465465</h1>} />
+                                    <Route path="/world" render={() => <h1>world</h1>} />
+                                    <Route path="/peter" render={() => <h1>对啊，我是彼得</h1>} />
+                                </Switch>
+                            </Router>
+                        </div>
                     </Content>
-                    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+                    <Footer style={{ textAlign: 'center' }}>古诗词学习系统 ©2020 Created by Peter</Footer>
                 </Layout>
             </Layout>
         )

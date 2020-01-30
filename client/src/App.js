@@ -18,10 +18,10 @@ function App() {
    return (
       <Router>
          <Switch>
-            <Route path={SIGNUP_PATH} component={Signup} />
-            <Route path={SIGNIN_PATH} component={Signin} />
-            <Route path={SIGNOUT_PATH} component={Signout} />
-            <Route path={HOME_PATH} exact component={Home} />
+            <Route path={SIGNUP_PATH} exact component={Signup} />
+            <Route path={SIGNIN_PATH} exact component={Signin} />
+            <Route path={SIGNOUT_PATH} exact component={Signout} />
+            <Route path={HOME_PATH} component={Home} />
          </Switch>
       </Router >
    );

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { clearToken } from "../../utils/token";
-import { HOME_PATH } from "../../constants/const";
+import { SIGNIN_PATH } from "../../constants/const";
 import { message } from "antd";
 
 class Signout extends Component {
@@ -12,9 +12,8 @@ class Signout extends Component {
     }
 
     redirect = () => {
-        this.props.history.push(HOME_PATH);
+        this.props.history.push(SIGNIN_PATH);
     }
-
 
     render() {
         return (

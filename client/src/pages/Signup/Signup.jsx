@@ -46,6 +46,8 @@ class Signup extends Component {
                 const password = values[passwordField];
                 const grade = values[gradeField][1];
 
+                console.log(123);
+
                 const res_data = await SignupService.signup(name, password, grade);
                 const { token } = res_data;
                 if (token) {
@@ -82,36 +84,45 @@ class Signup extends Component {
                     <h1 className="header">账号注册</h1>
                     <Form onSubmit={this.handleSubmit} labelCol={labelCol} wrapperCol={wrapperCol}>
                         <FormItem label={nameLabel} wrapp>
-                            {getFieldDecorator(nameField, {
-                                validate: [
-                                    {
-                                        trigger: "onBlur",
-                                        rules: [
-                                            {
-                                                validator: (rule, value, callback) => {
-                                                    setTimeout(() => {
-                                                        SignupService.checkUsername(value).then((result) => {
-                                                            if (result.result === true) {
-                                                                callback("该用户名已被注册")
-                                                            } else {
-                                                                callback();
-                                                            }
-                                                        })
-                                                    }, 100);
+                            {getFieldDecorator(nameField,
+                                {
+                                    validate: [
+                                        {
+                                            trigger: "onBlur",
+                                            rules: [
+                                                {
+                                                    validator: (rule, value, callback) => {
+                                                        setTimeout(() => {
+                                                            SignupService.checkUsername(value).then((result) => {
+                                                                if (result.result === true) {
+                                                                    callback("该用户名已被注册")
+                                                                } else {
+                                                                    if (value === "" || value.length < 6) {
+                                                                        callback("用户名必须不少于六位")
+                                                                    } else {
+                                                                        callback();
+                                                                    }
+                                                                }
+                                                            })
+                                                        }, 100);
+                                                    }
                                                 }
-                                            }
-                                        ]
-                                    }
-                                ],
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: nameRequiredMessage
-                                    }
-                                ]
-                            })(
-                                <Input placeholder={namePlaceholder} autoComplete="off" />
-                            )}
+                                            ]
+                                        },
+                                    ],
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: nameRequiredMessage
+                                        },
+                                        {
+                                            min: 6,
+                                            message: "用户名必须不少于6位"
+                                        }
+                                    ]
+                                })(
+                                    <Input placeholder={namePlaceholder} autoComplete="off" />
+                                )}
                         </FormItem>
                         <FormItem label={passwordLabel}>
                             {getFieldDecorator(passwordField, {
