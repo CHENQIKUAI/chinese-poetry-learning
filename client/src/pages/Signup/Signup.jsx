@@ -24,7 +24,7 @@ import {
 import "./Signup.less";
 
 import * as SignupService from "../../services/SignupService";
-import { setToken } from "../../utils/token";
+import { setToken, setType } from "../../utils/token";
 import { HOME_PATH } from "../../constants/const";
 
 
@@ -46,12 +46,12 @@ class Signup extends Component {
                 const password = values[passwordField];
                 const grade = values[gradeField][1];
 
-                console.log(123);
-
                 const res_data = await SignupService.signup(name, password, grade);
-                const { token } = res_data;
+                const { token, type } = res_data;
                 if (token) {
                     setToken(token);
+                    setType(type);
+
                     this.props.history.push(HOME_PATH);
                     message.info(SIGNUP_SUCCESS_MESSAGE);
                 }
@@ -70,6 +70,7 @@ class Signup extends Component {
 
 
     render() {
+
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const labelCol = {
             span: 5
@@ -97,7 +98,7 @@ class Signup extends Component {
                                                                 if (result.result === true) {
                                                                     callback("该用户名已被注册")
                                                                 } else {
-                                                                    if (value === "" || value.length < 6) {
+                                                                    if (!value || value === "" || value.length < 6) {
                                                                         callback("用户名必须不少于六位")
                                                                     } else {
                                                                         callback();
