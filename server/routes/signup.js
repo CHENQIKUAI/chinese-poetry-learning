@@ -15,7 +15,7 @@ const EXPIRESIN = config.EXPIRESIN;
 
 //需要生成token， 在注册和登录业务中
 router.post('/', async (req, res, next) => {
-    
+
     try {
         let year_first_grade = undefined;
 
@@ -34,8 +34,6 @@ router.post('/', async (req, res, next) => {
             year_first_grade = year - grade;
         }
 
-        console.error({ grade })
-
         const user = {
             _id: username,
             username,
@@ -52,7 +50,11 @@ router.post('/', async (req, res, next) => {
             console.log(createdUser);
 
             //2. 并且生成token
-            const payload = { username: user.username };
+            const payload = {
+                username: user.username,
+                type: 1
+            };
+
             jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
                 //3. 返回token
                 res.json({

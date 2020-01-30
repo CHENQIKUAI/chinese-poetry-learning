@@ -11,15 +11,12 @@ var router = express.Router();
 const SECRETKEY = config.SECRETKEY;
 const EXPIRESIN = config.EXPIRESIN;
 
-//FORMAT OF TOKEN
-// Authorization: Bearer <access_token>
-
 //登录
 router.post('/', async (req, res, next) => {
+
     const user = {
         username: req.body.username,
         password: req.body.password,
-        type: req.body.type,
     }
 
     const theUser = await userModel.findById(user.username);
@@ -27,11 +24,15 @@ router.post('/', async (req, res, next) => {
     if (theUser !== null) {
         const isEqual = sha1(user.password) === theUser.password;
         if (isEqual) {
-            const payload = { username: user.username };
+            const payload = {
+                username: user.username,
+                type: theUser.type
+            };
             jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
                 res.json({
                     ...SUCCESS_MSG,
-                    token
+                    token,
+                    type: theUser.type,
                 });
             });
         } else {
