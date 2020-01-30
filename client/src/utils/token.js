@@ -1,6 +1,8 @@
 const TOKEN = "token";
 const TYPE = "type";
 
+export const ADMIN_TYPE = "0";
+export const USER_TYPE = "1";
 
 
 export const setToken = (token) => {
