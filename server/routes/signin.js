@@ -29,11 +29,14 @@ router.post('/', async (req, res, next) => {
                 type: theUser.type
             };
             jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
+
                 res.json({
                     ...SUCCESS_MSG,
                     token,
                     type: theUser.type,
                 });
+
+
             });
         } else {
             res.json({
