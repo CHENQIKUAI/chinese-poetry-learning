@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require('config-lite')(__dirname);//读取配置
 const { FAIL_MSG } = require('../constants');
+const User = require("../models/User").userModel;
 
 const SECRETKEY = config.SECRETKEY;
 
@@ -23,7 +24,16 @@ const verifyToken = (req, res, next) => {
                     err
                 })
             } else {
-                // 通过验证
+                // Token验证通过
+
+                const username = authData.username;
+                const type = authData.type;
+
+                req.body.user = {
+                    username,
+                    type
+                }
+                
                 next();
             }
         })
