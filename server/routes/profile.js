@@ -2,6 +2,7 @@ var express = require('express');
 const config = require('config-lite')(__dirname);//读取配置
 const jwt = require("jsonwebtoken");
 const verifyToken = require("../middlewares/verifyToken")
+const verifyAdmin = require("../middlewares/verifyAdmin")
 const { userModel } = require("../models/User")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 var router = express.Router();
@@ -16,5 +17,6 @@ router.post('/', verifyToken, (req, res, next) => {
         message: "成功进入"
     })
 });
+
 
 module.exports = router;

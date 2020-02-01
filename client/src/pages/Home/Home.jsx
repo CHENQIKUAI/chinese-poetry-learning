@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import { Layout, message } from 'antd';
-import { getToken } from "../../utils/token";
-import { profile } from "../../services/HomeService";
-import { Button } from "antd";
-import { SIGNOUT_PATH } from "../../constants/const";
 import {
-    BrowserRouter as Router,
-    Switch,
     Route,
 } from "react-router-dom";
-import MyMenu from "../Menu/MyMenu"
+import { getToken, getType, USER_TYPE, ADMIN_TYPE } from "../../utils/token";
+import { profile } from "../../services/HomeService";
+
+import MyMenu from "../../Components/Menu/MyMenu";
+import Logout from '../../Components/Logout/Logout';
+import Time from '../../Components/Time/Time';
+
+
 import "./Home.less"
+import { MENU_ADMIN, MENU_USER } from "../../Components/Menu/menuConstants";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -19,7 +21,6 @@ class Home extends Component {
     UNSAFE_componentWillMount() {
         this.checkToken();
     }
-
 
     async componentDidMount() {
         const ret = await profile();
@@ -37,11 +38,11 @@ class Home extends Component {
         }
     }
 
-    handleSignout = () => {
-        this.props.history.push(SIGNOUT_PATH)
-    }
-
     render() {
+
+        const TYPE = getType();
+        const MENU_CONFIG = TYPE === ADMIN_TYPE ? MENU_ADMIN : MENU_USER;
+
         return (
             <Layout>
                 <Sider
@@ -54,27 +55,36 @@ class Home extends Component {
                         console.log(collapsed, type);
                     }}
                 >
-                    <div className="sider-logo" >
-                        中小学生古诗词学习系统
-                    </div>
-                    <MyMenu history={this.props.history} />
+
+                    {TYPE === USER_TYPE ?
+                        (<div className="sider-logo" >
+                            中小学生古诗词学习系统
+                    </div>) :
+                        (<div className="sider-logo" >
+                            古诗学习后台管理
+                        </div>)
+                    }
+                    <MyMenu history={this.props.history} menuConfig={MENU_CONFIG} />
                 </Sider>
                 <Layout>
                     <Header style={{ background: '#fff', padding: 0 }}>
-                        <Button onClick={this.handleSignout}>退出</Button>
+                        <Time style={{ marginLeft: "16px" }} />
+                        <Logout history={this.props.history} style={{ float: "right", marginRight: "16px" }} />
                     </Header>
                     <Content style={{ margin: '24px 16px 0' }}>
                         <div style={{ padding: 24, background: '#fff', height: "100%" }}>
-                            <Router>
-                                <Switch>
-                                    <Route path="/hello" render={() => <h1>65465465</h1>} />
-                                    <Route path="/world" render={() => <h1>world</h1>} />
-                                    <Route path="/peter" render={() => <h1>对啊，我是彼得</h1>} />
-                                </Switch>
-                            </Router>
+                            {
+                                MENU_CONFIG.map((menuItem) => {
+                                    return <Route
+                                        path={menuItem.key}
+                                        key={menuItem.key}
+                                        component={menuItem.component}
+                                    />
+                                })
+                            }
                         </div>
                     </Content>
-                    <Footer style={{ textAlign: 'center' }}>古诗词学习系统 ©2020 Created by Peter</Footer>
+                    <Footer style={{ textAlign: 'center' }}>古诗词学习系统 ©2020 Created by 陈其快</Footer>
                 </Layout>
             </Layout>
         )
