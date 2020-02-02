@@ -40,25 +40,29 @@ class Signup extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const { validateFields } = this.props.form;
-        validateFields(async (errors, values) => {
+        validateFields((errors, values) => {
             if (!errors) {
                 const name = values[nameField];
                 const password = values[passwordField];
                 const grade = values[gradeField][1];
 
-                const res_data = await SignupService.signup(name, password, grade);
-                const { token, type } = res_data;
-                if (token) {
-                    setToken(token);
-                    setType(type);
+                SignupService.signup(name, password, grade).then((res_data) => {
+                    const { token, type } = res_data;
+                    if (token) {
+                        setToken(token);
+                        setType(type);
 
-                    this.props.history.push(HOME_PATH);
-                    message.info(SIGNUP_SUCCESS_MESSAGE);
-                }
+                        this.props.history.push(HOME_PATH);
+                        message.info(SIGNUP_SUCCESS_MESSAGE);
+                    }
 
-                if (res_data.code === -1) {
-                    message.error(res_data.message)
-                }
+                    if (res_data.code === -1) {
+                        message.error(res_data.message)
+                    }
+                }).catch((err) => {
+                    message.error("出错啦", JSON.stringify(err));
+                })
+
             }
         });
     }
@@ -84,7 +88,7 @@ class Signup extends Component {
                 <div className="signup-container">
                     <h1 className="header">账号注册</h1>
                     <Form onSubmit={this.handleSubmit} labelCol={labelCol} wrapperCol={wrapperCol}>
-                        <FormItem label={nameLabel} wrapp>
+                        <FormItem label={nameLabel} >
                             {getFieldDecorator(nameField,
                                 {
                                     validate: [

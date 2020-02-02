@@ -47,6 +47,8 @@ class Signin extends Component {
                             })
                         }, 1500);
                     }
+                }).catch((err)=>{
+                    console.log(err, "web")
                 })
             }
         });
@@ -71,7 +73,6 @@ class Signin extends Component {
                 <div className="signin-container">
                     <h1 className="header">学习系统登录</h1>
                     <Form onSubmit={this.handleSubmit} labelCol={labelCol} wrapperCol={wrapperCol} >
-                        {/* <Alert className="alert-info" message={LOGIN_ERR_MSG} type="error" showIcon /> */}
                         {this.state.loginStatus === ERROR ? <Alert className="alert-info" message={LOGIN_ERR_MSG} type="error" showIcon /> : null}
                         <FormItem label={nameLabel}>
                             {getFieldDecorator(nameField, {

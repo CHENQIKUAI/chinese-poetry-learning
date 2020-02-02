@@ -21,15 +21,12 @@ export default function ajax(url, data = {}, type = 'GET') {
             }
             promise = axios.post(url, data)
         }
-        // 2. 如果成功了, 调用resolve(value)
         promise.then(response => {
+            // 2. 如果成功了, 调用resolve(value),传递结果
             resolve(response.data)
-            // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息
         }).catch(error => {
-            // reject(error)
-            // resolve(response.data)
-            console.log(error);
-            message.error('请求出错了: ' + error)
+            // 3. 如果失败了, 调用reject(reason)，发送原因
+            reject(error);
         })
     })
 }
