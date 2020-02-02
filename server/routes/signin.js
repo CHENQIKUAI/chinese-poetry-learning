@@ -2,7 +2,6 @@ var express = require('express');
 const config = require('config-lite')(__dirname);//读取配置
 const jwt = require("jsonwebtoken");
 const sha1 = require("sha1")
-const verifyToken = require("../middlewares/verifyToken")
 const { userModel } = require("../models/User")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 var router = express.Router();
@@ -14,10 +13,15 @@ const EXPIRESIN = config.EXPIRESIN;
 //登录
 router.post('/', async (req, res, next) => {
 
+    res.status(404).json({
+        error: "error"
+    })
+
     const user = {
         username: req.body.username,
         password: req.body.password,
     }
+
 
     const theUser = await userModel.findById(user.username);
 
