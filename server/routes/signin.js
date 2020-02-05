@@ -13,10 +13,6 @@ const EXPIRESIN = config.EXPIRESIN;
 //登录
 router.post('/', async (req, res, next) => {
 
-    res.status(404).json({
-        error: "error"
-    })
-
     const user = {
         username: req.body.username,
         password: req.body.password,

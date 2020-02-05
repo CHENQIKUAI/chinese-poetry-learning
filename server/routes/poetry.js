@@ -12,7 +12,7 @@ router.post('/getPoetries', verifyToken, verifyAdmin, async (req, res, next) => 
     const { currentPage, pageSize } = req.body;
     const total = await PoetryModel.find().count()
 
-    if (total - currentPage * pageSize > 0) {
+    if (total - (currentPage - 1) * pageSize > 0) {
         PoetryModel.find().skip((currentPage - 1) * pageSize).limit(pageSize).then((docs) => {
             res.json({
                 ...SUCCESS_MSG,
@@ -66,16 +66,20 @@ router.post('/createPoetry', verifyToken, verifyAdmin, async (req, res, next) =>
 
 
 // 删除
-router.post('/deletePoetry', verifyToken, verifyAdmin, async (req, res, next) => {
+router.post('/deletePoetry', verifyToken, verifyAdmin, (req, res, next) => {
+
     const { _id } = req.body;
     if (!_id)
         res.json({
             ...FAIL_MSG,
             message: "参数_id错误",
         })
-    PoetryModel.remove({ _id }).then((result) => {
+    PoetryModel.remove({ _id }).then(async (result) => {
+        const total = await PoetryModel.find().count()
+
         res.json({
             ...SUCCESS_MSG,
+            total,
             message: "删除成功",
         })
     }).catch((err) => {

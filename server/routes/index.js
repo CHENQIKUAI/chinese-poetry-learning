@@ -4,6 +4,7 @@ module.exports = (app) => {
     app.use('/signout', require('./signout'))
     app.use('/profile', require('./profile'))
     app.use('/poetry', require('./poetry'))
+    app.use('/writer', require('./writer'))
     // 404 page
     app.use(function (req, res) {
         if (!res.headersSent) {

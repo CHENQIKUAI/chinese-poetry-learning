@@ -1,5 +1,5 @@
 
-### 
+### 注册
 POST http://localhost:3001/signup HTTP/1.1
 content-type: application/json
 
@@ -9,7 +9,7 @@ content-type: application/json
     "grade": 2
 }
 
-### 
+### 登录
 POST http://localhost:3001/signin HTTP/1.1
 content-type: application/json
 
@@ -18,7 +18,7 @@ content-type: application/json
     "password":"123123"
 }
 
-###
+### 主页面
 POST http://localhost:3001/profile HTTP/1.1
 Content-Type: application/json
 
@@ -29,27 +29,13 @@ Content-Type: application/json
 }
 
 
-###
+### 检查昵称
 POST http://localhost:3001/signup/checkUsername HTTP/1.1
 Content-Type: application/json
 
 {
     "username": "peter"
 }
-
-
-
-
-
-
-
-# ###
-# POST http://localhost:3001/poetry/dog HTTP/1.1
-# Content-Type: application/json
-
-# {
-#     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkhlbmRyeSIsInR5cGUiOjEsImlhdCI6MTU4MDYyNDIyOSwiZXhwIjoxNTgwNjMxNDI5fQ.yrcB_T7VPhSayNwgwYAN0t_8wKRSugR73Fh-422QbqE"
-# }
 
 
 ### 获取诗词
@@ -74,7 +60,7 @@ Content-Type: application/json
     }
 }
 
-###
+### 
 POST http://localhost:3001/poetry/deletePoetry HTTP/1.1
 Content-Type: application/json
 
@@ -100,5 +86,56 @@ Content-Type: application/json
         "translation": "123123",
         "appreciation": "123132",
         "audioUrl":"hello"
+    }
+}
+
+
+### 作者列表
+POST http://localhost:3001/writer/getWriters HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwODg3MDQwLCJleHAiOjE1ODA4OTQyNDB9.KnEF1MhxHO3HKf-PTppZ_7iMnJ5ixe99FEdir5UWD8I",
+    "currentPage": 399,
+    "pageSize": 10
+}
+
+
+
+### 增加作者
+POST http://localhost:3001/writer/createWriter HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwODg3MDQwLCJleHAiOjE1ODA4OTQyNDB9.KnEF1MhxHO3HKf-PTppZ_7iMnJ5ixe99FEdir5UWD8I",
+    "writer": {
+        "name": "peter",
+        "simpleIntro": "laksdjflakjdsf",
+        "detailIntro": "lakjdflkqeworiu"
+    }
+}
+
+
+
+### 删除作者
+POST http://localhost:3001/writer/deleteWriter HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwODg3MDQwLCJleHAiOjE1ODA4OTQyNDB9.KnEF1MhxHO3HKf-PTppZ_7iMnJ5ixe99FEdir5UWD8I",
+    "_id": "5e3a76fd22b49d12341c6551"
+}
+
+
+
+### 修改作者信息
+POST http://localhost:3001/writer/modifyWriter HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwODg3MDQwLCJleHAiOjE1ODA4OTQyNDB9.KnEF1MhxHO3HKf-PTppZ_7iMnJ5ixe99FEdir5UWD8I",
+    "writer": {
+        "_id": "5e3a77bc419ecb2554a01d8d",
+        "name": "123123123"
     }
 }
