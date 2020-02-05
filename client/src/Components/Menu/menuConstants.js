@@ -24,7 +24,7 @@ export const MENU_ADMIN = [
         key: POETRY_MUST_LEARN,
         title: "必学篇目",
         component: PoetryMustLearn,
-    }
+    },
 ];
 
 // 用户的菜单
@@ -61,3 +61,5 @@ export const MENU_USER = [
         component: PoetryManagement,
     }
 ];
+
+

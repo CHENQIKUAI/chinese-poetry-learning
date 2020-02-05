@@ -10,7 +10,7 @@ class Signout extends Component {
         clearType();
 
         this.redirect();
-        message.info("退出成功")
+        message.success("退出成功")
     }
 
     redirect = () => {

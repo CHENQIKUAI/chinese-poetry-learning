@@ -12,7 +12,8 @@ import Time from '../../Components/Time/Time';
 
 
 import "./Home.less"
-import { MENU_ADMIN, MENU_USER } from "../../Components/Menu/menuConstants";
+import { MENU_ADMIN, MENU_USER, POETRY_MANAGEMENT } from "../../Components/Menu/menuConstants";
+import PoetryManagement from "../PoetryManagement/PoetryManagement";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -43,6 +44,12 @@ class Home extends Component {
         const TYPE = getType();
         const MENU_CONFIG = TYPE === ADMIN_TYPE ? MENU_ADMIN : MENU_USER;
 
+        if (TYPE === ADMIN_TYPE) {
+
+        }
+
+
+
         return (
             <Layout>
                 <Sider
@@ -67,24 +74,26 @@ class Home extends Component {
                     <MyMenu history={this.props.history} menuConfig={MENU_CONFIG} />
                 </Sider>
                 <Layout>
-                    <Header style={{ background: '#fff', padding: 0 }}>
-                        <Time style={{ marginLeft: "16px" }} />
-                        <Logout history={this.props.history} style={{ float: "right", marginRight: "16px" }} />
+                    <Header style={{ background: '#fff', padding: 0 }} className="header">
+                        <div>
+                            <Time style={{ marginLeft: "16px" }} />
+                            <Logout history={this.props.history} style={{ float: "right", marginRight: "16px" }} />
+                        </div>
                     </Header>
                     <Content style={{ margin: '24px 16px 0' }}>
-                        <div style={{ padding: 24, background: '#fff', height: "100%" }}>
+                        <div style={{ padding: 24, background: '#fff' }}>
                             {
                                 MENU_CONFIG.map((menuItem) => {
                                     return <Route
                                         path={menuItem.key}
                                         key={menuItem.key}
+                                        exact
                                         component={menuItem.component}
                                     />
                                 })
                             }
                         </div>
                     </Content>
-                    <Footer style={{ textAlign: 'center' }}>古诗词学习系统 ©2020 Created by 陈其快</Footer>
                 </Layout>
             </Layout>
         )

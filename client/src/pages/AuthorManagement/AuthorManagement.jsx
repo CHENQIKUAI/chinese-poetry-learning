@@ -4,7 +4,7 @@ class AuthorManagement extends Component {
     render() {
         return (
             <div>
-                AuthorManagement
+                
             </div>
         )
     }

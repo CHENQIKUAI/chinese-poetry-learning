@@ -86,7 +86,7 @@ class Signup extends Component {
         return (
             <>
                 <div className="signup-container">
-                    <h1 className="header">账号注册</h1>
+                    <h1 className="signup-title">账号注册</h1>
                     <Form onSubmit={this.handleSubmit} labelCol={labelCol} wrapperCol={wrapperCol}>
                         <FormItem label={nameLabel} >
                             {getFieldDecorator(nameField,
