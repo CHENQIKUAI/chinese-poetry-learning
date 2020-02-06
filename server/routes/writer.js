@@ -9,14 +9,14 @@ var router = express.Router();
 
 router.post('/getWriters', verifyToken, verifyAdmin, async (req, res, next) => {
 
-    const { currentPage, pageSize } = req.body;
+    const { current, pageSize } = req.body;
     const total = await WriterModel.find().count()
 
-    if (total - (currentPage - 1) * pageSize > 0) {
-        WriterModel.find().skip((currentPage - 1) * pageSize).limit(pageSize).then((docs) => {
+    if (total - (current - 1) * pageSize > 0) {
+        WriterModel.find().skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
             res.json({
                 ...SUCCESS_MSG,
-                currentPage,
+                current,
                 pageSize,
                 result: docs,
                 total,
@@ -31,7 +31,7 @@ router.post('/getWriters', verifyToken, verifyAdmin, async (req, res, next) => {
     } else {
         res.json({
             ...FAIL_MSG,
-            message: "您的查询超出了作者总量！"
+            message: "您查询的范围有误！"
         })
     }
 });
@@ -61,10 +61,12 @@ router.post('/createWriter', verifyToken, verifyAdmin, async (req, res, next) =>
 //删除
 router.post('/deleteWriter', verifyToken, verifyAdmin, async (req, res, next) => {
     const { _id } = req.body;
+    const total = await WriterModel.find().count();
     WriterModel.findByIdAndRemove(_id).then((doc) => {
         res.json({
             ...SUCCESS_MSG,
             message: "作者删除成功",
+            total
         })
     }).catch((err) => {
         res.json({
