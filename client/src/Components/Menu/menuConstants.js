@@ -1,11 +1,11 @@
 import PoetryManagement from "../../pages/PoetryManagement/PoetryManagement";
-import AuthorManagement from "../../pages/AuthorManagement/AuthorManagement";
+import WriterManagement from "../../pages/WriterManagement/WriterManagement";
 import PoetryMustLearn from "../../pages/PoetryMustLearn/PoetryMustLearn";
 
 // 管理员的菜单
 
 export const POETRY_MANAGEMENT = "/poetryManagement";
-export const AUTHOR_MANAGEMENT = "/authorManagement";
+export const WRITER_MANAGEMENT = "/writerManagement";
 export const POETRY_MUST_LEARN = "/poetryMustLearn";
 
 export const MENU_ADMIN = [
@@ -15,9 +15,9 @@ export const MENU_ADMIN = [
         component: PoetryManagement,
     },
     {
-        key: AUTHOR_MANAGEMENT,
+        key: WRITER_MANAGEMENT,
         title: "作者管理",
-        component: AuthorManagement,
+        component: WriterManagement,
 
     },
     {

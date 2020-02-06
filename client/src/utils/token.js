@@ -30,3 +30,4 @@ export const getType = () => {
 export const clearType = () => {
     localStorage.removeItem(TYPE);
 }
+

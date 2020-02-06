@@ -199,6 +199,7 @@ class PoetryList extends Component {
             columns: this.getColumns(),
             rowKey: "_id",
             pagination: this.getPagination(),
+            bordered: true,
             loading: this.getTableLoading(),
         }
     }
