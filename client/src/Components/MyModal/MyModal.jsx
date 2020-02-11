@@ -27,7 +27,8 @@ class MyModal extends Component {
 
                 httpRequest(values).then((ret) => {
                     if (ret && ret.code === 1) {
-                        message.success("保存成功!, 请到最后一页查看");
+                        this.props.mode === 1 ? message.success("保存成功!") :
+                            message.success("添加成功!, 请到最后一页查看");
                         this.handleHideModal();
                         this.onOkCallback();
                         this.handleClearMemory();

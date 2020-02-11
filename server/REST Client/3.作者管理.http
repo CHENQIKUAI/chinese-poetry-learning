@@ -1,0 +1,50 @@
+
+### 作者列表
+POST http://localhost:3001/writer/getWriters HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgxMDYyNDk4LCJleHAiOjE1ODEwNjk2OTh9.UdNO6FxcFl_yXeUnLEzaJ9HAoGd3VfFzvkFLYljbLP8",
+    "current": 1,
+    "pageSize": 10
+}
+
+
+
+### 增加作者
+POST http://localhost:3001/writer/createWriter HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwOTc2NDg4LCJleHAiOjE1ODA5ODM2ODh9._x14c0X6WND8hL2_DQHO9FGfqz5keLesVA4ZQudNfpA",
+    "writer": {
+        "name": "peter",
+        "simpleIntro": "laksdjflakjdsf",
+        "detailIntro": "lkajsdlkfjqwer"
+    }
+}
+
+
+
+### 删除作者
+POST http://localhost:3001/writer/deleteWriter HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwODg3MDQwLCJleHAiOjE1ODA4OTQyNDB9.KnEF1MhxHO3HKf-PTppZ_7iMnJ5ixe99FEdir5UWD8I",
+    "_id": "5e3a76fd22b49d12341c6551"
+}
+
+
+
+### 修改作者信息
+POST http://localhost:3001/writer/modifyWriter HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwODg3MDQwLCJleHAiOjE1ODA4OTQyNDB9.KnEF1MhxHO3HKf-PTppZ_7iMnJ5ixe99FEdir5UWD8I",
+    "writer": {
+        "_id": "5e3a77bc419ecb2554a01d8d",
+        "name": "123123123"
+    }
+}

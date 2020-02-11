@@ -1,0 +1,52 @@
+
+
+### 获取诗词
+POST http://localhost:3001/poetry/getPoetries HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwNjMxNzU4LCJleHAiOjE1ODA2Mzg5NTh9.NAzOFrvXCalSsWlErgrf7HpkArqWMAimuojsIYr6Mio",
+    "currentPage": 1,
+    "pageSize": 2
+}
+
+### 修改诗词
+POST http://localhost:3001/poetry/modifyPoetry HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwNjQxNzM4LCJleHAiOjE1ODA2NDg5Mzh9.VTTQpspbPB5d4JBEGme0hqV_nev1RyW79Anla5Ba7GI",
+    "poetry": {
+        "_id": "5e36b430cfd97634b46c3707",
+        "type": ["抒情123123"]
+    }
+}
+
+### 
+POST http://localhost:3001/poetry/deletePoetry HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwNjQxNzM4LCJleHAiOjE1ODA2NDg5Mzh9.VTTQpspbPB5d4JBEGme0hqV_nev1RyW79Anla5Ba7GI"
+}
+
+
+
+###
+POST http://localhost:3001/poetry/createPoetry HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MCwiaWF0IjoxNTgwNjQxNzM4LCJleHAiOjE1ODA2NDg5Mzh9.VTTQpspbPB5d4JBEGme0hqV_nev1RyW79Anla5Ba7GI",
+   "poetry": {
+       "type": "laksjdflkj",
+        "title":"lkajlsdkfqer",
+        "dynasty":"laksdfjlqwer",
+        "writer": "lkj11",
+        "content": "l1kjads",
+        "remark": "123123",
+        "translation": "123123",
+        "appreciation": "123132",
+        "audioUrl":"hello"
+    }
+}
