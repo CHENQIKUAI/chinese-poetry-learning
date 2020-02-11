@@ -13,4 +13,4 @@ export const DETAILINTRO_TITLE = "详细介绍";
 export const OPERATION = "opetaion";
 export const OPERATION_TITLE = "操作";
 
-export const pageSizeOptions = ["10", "20", "50"];
+export const pageSizeOptions = ["4", "10", "20", "50"];

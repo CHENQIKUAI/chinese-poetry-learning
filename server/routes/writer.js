@@ -4,16 +4,28 @@ const verifyToken = require("../middlewares/verifyToken")
 const verifyAdmin = require("../middlewares/verifyAdmin")
 const { WriterModel } = require("../models/Writer")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
+const { getFuzzyMatchingFilterObj } = require("../utils/filter")
 var router = express.Router();
 
-
 router.post('/getWriters', verifyToken, verifyAdmin, async (req, res, next) => {
+    const { current, pageSize, filterObj } = req.body;
 
-    const { current, pageSize } = req.body;
-    const total = await WriterModel.find().count()
+    const findObj = getFuzzyMatchingFilterObj(filterObj);
+
+    const total = await WriterModel.find(findObj).count()
+
+    if (total === 0) {
+        res.json({
+            ...SUCCESS_MSG,
+            current,
+            pageSize,
+            result: [],
+            total: 0,
+        })
+    }
 
     if (total - (current - 1) * pageSize > 0) {
-        WriterModel.find().skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
+        WriterModel.find(findObj).skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
             res.json({
                 ...SUCCESS_MSG,
                 current,
@@ -31,7 +43,7 @@ router.post('/getWriters', verifyToken, verifyAdmin, async (req, res, next) => {
     } else {
         res.json({
             ...FAIL_MSG,
-            message: "您查询的范围有误！"
+            message: "您查询的范围有误！",
         })
     }
 });

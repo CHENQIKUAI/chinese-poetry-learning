@@ -1,11 +1,13 @@
 import React, { Component } from "react"
-import { Table, Card, Button, Popconfirm, message, Modal, Input, Form, Tag, Tooltip } from "antd"
+import { Table, Card, Button, Popconfirm, message, Modal, Input, Form, Tag, Tooltip, Icon } from "antd"
 import { pageSizeOptions, TITLE_TITLE, TITLE, DYNASTY_TITLE, DYNASTY, WRITER_TITLE, WRITER, CONTENT_TITLE, CONTENT, TYPE_TITLE, TYPE, REMARK_TITLE, REMARK, TRANSLATION_TITLE, TRANSLATION, APPRECIATION_TITLE, APPRECIATION, OPERATION_TITLE, CREATE_MODE, EDIT_MODE } from "./const";
 import { getPoetryList, deletePoetry, createPoetry, editPoetry } from "../../services/PoetryService";
 import "./PoetryList.less"
 import { POETRY_MANAGEMENT } from "../Menu/menuConstants";
 import PoetryModal from "../PoetryModal/PoetryModal"
 import TypeList from "../TypeList/TypeList";
+import Highlighter from 'react-highlight-words';
+
 
 const TextArea = Input.TextArea;
 const FormItem = Form.Item;
@@ -16,28 +18,31 @@ class PoetryList extends Component {
         super(props);
         this.state = {
             poetryList: [],
-            currentPage: 1,
+            current: 1,
             pageSize: 10,
             total: 0,
             poetryModalVisible: false,
             modalMode: 0,
             loading: true,
+
+            [TITLE]: "",
+            [WRITER]: "",
+            [DYNASTY]: "",
+            [TYPE]: [],
+            searchedColumn: "",
         }
     }
 
-
-    fetchPoetryList = (currentPage, pageSize) => {
+    fetchPoetryList = (current, pageSize, { title, writer, dynasty, type } = {}) => {
         this.setState({
             loading: true,
         }, () => {
-            getPoetryList(currentPage, pageSize).then((ret) => {
-                const { result: list, total, currentPage, pageSize } = ret;
-
+            getPoetryList(current, pageSize, { title, writer, dynasty, type }).then((ret) => {
+                const { result: list, total, current } = ret;
                 this.setState({
                     poetryList: list,
                     total,
-                    currentPage,
-                    pageSize,
+                    current,
                     loading: false,
                 })
             })
@@ -45,9 +50,9 @@ class PoetryList extends Component {
     }
 
     componentDidMount() {
-        const currentPage = this.state.currentPage;
+        const current = this.state.current;
         const pageSize = this.state.pageSize;
-        this.fetchPoetryList(currentPage, pageSize);
+        this.fetchPoetryList(current, pageSize);
     }
 
     getDataSource = () => {
@@ -60,27 +65,32 @@ class PoetryList extends Component {
                 title: TITLE_TITLE,
                 dataIndex: TITLE,
                 width: 10,
+                align: "center",
+                ...this.getColumnSearchProps(TITLE)
             },
             {
                 title: WRITER_TITLE,
                 dataIndex: WRITER,
                 width: 5,
+                align: "center",
             },
-            // {
-            //     title: DYNASTY_TITLE,
-            //     dataIndex: DYNASTY,
-            //     width: 5,
-            // },
-
+            {
+                title: DYNASTY_TITLE,
+                dataIndex: DYNASTY,
+                width: 5,
+                align: "center",
+            },
             // {
             //     title: CONTENT_TITLE,
             //     dataIndex: CONTENT,
             //     width: 2,
+            // align: "center",
             // },
             {
                 title: TYPE_TITLE,
                 dataIndex: TYPE,
                 width: 20,
+                align: "center",
                 render: (text, record) => {
                     const tags = text;
                     return (
@@ -105,17 +115,21 @@ class PoetryList extends Component {
             // {
             //     title: REMARK_TITLE,
             //     dataIndex: REMARK,
+            // align: "center",
             // },
             // {
             //     title: TRANSLATION_TITLE,
             //     dataIndex: TRANSLATION,
+            // align: "center",
             // },
             // {
             //     title: APPRECIATION_TITLE,
+            // align: "center",
             //     dataIndex: APPRECIATION,
             // }
             {
                 title: OPERATION_TITLE,
+                align: "center",
                 render: (record, text) => {
                     return (
                         <div>
@@ -137,11 +151,121 @@ class PoetryList extends Component {
     }
 
 
+    getColumnSearchProps = dataIndex => ({
+        // 自定义筛选菜单
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                {
+                    dataIndex === "type" ?
+                        "一个type组件" :
+                        <Input
+                            ref={node => {
+                                this.searchInput = node;
+                            }}
+                            placeholder={`Search ${dataIndex}`}
+                            value={selectedKeys[0]}
+                            onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                            onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                            style={{ width: 188, marginBottom: 8, display: 'block' }}
+                        />
+                }
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    Search
+            </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    Reset
+            </Button>
+            </div>
+        ),
+        // 筛选icon
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        // 自定义筛选菜单 可见变化 时 调用
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        // 渲染该项的列
+        render: text =>
+            this.state.searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[this.state[dataIndex]]}
+                    autoEscape
+                    textToHighlight={text.toString()}
+                />
+            ) : (
+                    text
+                ),
+    });
+
+
+    getPoetryFilterObj = () => {
+        let obj = {};
+
+        const columns = [
+            {
+                dataIndex: TITLE,
+            },
+            {
+                dataIndex: WRITER,
+            },
+            {
+                dataIndex: DYNASTY,
+            },
+            {
+                dataIndex: TYPE,
+            }
+        ]
+
+        columns.map((item) => {
+            obj = {
+                ...obj,
+                [item.dataIndex]: this.state[item.dataIndex],
+            }
+        });
+        return obj;
+    }
+
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        this.setState({
+            [dataIndex]: selectedKeys[0],
+            searchedColumn: dataIndex,
+        }, () => {
+            const filterObj = this.getPoetryFilterObj();
+            this.fetchPoetryList(1, this.state.pageSize, filterObj);
+        });
+    };
+
+    handleReset = clearFilters => {
+        clearFilters();
+        const { searchedColumn } = this.state;
+        if (searchedColumn === TYPE) {
+            this.setState({ [searchedColumn]: [] });
+        } else {
+            this.setState({
+                [searchedColumn]: '',
+            }, () => {
+                console.log(searchedColumn, this.state.searchedColumn, this.state.title);
+            })
+        }
+        this.fetchPoetryList(this.state.current, this.state.pageSize, {});
+    };
+
+
 
     handleDeletePoetry = (text) => {
         const _id = text._id;
         deletePoetry(_id).then((ret) => {
-            const { currentPage, pageSize, total } = this.state;
+            const { current, pageSize, total } = this.state;
             let num;
             // 计算现在剩下了多少数目的诗词num
             if (ret && ret.total) {
@@ -150,13 +274,13 @@ class PoetryList extends Component {
                 num = total - 1;
             }
 
-            let page = currentPage;
+            let page = current;
 
-            if (num <= (currentPage - 1) * pageSize) {
-                page = currentPage - 1;
+            if (num <= (current - 1) * pageSize) {
+                page = current - 1;
             }
-
-            this.fetchPoetryList(page, pageSize);
+            const filterObj = this.getPoetryFilterObj();
+            this.fetchPoetryList(page, pageSize, filterObj);
         }).catch((e) => {
             message.error("删除错误！")
         })
@@ -169,17 +293,20 @@ class PoetryList extends Component {
     }
 
     handlePageChange = (page, pageSize) => {
-        this.fetchPoetryList(page, pageSize);
+        const filterObj = this.getPoetryFilterObj();
+        this.fetchPoetryList(page, pageSize, filterObj);
     }
 
     handleSizeChange = (current, size) => {
-        this.fetchPoetryList(current, size)
+        const filterObj = this.getPoetryFilterObj();
+        this.fetchPoetryList(current, size, filterObj)
     }
 
 
     getPagination = () => {
 
         return {
+            current: this.state.current,
             showSizeChanger: true,
             total: this.getPageTotal(),
             pageSizeOptions: pageSizeOptions,
@@ -284,7 +411,8 @@ class PoetryList extends Component {
     }
 
     handleRefreshPage = () => {
-        this.fetchPoetryList(this.state.currentPage, this.state.pageSize);
+        const filterObj = this.getPoetryFilterObj();
+        this.fetchPoetryList(this.state.current, this.state.pageSize, filterObj);
     }
 
     //保存修改过的诗词
@@ -334,12 +462,12 @@ class PoetryList extends Component {
                         <Input />
                     )}
                 </FormItem>
-                <FormItem label="题目" labelCol={{ span: 2 }} wrapperCol={{ span: 10 }}>
+                <FormItem label="标题" labelCol={{ span: 2 }} wrapperCol={{ span: 10 }}>
                     {getFieldDecorator("title", {
                         rules: [
                             {
                                 required: true,
-                                message: "请输入题目",
+                                message: "请输入标题",
                             }
                         ],
                     })(

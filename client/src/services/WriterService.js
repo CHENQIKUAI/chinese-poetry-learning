@@ -1,8 +1,8 @@
 import axios, { POST } from "./axios"
 
-export const getWriters = (current, pageSize) => {
+export const getWriters = (current, pageSize, filterObj) => {
     const url = "/writer/getWriters";
-    return axios(url, { current, pageSize }, POST);
+    return axios(url, { current, pageSize, filterObj }, POST);
 }
 
 

@@ -45,7 +45,7 @@ class PoetryModal extends Component {
                     onCancel={this.handleCancel}
                 >
                     <Form layout="horizontal" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-                        <FormItem label="题目" >
+                        <FormItem label="标题" >
                             {getFieldDecorator("title", {
                                 rules: [
                                     {

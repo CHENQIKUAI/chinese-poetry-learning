@@ -4,20 +4,31 @@ const verifyToken = require("../middlewares/verifyToken")
 const verifyAdmin = require("../middlewares/verifyAdmin")
 const { PoetryModel } = require("../models/Poetry")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
+const { getFuzzyMatchingFilterObj } = require("../utils/filter")
 var router = express.Router();
 
 
 router.post('/getPoetries', verifyToken, verifyAdmin, async (req, res, next) => {
+    const { current, pageSize, filterObj } = req.body;
 
-    const { currentPage, pageSize } = req.body;
-    const total = await PoetryModel.find().count()
+    const findObj = getFuzzyMatchingFilterObj(filterObj);
 
-    if (total - (currentPage - 1) * pageSize > 0) {
-        PoetryModel.find().skip((currentPage - 1) * pageSize).limit(pageSize).then((docs) => {
+    const total = await PoetryModel.find(findObj).count()
+
+    if (total === 0) {
+        res.json({
+            ...SUCCESS_MSG,
+            current: 1,
+            result: [],
+            total: 0,
+        })
+    }
+
+    if (total - (current - 1) * pageSize > 0) {
+        PoetryModel.find(findObj).skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
             res.json({
                 ...SUCCESS_MSG,
-                currentPage,
-                pageSize,
+                current,
                 result: docs,
                 total,
             })

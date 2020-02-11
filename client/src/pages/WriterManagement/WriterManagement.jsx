@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Card, Table, Popconfirm, message, Button, Form, Input } from "antd";
+import { Card, Table, Popconfirm, message, Button, Form, Input, Icon } from "antd";
 import { pageSizeOptions, NAME_TITLE, NAME, HEADIMAGEURL_TITLE, HEADIMAGEURL, SIMPLEINTRO_TITLE, SIMPLEINTRO, DETAILINTRO_TITLE, DETAILINTRO, OPERATION_TITLE } from "./const";
 import { getWriters, deleteWriter, modifyWriter, createWriter } from "../../services/WriterService";
+import Highlighter from 'react-highlight-words';
 import MyModal from "../../Components/MyModal/MyModal";
 import TextArea from "antd/lib/input/TextArea";
 import "./WriterManagement.less"
@@ -18,23 +19,24 @@ class AuthorManagement extends Component {
             total: 0,
             modalVisible: false,
             modalMode: 0,
+            searchText: "",
         }
     }
 
 
-
-    fetchWriterList = (current, pageSize) => {
+    fetchWriterList = (current, pageSize, { name } = { name: "" }) => {
 
         this.setState({
             loading: true,
         }, () => {
-            getWriters(current, pageSize).then((ret) => {
+            getWriters(current, pageSize, { name }).then((ret) => {
                 if (ret && ret.code === 1) {
                     const writerList = ret.result;
-                    const total = ret.total;
+                    const { current, total } = ret;
                     this.setState({
-                        writers: writerList,
+                        current,
                         total,
+                        writers: writerList,
                         loading: false,
                     })
                 } else {
@@ -42,7 +44,6 @@ class AuthorManagement extends Component {
                 }
             })
         })
-
     }
 
     componentDidMount() {
@@ -76,21 +77,112 @@ class AuthorManagement extends Component {
         }
     }
 
+
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        // confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+        }, () => {
+            this.fetchWriterList(1, this.state.pageSize, { name: selectedKeys[0] });
+        });
+
+    }
+
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+        this.fetchWriterList(1, this.state.pageSize, { name: "" });
+    };
+
+    getTitleByDataIndex = (dataIndex) => {
+        const arr = this.getTableColumns();
+        let title;
+        arr.forEach((item) => {
+            if (item.dataIndex === dataIndex) {
+                title = item.title;
+            }
+        })
+        return title;
+    }
+
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={`搜索${this.getTitleByDataIndex(dataIndex)}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    搜索
+            </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    重置
+            </Button>
+            </div>
+        ),
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: text =>
+            <Highlighter
+                highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                searchWords={[this.state.searchText]}
+                autoEscape
+                textToHighlight={text.toString()}
+            />
+
+    });
+
+
     getTableColumns = () => {
 
         return [
             {
                 title: NAME_TITLE,
                 dataIndex: NAME,
+                ...this.getColumnSearchProps(NAME),
+                width: 1,
+                align: "center",
             },
             {
-                title: HEADIMAGEURL_TITLE,
+                title: "头像",
                 dataIndex: HEADIMAGEURL,
+                render: (text, record) => {
+                    const name = record.name;
+                    // return <a href={text} target="_blank">{text}</a>
+                    return <img src={text} alt={name} style={{ width: "105px" }} />
+                },
+                width: "1%",
+                align: "center",
             },
-            // {
-            //     title: SIMPLEINTRO_TITLE,
-            //     dataIndex: SIMPLEINTRO,
-            // },
+            {
+                title: SIMPLEINTRO_TITLE,
+                dataIndex: SIMPLEINTRO,
+                width: "70%",
+                align: "center",
+            },
             // {
             //     title: DETAILINTRO_TITLE,
             //     dataIndex: DETAILINTRO,
@@ -99,13 +191,15 @@ class AuthorManagement extends Component {
                 title: OPERATION_TITLE,
                 render: (record) => {
                     return <>
-                        <span className="operate-edit" onClick={this.handleClickEditWriter.bind(this, record)}>编辑更多</span>
+                        <div className="operate-edit" onClick={this.handleClickEditWriter.bind(this, record)}>编辑更多</div>
                         <Popconfirm title="确定要删除此作者嘛" onConfirm={this.handleDeleteWriter.bind(this, record)}>
-                            <span className="operate-delete">删除</span>
+                            <div className="operate-delete">删除作者</div>
                         </Popconfirm>
                     </>
-                }
-            }
+                },
+                width: "10%",
+                align: "center",
+            },
         ]
     }
 
@@ -134,7 +228,7 @@ class AuthorManagement extends Component {
                 message.success("删除成功!");
                 const { current, pageSize, total } = this.state;
                 const showingPage = this.handleCalcShowingPage(current, pageSize, total - 1);
-                this.fetchWriterList(showingPage, pageSize);
+                this.fetchWriterList(showingPage, pageSize, { name: this.state.searchText });
             } else {
                 console.log(ret);
                 message.error("删除失败!");
@@ -162,7 +256,7 @@ class AuthorManagement extends Component {
             current: page,
             pageSize,
         }, () => {
-            this.fetchWriterList(page, pageSize);
+            this.fetchWriterList(page, pageSize, { name: this.state.searchText });
         })
     }
 
@@ -183,7 +277,7 @@ class AuthorManagement extends Component {
             current,
             pageSize: size,
         }, () => {
-            this.fetchWriterList(current, size);
+            this.fetchWriterList(current, size, { name: this.state.searchText });
         })
     }
     getTablePagination = () => {
@@ -288,7 +382,7 @@ class AuthorManagement extends Component {
 
     modalOnOkCallback = () => {
         const { current, pageSize } = this.state;
-        this.fetchWriterList(current, pageSize);
+        this.fetchWriterList(current, pageSize, { name: this.state.searchText });
     }
 
     getMyModalProps = () => {

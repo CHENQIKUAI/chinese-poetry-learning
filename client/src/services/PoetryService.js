@@ -20,7 +20,7 @@ export const editPoetry = (poetry) => {
 }
 
 
-export const getPoetryList = (currentPage, pageSize) => {
+export const getPoetryList = (current, pageSize, filterObj) => {
     const url = "/poetry/getPoetries";
-    return axios(url, { currentPage, pageSize }, POST);
+    return axios(url, { current, pageSize, filterObj }, POST);
 }
