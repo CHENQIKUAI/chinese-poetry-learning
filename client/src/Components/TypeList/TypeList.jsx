@@ -13,7 +13,6 @@ class TypeList extends Component {
     handleClose = removedTag => {
         const { value, onChange } = this.props;
         const restTags = value.filter(tag => tag !== removedTag);
-        console.log(restTags);
         onChange(restTags);
     };
 
@@ -31,7 +30,6 @@ class TypeList extends Component {
         if (inputValue && tags.indexOf(inputValue) === -1) {
             tags = [...tags, inputValue];
         }
-        console.log(tags);
         this.setState({
             inputVisible: false,
             inputValue: '',
@@ -66,6 +64,7 @@ class TypeList extends Component {
                         ref={this.saveInputRef}
                         type="text"
                         size="small"
+                        autoComplete="off"
                         style={{ width: 78 }}
                         value={inputValue}
                         onChange={this.handleInputChange}

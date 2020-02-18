@@ -55,7 +55,9 @@ class PoetryModal extends Component {
                                 ],
                                 initialValue: title,
                             })(
-                                <Input />
+                                <Input
+                                    autoComplete="off"
+                                />
                             )}
                         </FormItem>
                         <FormItem label="作者" >
@@ -67,7 +69,9 @@ class PoetryModal extends Component {
                                     }
                                 ]
                             })(
-                                <Input />
+                                <Input
+                                    autoComplete="off"
+                                />
                             )}
                         </FormItem>
                         <FormItem label="朝代" >
@@ -79,7 +83,9 @@ class PoetryModal extends Component {
                                     }
                                 ]
                             })(
-                                <Input />
+                                <Input
+                                    autoComplete="off"
+                                />
                             )}
                         </FormItem>
                         <FormItem label="类型" >
@@ -91,7 +97,9 @@ class PoetryModal extends Component {
                                     }
                                 ]
                             })(
-                                <Input />
+                                <Input
+                                    autoComplete="off"
+                                />
                             )}
                         </FormItem>
                         <FormItem label="内容" >

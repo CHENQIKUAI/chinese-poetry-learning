@@ -3,10 +3,10 @@ const config = require('config-lite')(__dirname);//读取配置
 const verifyToken = require("../middlewares/verifyToken")
 const verifyAdmin = require("../middlewares/verifyAdmin")
 const { PoetryModel } = require("../models/Poetry")
+const { MustLearnPoetryModel } = require("../models/MustLearn")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 const { getFuzzyMatchingFilterObj } = require("../utils/filter")
 var router = express.Router();
-
 
 router.post('/getPoetries', verifyToken, verifyAdmin, async (req, res, next) => {
     const { current, pageSize, filterObj } = req.body;
@@ -75,6 +75,14 @@ router.post('/createPoetry', verifyToken, verifyAdmin, async (req, res, next) =>
 });
 
 
+function deletePoetryRef(_id) {
+    const promise_arr = [
+        MustLearnPoetryModel.remove({ poetry_id: _id }),
+
+    ];
+    return Promise.all(promise_arr)
+}
+
 
 // 删除
 router.post('/deletePoetry', verifyToken, verifyAdmin, (req, res, next) => {
@@ -85,8 +93,10 @@ router.post('/deletePoetry', verifyToken, verifyAdmin, (req, res, next) => {
             ...FAIL_MSG,
             message: "参数_id错误",
         })
+
     PoetryModel.remove({ _id }).then(async (result) => {
         const total = await PoetryModel.find().count()
+        await deletePoetryRef(_id);
 
         res.json({
             ...SUCCESS_MSG,

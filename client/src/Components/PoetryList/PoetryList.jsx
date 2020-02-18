@@ -7,6 +7,7 @@ import { POETRY_MANAGEMENT } from "../Menu/menuConstants";
 import PoetryModal from "../PoetryModal/PoetryModal"
 import TypeList from "../TypeList/TypeList";
 import Highlighter from 'react-highlight-words';
+import DeleteConfirm from "../DeleteConfirm/DeleteConfirm";
 
 
 const TextArea = Input.TextArea;
@@ -131,17 +132,27 @@ class PoetryList extends Component {
                 title: OPERATION_TITLE,
                 align: "center",
                 render: (record, text) => {
+                    const title = record.title;
+                    const _id = record._id;
                     return (
                         <div>
                             <span onClick={this.handleClickEdit.bind(this, record)} className="poetry_edit_more">编辑更多</span>
-                            <Popconfirm
-                                title="确定要删除本诗词吗？"
-                                onConfirm={this.handleDeletePoetry.bind(this, text)}
-                                okText="是"
-                                cancelText="否"
+                            <DeleteConfirm confirmMsg={title} deleteFunc={() => {
+                                return deletePoetry(_id)
+                            }}
+                                deleteCallback={() => {
+                                    const { current, pageSize, total } = this.state;
+                                    let num = total - 1;
+                                    let page = current;
+                                    if (num <= (current - 1) * pageSize) {
+                                        page = current - 1;
+                                    }
+                                    const filterObj = this.getPoetryFilterObj();
+                                    this.fetchPoetryList(page, pageSize, filterObj);
+                                }}
                             >
-                                <span onClick={this.handleClickDelete} className="poetry_delete">删除</span>
-                            </Popconfirm>
+                                <span className="poetry_delete">删除</span>
+                            </DeleteConfirm>
                         </div>
                     )
                 },
@@ -159,6 +170,7 @@ class PoetryList extends Component {
                     dataIndex === "type" ?
                         "一个type组件" :
                         <Input
+                            autoComplete="off"
                             ref={node => {
                                 this.searchInput = node;
                             }}
@@ -260,10 +272,7 @@ class PoetryList extends Component {
         this.fetchPoetryList(this.state.current, this.state.pageSize, {});
     };
 
-
-
-    handleDeletePoetry = (text) => {
-        const _id = text._id;
+    handleDeletePoetry = (_id) => {
         deletePoetry(_id).then((ret) => {
             const { current, pageSize, total } = this.state;
             let num;
@@ -459,7 +468,9 @@ class PoetryList extends Component {
             <Form layout="horizontal" >
                 <FormItem label="" style={{ display: "none" }} >
                     {getFieldDecorator("_id")(
-                        <Input />
+                        <Input
+                            autoComplete="off"
+                        />
                     )}
                 </FormItem>
                 <FormItem label="标题" labelCol={{ span: 2 }} wrapperCol={{ span: 10 }}>
@@ -471,7 +482,9 @@ class PoetryList extends Component {
                             }
                         ],
                     })(
-                        <Input />
+                        <Input
+                            autoComplete="off"
+                        />
                     )}
                 </FormItem>
                 <FormItem label="作者" labelCol={{ span: 2 }} wrapperCol={{ span: 3 }}>
@@ -483,7 +496,9 @@ class PoetryList extends Component {
                             }
                         ]
                     })(
-                        <Input />
+                        <Input
+                            autoComplete="off"
+                        />
                     )}
                 </FormItem>
                 <FormItem label="朝代" labelCol={{ span: 2 }} wrapperCol={{ span: 3 }}>
@@ -495,7 +510,9 @@ class PoetryList extends Component {
                             }
                         ]
                     })(
-                        <Input />
+                        <Input
+                            autoComplete="off"
+                        />
                     )}
                 </FormItem>
                 <FormItem label="类型" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>

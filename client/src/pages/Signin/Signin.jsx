@@ -48,7 +48,7 @@ class Signin extends Component {
                         }, 1500);
                     }
                 }).catch((err) => {
-                    console.log(err, "web")
+                    console.error(err, "web")
                 })
             }
         });

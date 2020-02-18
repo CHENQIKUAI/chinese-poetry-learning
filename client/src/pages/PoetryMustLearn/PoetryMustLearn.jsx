@@ -69,7 +69,6 @@ class PoetryMustLearn extends Component {
                     }, () => {
                         const gradeColRowSpan = this.calcColRowSpan(this.state.poetryList, "grade");
                         const semesterColRowSpan = this.calcColRowSpan(this.state.poetryList, "semester");
-                        console.log(gradeColRowSpan, semesterColRowSpan);
 
                         this.setState({
                             gradeColRowSpan,
@@ -195,11 +194,11 @@ class PoetryMustLearn extends Component {
                 this.fetchMustLearnPoetryList(this.state.gradeSemester);
             } else {
                 message.error("删除失败");
-                console.log(ret);
+                console.error(ret);
             }
         }).catch((error) => {
             message.error("删除失败");
-            console.log(error);
+            console.error(error);
         })
     }
 
@@ -259,14 +258,14 @@ class PoetryMustLearn extends Component {
                     })
                 } else {
                     message.error("搜索错误!")
-                    console.log(ret);
+                    console.error(ret);
                 }
                 this.setState({
                     searchedLoading: false,
                 })
             }).catch((err) => {
                 message.error("搜索错误!")
-                console.log(err);
+                console.error(err);
                 this.setState({
                     searchedLoading: false,
                 })
@@ -361,7 +360,7 @@ class PoetryMustLearn extends Component {
                     className="modal-search-poetry"
                 >
                     <div className="modal-search-line">
-                        <Input className="ipt-search-title" onChange={this.handleInputChange} onPressEnter={this.handlePressEnter} value={this.state.searchText} placeholder="请输入诗词标题" />
+                        <Input autoComplete="off" className="ipt-search-title" onChange={this.handleInputChange} onPressEnter={this.handlePressEnter} value={this.state.searchText} placeholder="请输入诗词标题" />
                         <Button className="btn-search" onClick={this.handleClickSearch} type="primary">搜索</Button>
                     </div>
                     <Table {...this.getSearchedTableProps()} />

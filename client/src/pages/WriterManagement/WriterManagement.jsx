@@ -230,11 +230,11 @@ class AuthorManagement extends Component {
                 const showingPage = this.handleCalcShowingPage(current, pageSize, total - 1);
                 this.fetchWriterList(showingPage, pageSize, { name: this.state.searchText });
             } else {
-                console.log(ret);
+                console.error(ret);
                 message.error("删除失败!");
             }
         }).catch((err) => {
-            console.log(err);
+            console.error(err);
             message.error("删除失败!")
         })
     }

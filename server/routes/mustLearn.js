@@ -78,6 +78,8 @@ router.post('/getMustLearnPoetryList', verifyToken, verifyAdmin, async (req, res
                  * poetry_id
                  * 是以上两个字段
                  */
+
+
                 const requestArr = [];
 
                 for (let i = 0; i < docs.length; ++i) {
@@ -95,9 +97,7 @@ router.post('/getMustLearnPoetryList', verifyToken, verifyAdmin, async (req, res
                 }
 
                 Promise.all(requestArr).then((poetry_docs) => {
-
                     const arr = poetry_docs.map((item, index) => {
-
                         const str = docs[index]._doc.grade_semester;
                         return {
                             ...item._doc,

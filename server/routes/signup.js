@@ -47,7 +47,6 @@ router.post('/', async (req, res, next) => {
         if (theUser === null) {//如果用户不存在，则将数据存入数据库，并且生成token
             //1. 则将数据存入数据库
             const createdUser = await userModel.create(user);
-            console.log(createdUser);
 
             //2. 并且生成token
             const payload = {
@@ -71,8 +70,7 @@ router.post('/', async (req, res, next) => {
             });
         }
     } catch (e) {
-
-        console.log(e);
+        console.error(e);
 
 
         res.json({
