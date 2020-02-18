@@ -2,12 +2,13 @@ import React, { Component } from "react"
 import { Menu } from "antd"
 
 import "./MyMenu.less"
-import { POETRY_MANAGEMENT } from "./menuConstants";
+import { POETRY_MANAGEMENT, PERSONAL_SETTING } from "./menuConstants";
 
 class MyMenu extends Component {
 
     state = {
-        selectedKey: null
+        selectedKey: null,
+        openKeys: [PERSONAL_SETTING],
     }
 
     getFirstPath = () => {
@@ -33,7 +34,6 @@ class MyMenu extends Component {
         this.setState({
             selectedKey
         })
-
     }
 
 
@@ -45,15 +45,44 @@ class MyMenu extends Component {
         })
     }
 
+    getMenuProps = () => {
+        return {
+            theme: "dark",
+            mode: "inline",
+            className: "my-menu",
+            onClick: this.handleClickMenuItem,
+            selectedKeys: [this.state.selectedKey],
+            openKeys: this.state.openKeys,
+        }
+    }
+
     render() {
         return (
-            <Menu theme="dark" mode="inline" className="my-menu" onClick={this.handleClickMenuItem} selectedKeys={[this.state.selectedKey]}>
-                {this.props.menuConfig.map(item => (
-                    <Menu.Item key={item.key}>
-                        <p className="nav-text">{item.title}</p>
-                    </Menu.Item>
-                ))
-                }
+            <Menu {...this.getMenuProps()}>
+                {this.props.menuConfig.map(item => {
+                    if (item.children && item.children.length !== 0) {
+                        const children = item.children;
+                        return (
+                            <Menu.SubMenu key={item.key} title={item.title}>
+                                {
+                                    children.map((i) => {
+                                        return (
+                                            <Menu.Item key={i.key}>
+                                                <p className="nav-text">{i.title}</p>
+                                            </Menu.Item>
+                                        )
+                                    })
+                                }
+                            </Menu.SubMenu>
+                        )
+                    } else {
+                        return (
+                            <Menu.Item key={item.key}>
+                                <p className="nav-text">{item.title}</p>
+                            </Menu.Item>
+                        );
+                    }
+                })}
             </Menu>
         )
     }

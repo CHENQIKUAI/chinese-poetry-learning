@@ -44,25 +44,12 @@ class Home extends Component {
         const TYPE = getType();
         const MENU_CONFIG = TYPE === ADMIN_TYPE ? MENU_ADMIN : MENU_USER;
 
-        if (TYPE === ADMIN_TYPE) {
-
-        }
-
-
-
         return (
             <Layout>
                 <Sider
                     breakpoint="lg"
                     collapsedWidth="0"
-                    onBreakpoint={broken => {
-                        console.log(broken);
-                    }}
-                    onCollapse={(collapsed, type) => {
-                        console.log(collapsed, type);
-                    }}
                 >
-
                     {TYPE === USER_TYPE ?
                         (<div className="sider-logo" >
                             中小学生古诗词学习系统
@@ -81,18 +68,36 @@ class Home extends Component {
                         </div>
                     </Header>
                     <Content style={{ margin: '24px 16px 0' }}>
+
+
                         <div style={{ padding: 24, background: '#fff' }}>
                             {
+
                                 MENU_CONFIG.map((menuItem) => {
-                                    return <Route
-                                        path={menuItem.key}
-                                        key={menuItem.key}
-                                        exact
-                                        component={menuItem.component}
-                                    />
+                                    if (menuItem.children && menuItem.children.length !== 0) {
+
+                                        return menuItem.children.map(i => {
+                                            return <Route
+                                                path={i.key}
+                                                key={i.key}
+                                                exact
+                                                component={i.component} />
+                                        })
+
+                                    } else {
+                                        return <Route
+                                            path={menuItem.key}
+                                            key={menuItem.key}
+                                            exact
+                                            component={menuItem.component}
+                                        />
+                                    }
                                 })
                             }
                         </div>
+
+
+
                     </Content>
                 </Layout>
             </Layout>

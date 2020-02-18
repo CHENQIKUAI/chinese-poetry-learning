@@ -27,6 +27,7 @@ export const MENU_ADMIN = [
     },
 ];
 
+
 // 用户的菜单
 export const POETRY_SEARCH = '/poetrySearch'
 export const POETRY_LEARN = '/poetryLearn'
@@ -58,7 +59,13 @@ export const MENU_USER = [
     {
         key: PERSONAL_SETTING,
         title: "个人设置",
-        component: PoetryManagement,
+        children: [
+            {
+                key: "/test",
+                title: "测试",
+                component: PoetryManagement,
+            }
+        ]
     }
 ];
 
