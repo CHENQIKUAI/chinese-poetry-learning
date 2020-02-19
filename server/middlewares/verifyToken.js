@@ -25,15 +25,12 @@ const verifyToken = (req, res, next) => {
                 })
             } else {
                 // Token验证通过
-
-                const username = authData.username;
-                const type = authData.type;
-
+                const { username, type, _id } = authData
                 req.body.user = {
                     username,
-                    type
+                    type,
+                    _id,
                 }
-                
                 next();
             }
         })
