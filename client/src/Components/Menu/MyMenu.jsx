@@ -8,7 +8,7 @@ class MyMenu extends Component {
 
     state = {
         selectedKey: null,
-        openKeys: [PERSONAL_SETTING],
+        openKeys: [],
     }
 
     getFirstPath = () => {
@@ -18,10 +18,9 @@ class MyMenu extends Component {
     }
 
     UNSAFE_componentWillMount() {
+
         const menuConfig = this.props.menuConfig;
-
         const pathname = this.props.history.location.pathname;
-
         let selectedKey = null;
         if (pathname === "/") {
             const first_key = menuConfig[0].key;
@@ -34,6 +33,26 @@ class MyMenu extends Component {
         this.setState({
             selectedKey
         })
+
+        const openKeys = [];
+        menuConfig.map((item) => {
+            if (item && item.children && Array.isArray(item.children)) {
+                openKeys.push(item.key)
+            }
+        })
+        this.setState({
+            openKeys
+        })
+
+
+        window.onhashchange = (e) => {
+            const pathname = this.props.history.location.pathname;
+            this.setState({
+                selectedKey: pathname
+
+            })
+        }
+
     }
 
 

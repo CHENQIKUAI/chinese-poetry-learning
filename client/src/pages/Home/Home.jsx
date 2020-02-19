@@ -69,7 +69,6 @@ class Home extends Component {
                     </Header>
                     <Content style={{ margin: '24px 16px 0' }}>
 
-
                         <div style={{ padding: 24, background: '#fff' }}>
                             {
 
@@ -80,7 +79,6 @@ class Home extends Component {
                                             return <Route
                                                 path={i.key}
                                                 key={i.key}
-                                                exact
                                                 component={i.component} />
                                         })
 
@@ -88,7 +86,6 @@ class Home extends Component {
                                         return <Route
                                             path={menuItem.key}
                                             key={menuItem.key}
-                                            exact
                                             component={menuItem.component}
                                         />
                                     }
