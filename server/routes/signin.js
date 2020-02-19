@@ -26,7 +26,8 @@ router.post('/', async (req, res, next) => {
         if (isEqual) {
             const payload = {
                 username: user.username,
-                type: theUser.type
+                type: theUser.type,
+                _id: theUser._id,
             };
             jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
 

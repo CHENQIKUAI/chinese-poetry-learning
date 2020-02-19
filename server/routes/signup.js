@@ -51,7 +51,8 @@ router.post('/', async (req, res, next) => {
             //2. 并且生成token
             const payload = {
                 username: user.username,
-                type: 1
+                type: 1,
+                _id: theUser._id,
             };
 
             jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {

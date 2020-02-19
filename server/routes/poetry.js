@@ -2,13 +2,16 @@ var express = require('express');
 const config = require('config-lite')(__dirname);//读取配置
 const verifyToken = require("../middlewares/verifyToken")
 const verifyAdmin = require("../middlewares/verifyAdmin")
+const verifyUser = require("../middlewares/verifyUser");
 const { PoetryModel } = require("../models/Poetry")
+const { FavoritePoetryModel } = require("../models/FavoritePoetry")
 const { MustLearnPoetryModel } = require("../models/MustLearn")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 const { getFuzzyMatchingFilterObj } = require("../utils/filter")
 var router = express.Router();
 
-router.post('/getPoetries', verifyToken, verifyAdmin, async (req, res, next) => {
+
+router.post('/getPoetries', verifyToken, async (req, res, next) => {
     const { current, pageSize, filterObj } = req.body;
 
     const findObj = getFuzzyMatchingFilterObj(filterObj);
@@ -78,7 +81,6 @@ router.post('/createPoetry', verifyToken, verifyAdmin, async (req, res, next) =>
 function deletePoetryRef(_id) {
     const promise_arr = [
         MustLearnPoetryModel.remove({ poetry_id: _id }),
-
     ];
     return Promise.all(promise_arr)
 }
@@ -135,6 +137,22 @@ router.post('/modifyPoetry', verifyToken, verifyAdmin, async (req, res, next) =>
         })
     })
 });
+
+
+// 用户收藏诗词
+router.post('/like', verifyToken, verifyUser, async (req, res, next) => {
+    const { _id: user_id } = req.body.user; //用户id
+    const { poetry_id } = req.body; // 前端发送来的诗词id
+
+    FavoritePoetryModel.create({ user_id, poetry_id }).then((doc) => {
+        res.json({
+            ...SUCCESS_MSG,
+            message: "收藏成功",
+        })
+    })
+
+});
+
 
 
 
