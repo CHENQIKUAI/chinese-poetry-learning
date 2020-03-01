@@ -1,0 +1,10 @@
+
+
+POST http://localhost:3001/personalSetting/fetchUsername HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBldGVyIiwidHlwZSI6MSwiX2lkIjoiNWU1MjhkN2IxMTc1ZTY1M2UwZmU0OTcwIiwiaWF0IjoxNTgyODEwNzI1LCJleHAiOjE1ODI4MTc5MjV9.zmwq6ta9Gfb3cCoeUm62V-YRqRsuxB3GDF9EB7A3ics"
+}
+
+

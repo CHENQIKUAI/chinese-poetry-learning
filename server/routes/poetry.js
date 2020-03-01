@@ -139,21 +139,5 @@ router.post('/modifyPoetry', verifyToken, verifyAdmin, async (req, res, next) =>
 });
 
 
-// 用户收藏诗词
-router.post('/like', verifyToken, verifyUser, async (req, res, next) => {
-    const { _id: user_id } = req.body.user; //用户id
-    const { poetry_id } = req.body; // 前端发送来的诗词id
-
-    FavoritePoetryModel.create({ user_id, poetry_id }).then((doc) => {
-        res.json({
-            ...SUCCESS_MSG,
-            message: "收藏成功",
-        })
-    })
-
-});
-
-
-
 
 module.exports = router;

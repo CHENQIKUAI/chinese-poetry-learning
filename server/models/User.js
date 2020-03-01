@@ -3,7 +3,6 @@ const sha1 = require("sha1")
 
 // users
 const userSchema = mongoose.Schema({
-    _id: { type: String },
     username: { type: String, required: true, unique: true },
     password: {
         type: String, required: true,

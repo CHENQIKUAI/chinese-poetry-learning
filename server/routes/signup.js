@@ -35,14 +35,13 @@ router.post('/', async (req, res, next) => {
         }
 
         const user = {
-            _id: username,
             username,
             password,
             year_first_grade,
             type: 1,
         }
 
-        const theUser = await userModel.findById(user._id);
+        const theUser = await userModel.findOne({ username: user.username });
 
         if (theUser === null) {//如果用户不存在，则将数据存入数据库，并且生成token
             //1. 则将数据存入数据库
@@ -52,15 +51,16 @@ router.post('/', async (req, res, next) => {
             const payload = {
                 username: user.username,
                 type: 1,
-                _id: theUser._id,
+                _id: createdUser._id,
             };
 
             jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
                 //3. 返回token
                 res.json({
-                    ...SUCCESS_MSG
-                    ,
-                    token
+                    ...SUCCESS_MSG,
+                    token,
+                    type: 1,
+                    username: user.username,
                 });
             });
 
@@ -72,7 +72,6 @@ router.post('/', async (req, res, next) => {
         }
     } catch (e) {
         console.error(e);
-
 
         res.json({
             ...FAIL_MSG,

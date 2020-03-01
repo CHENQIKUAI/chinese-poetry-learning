@@ -18,8 +18,7 @@ router.post('/', async (req, res, next) => {
         password: req.body.password,
     }
 
-
-    const theUser = await userModel.findById(user.username);
+    const theUser = await userModel.findOne({ username: user.username });
 
     if (theUser !== null) {
         const isEqual = sha1(user.password) === theUser.password;
@@ -35,6 +34,7 @@ router.post('/', async (req, res, next) => {
                     ...SUCCESS_MSG,
                     token,
                     type: theUser.type,
+                    username: user.username,
                 });
 
 

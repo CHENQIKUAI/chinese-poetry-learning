@@ -17,7 +17,7 @@ exports.getFuzzyMatchingFilterObj = (filterObj) => {
                 [propertyName]: propertyValue,
             }
         } else if (Array.isArray(propertyValue)) {
-            
+
             // findObj = {
             //     ...findObj,
             //     [propertyName]: propertyValue,
@@ -25,6 +25,29 @@ exports.getFuzzyMatchingFilterObj = (filterObj) => {
         }
     })
 
-
     return findObj;
+}
+
+exports.getPoetrySearchFilterObj = (value) => {
+
+    if (!value) {
+        return {};
+    }
+
+    value = value.trim();
+
+    const replacedValue = (value + "").replace(' ', '.*');
+    const title = new RegExp(replacedValue, 'g');
+    const dynasty = new RegExp(value, 'g');
+    const writer = new RegExp(value, 'g');
+    const content = new RegExp(replacedValue, 'g');
+    // const type = null, type待定
+    return {
+        $or: [
+            { title },
+            { dynasty },
+            { writer },
+            { content },
+        ]
+    }
 }
