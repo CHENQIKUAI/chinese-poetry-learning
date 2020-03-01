@@ -3,7 +3,7 @@ import { Layout, message } from 'antd';
 import {
     Route,
 } from "react-router-dom";
-import { getToken, getType, USER_TYPE, ADMIN_TYPE } from "../../utils/token";
+import { getToken, getType, USER_TYPE, ADMIN_TYPE } from "../../utils/localStorageManagement";
 import { profile } from "../../services/HomeService";
 
 import MyMenu from "../../Components/Menu/MyMenu";

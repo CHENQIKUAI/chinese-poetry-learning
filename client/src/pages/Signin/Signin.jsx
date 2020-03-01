@@ -3,7 +3,7 @@ import { Form, Input, Button, Alert, message } from "antd"
 import { nameLabel, nameField, nameRequiredMessage, namePlaceholder, passwordField, passwordLabel, passwordRequiredMessage, passwordPlaceholder } from "../Signup/const";
 import "./Signin.less";
 import { signin } from "../../services/SigninService";
-import { setToken, setType } from "../../utils/token";
+import { setToken, setType, setUsername } from "../../utils/localStorageManagement";
 import { SUCCESS, ERROR, LOGIN_ERR_MSG, LOGIN_SUCCESS_MESSAGE } from "./constants";
 
 const FormItem = Form.Item;
@@ -31,10 +31,11 @@ class Signin extends Component {
 
                 signin(name, password).then((data) => {
                     if (data.code === 1) {
-                        const token = data.token;
-                        const type = data.type;
+                        const { token, type, username } = data;
                         setToken(token);
                         setType(type);
+                        setUsername(username);
+
                         this.props.history.push("/");
                         message.info(LOGIN_SUCCESS_MESSAGE);
                     } else {
@@ -49,6 +50,7 @@ class Signin extends Component {
                     }
                 }).catch((err) => {
                     console.error(err, "web")
+                    message.error(err)
                 })
             }
         });

@@ -6,6 +6,7 @@ import PoetrySearch from "../../pages/PoetrySearch/PoetrySearch";
 import PoetryLearning from "../../pages/PoetryLearning/PoetryLearning";
 import PoetryLearningSet from "../../pages/PoetryLearningSet/PoetryLearningSet";
 import FavoritePoetry from "../../pages/FavoritePoetry/FavoritePoetry";
+import PersonalSetting from "../../pages/PersonalSetting/PersonalSetting";
 
 // 管理员的菜单
 
@@ -47,11 +48,6 @@ export const MENU_USER = [
         component: PoetrySearch,
     },
     {
-        key: POETRY_LEARNING,
-        title: "诗词学习",
-        component: PoetryLearning,
-    },
-    {
         key: POETRY_LEARNING_SET,
         title: "学习集",
         component: PoetryLearningSet,
@@ -62,15 +58,14 @@ export const MENU_USER = [
         component: FavoritePoetry,
     },
     {
+        key: POETRY_LEARNING,
+        title: "诗词学习",
+        component: PoetryLearning,
+    },
+    {
         key: PERSONAL_SETTING,
         title: "个人设置",
-        children: [
-            {
-                key: "/test",
-                title: "测试",
-                component: null,
-            }
-        ]
+        component: PersonalSetting,
     }
 ];
 

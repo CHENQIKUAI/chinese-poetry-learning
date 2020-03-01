@@ -1,6 +1,6 @@
 import axios from "axios"
 import { message } from "antd"
-import { getToken } from "../utils/token"
+import { getToken } from "../utils/localStorageManagement"
 import { baseURL } from "../config/config";
 axios.defaults.baseURL = baseURL;
 

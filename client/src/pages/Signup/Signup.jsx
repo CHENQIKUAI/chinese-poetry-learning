@@ -24,7 +24,7 @@ import {
 import "./Signup.less";
 
 import * as SignupService from "../../services/SignupService";
-import { setToken, setType } from "../../utils/token";
+import { setToken, setType, setUsername } from "../../utils/localStorageManagement";
 import { HOME_PATH } from "../../constants/const";
 
 
@@ -34,7 +34,6 @@ class Signup extends Component {
 
     constructor(props) {
         super(props);
-
     }
 
     handleSubmit = (e) => {
@@ -47,11 +46,11 @@ class Signup extends Component {
                 const grade = values[gradeField][1];
 
                 SignupService.signup(name, password, grade).then((res_data) => {
-                    const { token, type } = res_data;
+                    const { token, type, username } = res_data;
                     if (token) {
                         setToken(token);
                         setType(type);
-
+                        setUsername(username);
                         this.props.history.push(HOME_PATH);
                         message.info(SIGNUP_SUCCESS_MESSAGE);
                     }
@@ -83,12 +82,17 @@ class Signup extends Component {
             span: 19
         }
 
+        const layout = {
+            labelCol,
+            wrapperCol,
+        }
+
         return (
             <>
                 <div className="signup-container">
                     <h1 className="signup-title">账号注册</h1>
-                    <Form onSubmit={this.handleSubmit} labelCol={labelCol} wrapperCol={wrapperCol}>
-                        <FormItem label={nameLabel} >
+                    <Form onSubmit={this.handleSubmit} {...layout}>
+                        <FormItem label={nameLabel} hasFeedback>
                             {getFieldDecorator(nameField,
                                 {
                                     validate: [
@@ -116,20 +120,20 @@ class Signup extends Component {
                                         },
                                     ],
                                     rules: [
-                                        {
-                                            required: true,
-                                            message: nameRequiredMessage
-                                        },
-                                        {
-                                            min: 6,
-                                            message: "用户名必须不少于6位"
-                                        }
+                                        { required: true, message: nameRequiredMessage },
+                                        { min: 6, message: "用户名必须不少于6位" },
+                                        { pattern: /^[a-zA-Z0-9_]{6,}$/, message: "请输入由英文字母、数字或下划线组成的字符" },
+                                        ({ getFieldValue }) => ({
+                                            validator(rule, value) {
+                                                return Promise.reject('asdlkj');
+                                            },
+                                        }),
                                     ]
                                 })(
                                     <Input placeholder={namePlaceholder} autoComplete="off" />
                                 )}
                         </FormItem>
-                        <FormItem label={passwordLabel}>
+                        <FormItem label={passwordLabel} hasFeedback>
                             {getFieldDecorator(passwordField, {
                                 rules: [
                                     {
@@ -142,11 +146,11 @@ class Signup extends Component {
                                     }
                                 ]
                             })(
-                                <Input placeholder={passwordPlaceholder} type="password" autoComplete="off" />
+                                <Input.Password placeholder={passwordPlaceholder} autoComplete="off" />
                             )}
                         </FormItem>
 
-                        <FormItem label={passwordConfirmLable}>
+                        <FormItem label={passwordConfirmLable} hasFeedback>
                             {getFieldDecorator(passwordConfirmField, {
                                 rules: [
                                     {
@@ -166,10 +170,9 @@ class Signup extends Component {
                                     }
                                 ]
                             })(
-                                <Input placeholder={passwordConfirmPlaceholder} type="password" autoComplete="off" />
+                                <Input.Password placeholder={passwordConfirmPlaceholder} autoComplete="off" />
                             )}
                         </FormItem>
-
 
                         <FormItem label={gradeLabel}>
                             {

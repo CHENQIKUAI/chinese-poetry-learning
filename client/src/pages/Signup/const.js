@@ -1,5 +1,5 @@
 export const nameLabel = "昵称"
-export const nameField = "name";
+export const nameField = "username";
 export const nameRequiredMessage = "请输入昵称";
 export const namePlaceholder = "请输入昵称";
 
@@ -97,6 +97,10 @@ export const gradeOptions = [
                 value: 12
             }
         ]
+    },
+    {
+        label: '其他',
+        value: 'D'
     }
 ]
 
