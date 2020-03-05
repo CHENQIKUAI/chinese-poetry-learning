@@ -25,39 +25,43 @@ router.post('/getPoetries', verifyToken, async (req, res, next) => {
     }
 
     if (total - (current - 1) * pageSize > 0) {
-        PoetryModel.find(findObj).skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
-            const poetry_like_arr = [];
-            for (let i = 0; i < docs.length; ++i) {
-                const poetry_like = {
-                    poetry_id: docs[i]._doc._id,
-                    user_id,
-                }
-                poetry_like_arr.push(
-                    FavoritePoetryModel.findOne(poetry_like)
-                );
-            }
-
-            Promise.all(poetry_like_arr).then((like_docs) => {
-                for (let i = 0; i < like_docs.length; ++i) {
-                    if (like_docs[i]) {
-                        docs[i]._doc.like = true;
+        PoetryModel.find(
+            findObj,
+            {
+                _id: 1, title: 1, type: 1, dynasty: 1, writer: 1, content: 1, audioUrl: 1
+            }).skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
+                const poetry_like_arr = [];
+                for (let i = 0; i < docs.length; ++i) {
+                    const poetry_like = {
+                        poetry_id: docs[i]._doc._id,
+                        user_id,
                     }
+                    poetry_like_arr.push(
+                        FavoritePoetryModel.findOne(poetry_like)
+                    );
                 }
+
+                Promise.all(poetry_like_arr).then((like_docs) => {
+                    for (let i = 0; i < like_docs.length; ++i) {
+                        if (like_docs[i]) {
+                            docs[i]._doc.like = true;
+                        }
+                    }
+                    res.json({
+                        ...SUCCESS_MSG,
+                        current,
+                        result: docs,
+                        total,
+                    })
+                })
+
+            }).catch((e) => {
                 res.json({
-                    ...SUCCESS_MSG,
-                    current,
-                    result: docs,
-                    total,
+                    ...FAIL_MSG,
+                    message: "数据库查询错误",
+                    err: e,
                 })
             })
-
-        }).catch((e) => {
-            res.json({
-                ...FAIL_MSG,
-                message: "数据库查询错误",
-                err: e,
-            })
-        })
     } else {
         res.json({
             ...FAIL_MSG,

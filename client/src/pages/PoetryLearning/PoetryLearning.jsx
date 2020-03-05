@@ -1,10 +1,44 @@
 import React, { Component } from "react";
-import { Form, Input, Button, Alert, message } from "antd"
+import { Card, Button } from "antd";
+import "./PoetryLearning.less"
+import LearnPoetry from "../../Components/LearnPoetry/LearnPoetry";
 
-export default class PoetryLearning extends Component{
-    render(){
+class PoetryLearning extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+    }
+
+    componentDidMount() {
+
+    }
+
+
+    getCardTitle = () => {
+        return <div className="card-title">诗词学习</div>
+    }
+
+
+    getCardProps = () => {
+        return {
+            title: this.getCardTitle(),
+            className: "card_personal_setting"
+        }
+    }
+
+    render() {
+
         return (
-            <div>PoetryLearning</div>
+            <div>
+                <Card {...this.getCardProps()}>
+                    <LearnPoetry/>
+                </Card>
+            </div>
         )
     }
-} 
+}
+
+export default PoetryLearning;

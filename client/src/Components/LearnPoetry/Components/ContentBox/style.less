@@ -1,0 +1,39 @@
+.box-container {
+    background-color: #F0EFE2;
+    border: 1px solid #C8C7BC;
+    padding: 20px 20px;
+    margin: 10px 0px;
+    border-radius: 5px;
+
+    .box-title {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .box-content {
+        white-space: pre-wrap;
+    }
+
+    .box-hidde-util {
+        height: 300px;
+        overflow: hidden;
+    }
+
+    .box-spread {
+        position: relative;
+        background-image: linear-gradient(to bottom, transparent 0, #F0EFE2 80%);
+        margin-top: -100px;
+        height: 100px;
+        text-align: center;
+
+        p {
+            cursor: pointer;
+            position: absolute;
+            bottom: 0%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            font-size: 20px;
+        }
+    }
+}

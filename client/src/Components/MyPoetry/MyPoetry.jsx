@@ -15,7 +15,7 @@ class MyPoetry extends Component {
         audioVisible: false,
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { like } = this.getData();
         if (like) {
             this.setState({
@@ -25,8 +25,25 @@ class MyPoetry extends Component {
         this.audioRef = React.createRef();
     }
 
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.data !== this.props.data) {
+
+            const { like } = nextProps.data;
+            if (like) {
+                this.setState({
+                    like: true,
+                })
+            } else {
+                this.setState({
+                    like: false,
+                })
+            }
+        }
+    }
+
     getData = () => {
-        return this.props.data;
+        return this.props.data || {};
     }
 
     getLoading = () => {
@@ -109,7 +126,7 @@ class MyPoetry extends Component {
             translation,
             audioUrl,
             appreciation,
-        } = this.props.data;
+        } = this.props.data || {};
 
         return (
             <div className="my-poetry">
@@ -118,7 +135,7 @@ class MyPoetry extends Component {
                         <Highlighter
                             highlightClassName="high-light-text"
                             searchWords={this.props.searchWords || []}
-                            textToHighlight={title}
+                            textToHighlight={title || ""}
                         />
                     </span>
                 </div>
@@ -134,7 +151,7 @@ class MyPoetry extends Component {
                         <Highlighter
                             highlightClassName="high-light-text"
                             searchWords={this.props.searchWords || []}
-                            textToHighlight={writer}
+                            textToHighlight={writer || ""}
                         />
                     </span>
                 </div>
@@ -142,7 +159,7 @@ class MyPoetry extends Component {
                     <Highlighter
                         highlightClassName="high-light-text"
                         searchWords={this.props.searchWords || []}
-                        textToHighlight={content}
+                        textToHighlight={content || ""}
                     />
                 </div>
                 <div className="functions">

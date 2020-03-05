@@ -5,6 +5,9 @@ import { MAIN_MODE } from "../cons";
 
 class UpdatePwd extends Component {
 
+    handleChangeMode = (mode) => {
+        this.props.changeMode(mode)
+    }
 
     handleSubmit = () => {
         const { validateFields } = this.props.form;
@@ -62,6 +65,14 @@ class UpdatePwd extends Component {
         }
     }
 
+    validateToNextPassword = (rules, value, callback) => {
+        const { getFieldValue, validateFields } = this.props.form;
+        const nextPwd = getFieldValue('confirmPwd')
+        if (nextPwd) {
+            validateFields(['confirmPwd'], { force: true })
+        }
+        callback();
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -81,7 +92,11 @@ class UpdatePwd extends Component {
                     </Form.Item>
                     <Form.Item label="新密码">
                         {getFieldDecorator('newPwd', {
-                            rules: [{ required: true, message: "请输入密码" }, { min: 6, message: "请输入至少六位密码" }]
+                            rules: [
+                                { required: true, message: "请输入密码" },
+                                { min: 6, message: "请输入至少六位密码" },
+                                { validator: this.validateToNextPassword }
+                            ]
                         })(
                             <Input.Password placeholder="请输入当前密码" autoComplete="off" />
                         )}

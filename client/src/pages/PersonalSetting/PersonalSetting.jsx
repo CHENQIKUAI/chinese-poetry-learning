@@ -172,10 +172,13 @@ class PersonalSetting extends Component {
                     {
                         mode === MAIN_MODE ?
                             <Form {...formLayout}>
-                                <Form.Item label={USERNAME_TITLE}>
+                                <Form.Item label={USERNAME_TITLE} hasFeedback>
                                     {getFieldDecorator(USERNAME, {
                                         initialValue: this.state.username,
-                                        rules: [{ pattern: /^[a-zA-Z0-9_]{6,}$/, message: "请输入6位以上由英文字母、数字或下划线组成的字符" }],
+                                        rules: [
+                                            { min: 6, message: "密码至少为六位" },
+                                            { pattern: /^[a-zA-Z0-9_]+$/, message: "请输入由英文字母、数字或下划线组成的字符" }
+                                        ],
                                         validate: [{ trigger: "onBlur", rules: [{ validator: this.handleCheckUsername }] }],
                                     })(<Input placeholder="请输入用户名" autoComplete="off" />)}
                                 </Form.Item>

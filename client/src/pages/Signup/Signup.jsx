@@ -72,6 +72,15 @@ class Signup extends Component {
     }
 
 
+    validateToNextPassword = (rules, value, callback) => {
+        const { getFieldValue, validateFields } = this.props.form
+        const nextPwd = getFieldValue(passwordConfirmField)
+        if (nextPwd) {
+            validateFields([passwordConfirmField], { force: true });
+        }
+        callback()
+    }
+
     render() {
 
         const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -122,12 +131,7 @@ class Signup extends Component {
                                     rules: [
                                         { required: true, message: nameRequiredMessage },
                                         { min: 6, message: "用户名必须不少于6位" },
-                                        { pattern: /^[a-zA-Z0-9_]{6,}$/, message: "请输入由英文字母、数字或下划线组成的字符" },
-                                        ({ getFieldValue }) => ({
-                                            validator(rule, value) {
-                                                return Promise.reject('asdlkj');
-                                            },
-                                        }),
+                                        { pattern: /^[a-zA-Z0-9_]+$/, message: "请输入由英文字母、数字或下划线组成的字符" },
                                     ]
                                 })(
                                     <Input placeholder={namePlaceholder} autoComplete="off" />
@@ -143,6 +147,9 @@ class Signup extends Component {
                                     {
                                         min: 6,
                                         message: "密码长度至少为6"
+                                    },
+                                    {
+                                        validator: this.validateToNextPassword
                                     }
                                 ]
                             })(
