@@ -11,7 +11,7 @@ export default function ({ detailIntro }) {
         <div>
             {
                 keys.map((key) =>
-                    <ContentBox key={key} data={detailIntro[key]} title={key} />
+                    <ContentBox key={key} data={detailIntro[key]} title={key} spreadable={true} />
                 )
             }
         </div>

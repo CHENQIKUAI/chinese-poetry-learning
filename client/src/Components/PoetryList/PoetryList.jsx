@@ -1,10 +1,8 @@
 import React, { Component } from "react"
-import { Table, Card, Button, Popconfirm, message, Modal, Input, Form, Tag, Tooltip, Icon } from "antd"
-import { pageSizeOptions, TITLE_TITLE, TITLE, DYNASTY_TITLE, DYNASTY, WRITER_TITLE, WRITER, CONTENT_TITLE, CONTENT, TYPE_TITLE, TYPE, REMARK_TITLE, REMARK, TRANSLATION_TITLE, TRANSLATION, APPRECIATION_TITLE, APPRECIATION, OPERATION_TITLE, CREATE_MODE, EDIT_MODE } from "./const";
+import { Table, Card, Button, message, Modal, Input, Form, Tag, Tooltip, Icon } from "antd"
+import { pageSizeOptions, TITLE_TITLE, TITLE, DYNASTY_TITLE, DYNASTY, WRITER_TITLE, WRITER, TYPE_TITLE, TYPE, OPERATION_TITLE, CREATE_MODE, EDIT_MODE } from "./const";
 import { getPoetryList, deletePoetry, createPoetry, editPoetry } from "../../services/PoetryService";
 import "./PoetryList.less"
-import { POETRY_MANAGEMENT } from "../Menu/menuConstants";
-import PoetryModal from "../PoetryModal/PoetryModal"
 import TypeList from "../TypeList/TypeList";
 import Highlighter from 'react-highlight-words';
 import DeleteConfirm from "../DeleteConfirm/DeleteConfirm";

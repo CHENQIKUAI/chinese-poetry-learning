@@ -4,8 +4,7 @@ import "./style.less"
 const HEIGHT_RECOMMENT = 300;
 
 export default function ContentBox({ data, title, spreadable = false }) {
-    const refContainer = React.createRef();
-    let ref;
+
     const [spreadEleVisible, setSpreadVisible] = useState(true)
 
     function spreadContent() {
@@ -38,7 +37,7 @@ export default function ContentBox({ data, title, spreadable = false }) {
 
     return (
         data ?
-            <div className="box-container" ref={(node) => ref = node}>
+            <div className="box-container" >
                 <h1 className="box-title">
                     {title ? title : `对不起，没有${title}!`}
                 </h1>

@@ -2,8 +2,6 @@ import React, { Component } from "react"
 import { Menu } from "antd"
 
 import "./MyMenu.less"
-import { POETRY_MANAGEMENT, PERSONAL_SETTING } from "./menuConstants";
-
 class MyMenu extends Component {
 
     state = {

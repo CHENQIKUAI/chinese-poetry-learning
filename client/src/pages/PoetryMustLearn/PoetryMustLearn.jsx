@@ -106,7 +106,7 @@ class PoetryMustLearn extends Component {
         const colRowSpanArr = [];
         const len = dataList.length
 
-        if (len == 0) {
+        if (len === 0) {
             return [];
         }
 

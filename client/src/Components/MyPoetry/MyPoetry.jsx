@@ -122,17 +122,13 @@ class MyPoetry extends Component {
 
 
     render() {
-        let { _id,
+        let {
             title,
-            name,
             writer,
             dynasty,
             content,
             type,
-            remark,
-            translation,
             audioUrl,
-            appreciation,
         } = this.props.data || {};
 
 

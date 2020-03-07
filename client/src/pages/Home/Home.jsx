@@ -12,10 +12,9 @@ import Time from '../../Components/Time/Time';
 
 
 import "./Home.less"
-import { MENU_ADMIN, MENU_USER, POETRY_MANAGEMENT } from "../../Components/Menu/menuConstants";
-import PoetryManagement from "../PoetryManagement/PoetryManagement";
+import { MENU_ADMIN, MENU_USER } from "../../Components/Menu/menuConstants";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 class Home extends Component {
 

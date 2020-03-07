@@ -41,7 +41,7 @@ class PoetrySearch extends Component {
     getUrlValue = () => {
         const search = this.props.history.location.search;
         const value = search.split('=')[1];
-        return value && decodeURI(value) || null;
+        return (value && decodeURI(value)) || null;
     }
 
     componentDidMount() {
