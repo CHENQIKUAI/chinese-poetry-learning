@@ -10,6 +10,8 @@ import { POETRY_MODE, WRITER_MODE } from './const';
 import DetailWriter from './Components/DetailWriter/DetailWriter';
 import NotFindWriter from './Components/NotFindWriter/NotFindWriter';
 import { Spin } from 'antd'
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
+
 
 class LearnPoetry extends Component {
 
@@ -84,6 +86,7 @@ class LearnPoetry extends Component {
         })
     }
 
+
     fetchPoetry = (id) => {
         this.setState({
             loading: true,
@@ -138,7 +141,6 @@ class LearnPoetry extends Component {
         return this.state.writer && this.state.writer.detailIntro;
     }
 
-
     render() {
         const { poetry, mode, writer } = this.state;
 
@@ -164,7 +166,7 @@ class LearnPoetry extends Component {
                                 </div>) : <NotFindWriter />
                         )
                 }
-
+                <ScrollToTop />
             </Spin>
         )
     }
