@@ -41,6 +41,7 @@ export const POETRY_LEARNING_SET = '/poetryLearningSet'
 export const FAVORITE_POETRY = '/favoritePoetry'
 export const PERSONAL_SETTING = '/personalSetting'
 
+
 export const MENU_USER = [
     {
         key: POETRY_SEARCH,
@@ -59,7 +60,7 @@ export const MENU_USER = [
     },
     {
         key: POETRY_LEARNING,
-        title: "诗词学习",
+        title: "学习中心",
         component: PoetryLearning,
     },
     {

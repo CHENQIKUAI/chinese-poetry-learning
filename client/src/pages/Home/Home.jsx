@@ -93,8 +93,6 @@ class Home extends Component {
                             }
                         </div>
 
-
-
                     </Content>
                 </Layout>
             </Layout>

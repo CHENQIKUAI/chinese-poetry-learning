@@ -3,7 +3,7 @@ import "./style.less"
 
 const HEIGHT_RECOMMENT = 300;
 
-export default function ContentBox({ data, title }) {
+export default function ContentBox({ data, title, spreadable = false }) {
     const refContainer = React.createRef();
     let ref;
     const [spreadEleVisible, setSpreadVisible] = useState(true)
@@ -23,16 +23,13 @@ export default function ContentBox({ data, title }) {
     }
 
     useEffect(() => {
-        const height = getContentHeight();
-
-        setTimeout(() => {
-            console.log(ref);
-        }, 1000)
-
-        if (height <= HEIGHT_RECOMMENT) {
-            setSpreadVisible(false);
-        } else {
-            setSpreadVisible(true);
+        if (spreadable) {
+            const height = getContentHeight();
+            if (height <= HEIGHT_RECOMMENT) {
+                setSpreadVisible(false);
+            } else {
+                setSpreadVisible(true);
+            }
         }
     }, [])
 
@@ -45,11 +42,11 @@ export default function ContentBox({ data, title }) {
                 <h1 className="box-title">
                     {title ? title : `对不起，没有${title}!`}
                 </h1>
-                <div className={!spreadEleVisible ? "box-content" : "box-content box-hidde-util"}>
+                <div className={(spreadable && spreadEleVisible) ? "box-content box-hidde-util" : "box-content"}>
                     {data}
                 </div>
                 {
-                    spreadEleVisible &&
+                    spreadable && spreadEleVisible &&
                     <div className="box-spread">
                         <p onClick={spreadContent}>展开全文阅读 👇</p>
                     </div>

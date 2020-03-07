@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card, Button } from "antd";
 import "./PoetryLearning.less"
 import LearnPoetry from "../../Components/LearnPoetry/LearnPoetry";
+import { withRouter } from "react-router-dom"
 
 class PoetryLearning extends Component {
 
@@ -18,7 +19,12 @@ class PoetryLearning extends Component {
 
 
     getCardTitle = () => {
-        return <div className="card-title">诗词学习</div>
+        const search = this.props.history.location.search
+        if (search.match(/id/)) {
+            return <div className="card-title">诗词学习</div>
+        } else if (search.match(/writer/)) {
+            return <div className="card-title">作者介绍</div>
+        }
     }
 
 
@@ -34,11 +40,11 @@ class PoetryLearning extends Component {
         return (
             <div>
                 <Card {...this.getCardProps()}>
-                    <LearnPoetry/>
+                    <LearnPoetry />
                 </Card>
             </div>
         )
     }
 }
 
-export default PoetryLearning;
+export default withRouter(PoetryLearning);

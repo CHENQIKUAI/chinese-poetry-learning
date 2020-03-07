@@ -21,9 +21,11 @@ const getConfig = () => {
    }
 }
 
+function Demo() {
+   return (<div>demo</div>)
+}
+
 function App() {
-
-
 
    return (
       <ConfigProvider {...getConfig()}>

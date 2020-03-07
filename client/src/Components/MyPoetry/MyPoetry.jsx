@@ -113,8 +113,15 @@ class MyPoetry extends Component {
         })
     }
 
-    render() {
 
+    handleClickWriter = () => {
+        const { writer } = this.props.data;
+        this.props.history.push(`${POETRY_LEARNING}?writer=${writer}`)
+        this.props.goToWriter && this.props.goToWriter();
+    }
+
+
+    render() {
         let { _id,
             title,
             name,
@@ -127,6 +134,7 @@ class MyPoetry extends Component {
             audioUrl,
             appreciation,
         } = this.props.data || {};
+
 
         return (
             <div className="my-poetry">
@@ -147,7 +155,7 @@ class MyPoetry extends Component {
                             textToHighlight={dynasty ? dynasty + ": " : ""}
                         />
                     </span>
-                    <span>
+                    <span onClick={this.handleClickWriter} className={"writer"}>
                         <Highlighter
                             highlightClassName="high-light-text"
                             searchWords={this.props.searchWords || []}
