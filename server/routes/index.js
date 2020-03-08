@@ -10,6 +10,7 @@ module.exports = (app) => {
     app.use('/favoritePoetry', require('./favoritePoetry'))
     app.use('/personalSetting', require('./personalSetting'))
     app.use('/poetryLearning', require('./poetryLearning'))
+    app.use('/poetryLearningSet', require('./poetryLearningSet'))
     // 404 page
     app.use(function (req, res) {
         if (!res.headersSent) {
