@@ -13,6 +13,6 @@ POST http://localhost:3001/poetryLearningSet/getSetPoetryList HTTP/1.1
 Content-Type: application/json
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNoZW5xaWt1YWkiLCJ0eXBlIjoxLCJfaWQiOiI1ZTUyOGQ3YjExNzVlNjUzZTBmZTQ5NzAiLCJpYXQiOjE1ODM2NDg2NzAsImV4cCI6MTU4MzY1NTg3MH0.3ahdidC3uGAVsIlOppdJQpepAT0inC5ZHFwpUpiJu1o",
-    "created_poetry_list_id":"5e63a524dddb4a1a08c1dccb"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNoZW5xaWt1YWkiLCJ0eXBlIjoxLCJfaWQiOiI1ZTUyOGQ3YjExNzVlNjUzZTBmZTQ5NzAiLCJpYXQiOjE1ODM2NjkzMzUsImV4cCI6MTU4MzY3NjUzNX0.70MuwLWR5qJ_pNRV-avoDGK0K8iItx8JnhBjFRFHLns",
+    "created_poetry_list_id":"5e64f0f978f113424cdf1a79"
 }

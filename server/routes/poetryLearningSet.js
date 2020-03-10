@@ -5,6 +5,7 @@ const verifyUser = require("../middlewares/verifyUser")
 const { CreatedPoetryListModel } = require("../models/CollectedPoetry")
 // 学习集诗词表
 const { CollectedPoetryModel } = require("../models/CollectedPoetry")
+const { PoetryModel } = require("../models/Poetry")
 const { userModel } = require("../models/User")
 const { MustLearnPoetryModel } = require("../models/MustLearn")
 
@@ -93,8 +94,20 @@ function insertMustLearnPoetryList(user_id, grade_semester, title) {
 
 function getCreatedPoetryList(user_id) {
     return new Promise((resolve) => {
-        CreatedPoetryListModel.find({ user_id }).then(docs => {
-            resolve(docs);
+        CreatedPoetryListModel.find({ user_id }).then(async (docs) => {
+            const list = [];
+
+            for (let i = 0; i < docs.length; ++i) {
+                const _id = docs[i]._id;
+                const title = docs[i]._doc.title;
+                const setDescription = await getSpecificSetDescription(_id)
+                list.push({
+                    ...setDescription,
+                    title,
+                    _id,
+                })
+            }
+            resolve(list);
         })
     })
 }
@@ -138,13 +151,12 @@ function getSetSpecificValue(created_poetry_list_id, { check_in = 0, check_in_da
 
 
 function getListDescription(list) {
-    let description = {};
 
     return new Promise(async (resolve) => {
         const specificValuesArrOfOneSetContainer = [];//包含各个集合的字段信息。
 
         for (let i = 0; i < list.length; ++i) {
-            const created_poetry_list_id = list[i]._doc._id;
+            const created_poetry_list_id = list[i]._id;
             const specificValuesArrOfOneSet = await getSetSpecificValue(created_poetry_list_id, { check_in: 1, check_in_date: 1, poetry_id: 1 })
             specificValuesArrOfOneSetContainer.push(specificValuesArrOfOneSet);
         }
@@ -197,8 +209,8 @@ function getListDescription(list) {
             }
         }
 
-        description = {
-            ...description,
+
+        const description = {
             checkInNumber: poetryIdArr.length,
             consecutiveDays: count,
             cumulativeDays: Object.keys(timeContainer).length,
@@ -208,21 +220,92 @@ function getListDescription(list) {
     })
 }
 
-let global = null;
+async function getSetTitle(created_poetry_list_id) {
+    return new Promise((resolve) => {
+        CreatedPoetryListModel.findById(created_poetry_list_id).then(doc => {
+            resolve(doc._doc.title)
+        })
+    })
+}
+
+async function getSpecificSetDescription(created_poetry_list_id) {
+    return new Promise(async (resolve) => {
+        let description = {};
+        const specificValuesArrOfThisSet = await getSetSpecificValue(created_poetry_list_id, { check_in: 1, poetry_id: 1, check_in_date: 1 })
+        let timeContainer = {};
+        let poetryIdContainer = {};
+        for (let i = 0; i < specificValuesArrOfThisSet.length; ++i) {
+            const check_in_date = specificValuesArrOfThisSet[i].check_in_date
+            const check_in = specificValuesArrOfThisSet[i].check_in
+            const poetry_id = specificValuesArrOfThisSet[i].poetry_id
+            if (check_in) {
+                poetryIdContainer[poetry_id] = 1;
+                const date = new Date(check_in_date);
+                const dateStr = `${date.getFullYear()},${date.getMonth() + 1},${date.getDate()}`
+                timeContainer[dateStr] = 1;
+            }
+        }
+
+        const learnedCount = Object.keys(poetryIdContainer).length
+        const cumulativeDays = Object.keys(timeContainer).length
+        const learningProgress = learnedCount / (specificValuesArrOfThisSet.length)
+
+        const title = await getSetTitle(created_poetry_list_id);
+        description = {
+            learnedCount,
+            cumulativeDays,
+            learningProgress,
+            title,
+        }
+        resolve(description);
+    })
+}
+
+
+
+async function getPoetrySpecificValue(poetry_id,
+    inclusionObj) {
+    return new Promise((resolve) => {
+        PoetryModel.findOne(poetry_id, inclusionObj).then(doc => {
+            resolve(doc);
+        })
+    })
+}
+
+
+async function getSetPoetryList(created_poetry_list_id) {
+    return new Promise((resolve) => {
+        const poetryContainer = [];
+        CollectedPoetryModel.find({ created_poetry_list_id }).then(async docs => {
+            for (let i = 0; i < docs.length; ++i) {
+                const { poetry_id, check_in } = docs[i]._doc;
+                const poetry = await getPoetrySpecificValue(poetry_id, { _id: 1, title: 1, content: 1 });
+                poetryContainer.push({ ...poetry._doc, check_in });
+            }
+            resolve(poetryContainer);
+        })
+    })
+}
+
+
+
 
 router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) => {
     const { _id } = req.body.user;
-    global = res;
 
     const grade = await getUserGrade(_id);
-    const grade_semester = getGradeSemester(grade);
-    const judge = await DoSetsHaveMustLearnInThisGradeSemester(_id, grade_semester);
 
-    if (!judge) {
-        // 先插入再返回集合
-        const title = getMustLearnTitle(grade_semester);
-        await insertMustLearnPoetryList(_id, grade_semester, title);
+    if (grade >= 1 && grade <= 12) {
+        const grade_semester = getGradeSemester(grade);
+        const judge = await DoSetsHaveMustLearnInThisGradeSemester(_id, grade_semester);
+
+        if (!judge) {
+            // 先插入再返回集合
+            const title = getMustLearnTitle(grade_semester);
+            await insertMustLearnPoetryList(_id, grade_semester, title);
+        }
     }
+
 
     const list = await getCreatedPoetryList(_id);
 
@@ -230,6 +313,7 @@ router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) 
 
     res.json({
         ...SUCCESS_MSG,
+        grade,
         result: {
             list,
             description
@@ -237,47 +321,145 @@ router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) 
     })
 });
 
+
+
+
+
 router.post('/getSetPoetryList', verifyToken, verifyUser, async (req, res, next) => {
     const { user, created_poetry_list_id } = req.body;
     const { _id: user_id } = user;
 
-    let description = {};
+    const description = await getSpecificSetDescription(created_poetry_list_id);
+    const list = await getSetPoetryList(created_poetry_list_id)
 
-    const specificValuesArrOfThisSet = await getSetSpecificValue(created_poetry_list_id, { check_in: 1, poetry_id: 1, check_in_date: 1 })
-    let timeContainer = {};
-    let poetryIdContainer = {};
-    for (let i = 0; i < specificValuesArrOfThisSet.length; ++i) {
-        const check_in_date = specificValuesArrOfThisSet[i].check_in_date
-        const check_in = specificValuesArrOfThisSet[i].check_in
-        const poetry_id = specificValuesArrOfThisSet[i].poetry_id
-        if (check_in) {
-            poetryIdContainer[poetry_id] = 1;
-            const date = new Date(check_in_date);
-            const dateStr = `${date.getFullYear()},${date.getMonth() + 1},${date.getDate()}`
-            timeContainer[dateStr] = 1;
-        }
-    }
-
-    const learnedCount = Object.keys(poetryIdContainer).length
-    const cumulativeDays = Object.keys(timeContainer).length
-    const learningProgress = learnedCount / (specificValuesArrOfThisSet.length)
-
-    description = {
-        learnedCount,
-        cumulativeDays,
-        learningProgress
-    }
-
-    CollectedPoetryModel.find({ created_poetry_list_id }).then(rets => {
-
-        res.json({
-            ...SUCCESS_MSG,
-            result: rets,
+    res.json({
+        ...SUCCESS_MSG,
+        result: {
+            list,
             description
-        })
+        },
 
     })
 })
 
+
+
+// 关于学习集中诗词的操作
+router.post('/poetryCheckIn', verifyToken, verifyUser, async (req, res, next) => {
+    const { created_poetry_list_id, poetry_id } = req.body;
+    CollectedPoetryModel.findOneAndUpdate({ created_poetry_list_id, poetry_id }, { check_in: true, check_in_date: new Date() }).then(ret => {
+        res.json({
+            ...SUCCESS_MSG,
+            message: "打卡成功"
+        })
+    })
+})
+
+
+
+router.post('/addNewPoetry', verifyToken, verifyUser, async (req, res, next) => {
+    const { created_poetry_list_id, poetry_id } = req.body;
+    CollectedPoetryModel.findOne({ created_poetry_list_id, poetry_id }).then(doc => {
+        if (!doc) {
+            CollectedPoetryModel.create({ created_poetry_list_id, poetry_id }).then(ret => {
+                res.json({
+                    ...SUCCESS_MSG,
+                    message: "新增成功"
+                })
+            }).catch(error => {
+                res.json({
+                    ...FAIL_MSG,
+                    error
+                })
+            })
+        }else{
+            res.json({
+                ...FAIL_MSG,
+                message: "诗词已存在学习集中"
+            })
+        }
+    }).catch(error=>{
+        res.json({
+            ...FAIL_MSG,
+            error,
+        })
+    })
+    
+});
+
+
+
+router.post('/deletePoetryFromCollection', verifyToken, verifyUser, async (req, res, next) => {
+    const { created_poetry_list_id, poetry_id } = req.body;
+    CollectedPoetryModel.remove({ created_poetry_list_id, poetry_id }).then(ret => {
+        res.json({
+            ...SUCCESS_MSG,
+            message: "删除成功"
+        })
+    }).catch(error => {
+        res.json({
+            ...FAIL_MSG,
+            error
+        })
+    })
+});
+
+
+
+/**
+ * 
+ * 关于学习集的操作
+ * 
+ */
+
+router.post('/updateSetName', verifyToken, verifyUser, async (req, res, next) => {
+    const { created_poetry_list_id, title } = req.body;
+    CreatedPoetryListModel.findByIdAndUpdate(created_poetry_list_id, { title }).then(ret => {
+        res.json({
+            ...SUCCESS_MSG,
+            message: "名字修改"
+        })
+    }).catch(error => {
+        res.json({
+            ...FAIL_MSG,
+            error
+        })
+    })
+});
+
+
+router.post('/deleteSet', verifyToken, verifyUser, async (req, res, next) => {
+    const { created_poetry_list_id } = req.body;
+    CreatedPoetryListModel.findByIdAndRemove(created_poetry_list_id).then(ret => {
+        CollectedPoetryModel.remove({ created_poetry_list_id }).then(ret => {
+            res.json({
+                ...SUCCESS_MSG,
+                message: "删除成功"
+            })
+        })
+    }).catch(error => {
+        res.json({
+            ...FAIL_MSG,
+            error
+        })
+    })
+});
+
+router.post('/createSet', verifyToken, verifyUser, async (req, res, next) => {
+    const { title, user } = req.body;
+    const user_id = user._id;
+
+    CreatedPoetryListModel.create({ title, user_id }).then(doc => {
+        res.json({
+            ...SUCCESS_MSG,
+            result: doc
+        })
+    }).catch(error => {
+        res.json({
+            ...FAIL_MSG,
+            error
+        })
+    })
+});
 
 module.exports = router;

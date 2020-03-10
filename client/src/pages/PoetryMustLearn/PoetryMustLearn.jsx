@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card, Cascader, Table, Button, Modal, Input, message, Icon, Popconfirm } from "antd"
 import { getGradeSemester, getMustLearnPoetryList, getPoetryByTitle, addPoetry, removePoetry } from "../../services/PoetryMustLearnService";
 import "./PoetryMustLearn.less"
+import SeachPoetryModal from "./SearchPoetryModal/SearchPoetryModal";
 class PoetryMustLearn extends Component {
 
     state = {
@@ -227,118 +228,26 @@ class PoetryMustLearn extends Component {
         this.setModalVisible(true);
     }
 
-    handleInputChange = (e) => {
-        const value = e.target.value;
-        this.setState({
-            searchText: value,
-        })
+    ajaxAddPoetry = (poetry_id) => {
+        return addPoetry(poetry_id, this.state.gradeSemester);
     }
 
-
-    handleModalOk = () => {
-        this.setModalVisible(false);
-    }
-
-    handleModalCancel = () => {
-        this.setModalVisible(false);
-        this.setState({
-            searchText: "",
-            searchedPoetryList: [],
-        })
-    }
-
-    fetchPoetryByTitle = (searchText) => {
-        this.setState({
-            searchedLoading: true,
-        }, () => {
-            getPoetryByTitle(searchText).then((ret) => {
-                if (ret && ret.code === 1) {
-                    this.setState({
-                        searchedPoetryList: ret.result,
-                    })
-                } else {
-                    message.error("搜索错误!")
-                    console.error(ret);
-                }
-                this.setState({
-                    searchedLoading: false,
-                })
-            }).catch((err) => {
-                message.error("搜索错误!")
-                console.error(err);
-                this.setState({
-                    searchedLoading: false,
-                })
-            })
-        })
-
-    }
-
-    handlePressEnter = () => {
-        const { searchText } = this.state;
-        if (searchText.trim() !== "")
-            this.fetchPoetryByTitle(searchText);
-    }
-
-    handleClickSearch = () => {
-        const { searchText } = this.state;
-        if (searchText.trim() !== "")
-            this.fetchPoetryByTitle(searchText);
-    }
-
-
-    handleAddPoetryToMustLearn = (_id, gradeSemester) => {
-        addPoetry(_id, gradeSemester).then((ret) => {
-            if (ret && ret.code === 1) {
-                message.success("添加成功");
-                this.fetchMustLearnPoetryList(this.state.gradeSemester)
-            }
-        })
-    }
-
-
-    getSearchedTableProps = () => {
+    getSeachPoetryModalProps = () => {
+        const hideModal = () => {
+            this.setModalVisible(false)
+        }
 
         return {
-            columns: [
-                {
-                    dataIndex: "title",
-                    title: "标题",
-                    align: "center",
-                },
-                {
-                    dataIndex: "writer",
-                    title: "作者",
-                    align: "center",
-                },
-                {
-                    dataIndex: "content",
-                    title: "内容",
-                    align: "center",
-                    render: (text) => {
-                        return text.split(/[\n。]/)[0] + "..."
-                    }
-                },
-                {
-                    title: "操作",
-                    align: "center",
-                    render: (record) => {
-                        const { _id } = record;
-                        const { gradeSemester } = this.state;
-                        return <Icon type="plus" onClick={this.handleAddPoetryToMustLearn.bind(this, _id, gradeSemester)} />
-                    }
-                }
-            ],
-            dataSource: this.state.searchedPoetryList,
-            loading: this.state.searchedLoading,
-            rowKey: "_id",
-            pagination: {
-                pageSize: 5,
-            },
-            bordered: true,
+            visible: this.state.modalVisible,
+            hideModal: hideModal,
+            ajaxFunction: this.ajaxAddPoetry,
+            refreshFunction: this.refresh,
         }
     }
 
+    refresh = () => {
+        this.fetchMustLearnPoetryList(this.state.gradeSemester)
+    }
 
     render() {
         const showBtn = this.state.gradeSemester === "0,0" ? false : true;
@@ -349,26 +258,10 @@ class PoetryMustLearn extends Component {
                     {showBtn && <Button type="primary" className="btn-search" onClick={this.handleClickAdd}>添加诗词</Button>}
                     <Table {...this.getTableProps()} />
                 </Card>
-                <Modal
-                    title={<div className="modal-title-center">添加诗词</div>}
-                    visible={this.state.modalVisible}
-                    onOk={this.handleModalOk}
-                    onCancel={this.handleModalCancel}
-                    footer={null}
-                    cancelButtonProps={{ style: { display: "none" } }}
-                    width="800px"
-                    className="modal-search-poetry"
-                >
-                    <div className="modal-search-line">
-                        <Input autoComplete="off" className="ipt-search-title" onChange={this.handleInputChange} onPressEnter={this.handlePressEnter} value={this.state.searchText} placeholder="请输入诗词标题" />
-                        <Button className="btn-search" onClick={this.handleClickSearch} type="primary">搜索</Button>
-                    </div>
-                    <Table {...this.getSearchedTableProps()} />
-                </Modal>
+                <SeachPoetryModal {...this.getSeachPoetryModalProps()} />
             </div>
         )
     }
-
 }
 
 export default PoetryMustLearn;

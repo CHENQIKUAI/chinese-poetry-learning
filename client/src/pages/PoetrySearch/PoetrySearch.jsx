@@ -105,10 +105,10 @@ class PoetrySearch extends Component {
     }
 
     hasData = () => {
-        if (this.state.poetryList.length === 0)
-            return false;
-        else
+        if (this.state.poetryList && this.state.poetryList.length !== 0)
             return true;
+        else
+            return false;
     }
 
     setHighlightWords = (value) => {
