@@ -222,7 +222,7 @@ router.post('/getGradeSemester', verifyToken, verifyAdmin, async (req, res, next
 /**
  * searchText
  */
-router.post('/findByTitle', verifyToken, verifyAdmin, (req, res, next) => {
+router.post('/findByTitle', verifyToken, (req, res, next) => {
 
     const { searchText } = req.body;
     const text = (searchText + "").trim();
