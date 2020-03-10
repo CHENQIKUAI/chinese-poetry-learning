@@ -5,7 +5,7 @@ import { message } from "antd";
 
 class Signout extends Component {
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         clearToken();
         clearType();
         clearUsername();

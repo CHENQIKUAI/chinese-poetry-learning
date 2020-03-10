@@ -46,8 +46,7 @@ class MyMenu extends Component {
         window.onhashchange = (e) => {
             const pathname = this.props.history.location.pathname;
             this.setState({
-                selectedKey: pathname
-
+                selectedKey: '/' + pathname.split('/')[1]
             })
         }
 

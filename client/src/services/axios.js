@@ -2,6 +2,10 @@ import axios from "axios"
 import { message } from "antd"
 import { getToken } from "../utils/localStorageManagement"
 import { baseURL } from "../config/config";
+import { Redirect } from 'react-router-dom';
+import { SIGNOUT_PATH } from "../constants/const";
+import history from "../history";
+
 axios.defaults.baseURL = baseURL;
 
 export default function ajax(url, data = {}, type = 'GET') {
@@ -23,10 +27,16 @@ export default function ajax(url, data = {}, type = 'GET') {
         }
         promise.then(response => {
             // 2. 如果成功了, 调用resolve(value),传递结果
-            resolve(response.data)
+            const ret = response.data;
+            // 如果code为0，表示token过期了
+            if (ret && ret.code === 0) {
+                history.push(SIGNOUT_PATH);
+            }
+            resolve(ret);
         }).catch(error => {
             // 3. 如果失败了, 调用reject(reason)，发送原因
             reject(error);
+            console.log({ error })
         })
     })
 }

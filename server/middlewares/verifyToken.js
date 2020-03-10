@@ -19,7 +19,7 @@ const verifyToken = (req, res, next) => {
         jwt.verify(token, SECRETKEY, async (err, authData) => {
             if (err) {
                 res.json({
-                    ...FAIL_MSG,
+                    code: 0,
                     message: "token验证错误",
                     err
                 })
