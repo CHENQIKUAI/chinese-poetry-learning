@@ -3,7 +3,7 @@ import { message } from "antd"
 import { getToken } from "../utils/localStorageManagement"
 import { baseURL } from "../config/config";
 import { Redirect } from 'react-router-dom';
-import { SIGNOUT_PATH } from "../constants/const";
+import { SIGNOUT_PATH } from "../const";
 import history from "../history";
 
 axios.defaults.baseURL = baseURL;

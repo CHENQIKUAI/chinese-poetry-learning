@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { clearToken, clearType, clearUsername } from "../../utils/localStorageManagement";
-import { SIGNIN_PATH } from "../../constants/const";
+import { SIGNIN_PATH } from "../../const";
 import { message } from "antd";
 
 class Signout extends Component {

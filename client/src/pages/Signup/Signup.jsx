@@ -25,7 +25,7 @@ import "./Signup.less";
 
 import * as SignupService from "../../services/SignupService";
 import { setToken, setType, setUsername } from "../../utils/localStorageManagement";
-import { HOME_PATH } from "../../constants/const";
+import { HOME_PATH } from "../../const";
 
 
 const FormItem = Form.Item;

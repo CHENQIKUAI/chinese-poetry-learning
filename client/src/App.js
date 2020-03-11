@@ -13,7 +13,7 @@ import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import './App.css';
 
-import { SIGNUP_PATH, HOME_PATH, SIGNIN_PATH, SIGNOUT_PATH } from './constants/const';
+import { SIGNUP_PATH, HOME_PATH, SIGNIN_PATH, SIGNOUT_PATH } from './const';
 
 const getConfig = () => {
    return {

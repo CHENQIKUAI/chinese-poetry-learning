@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import logoutIcon from "../../img/logout.svg";
 
 import "./Logout.less"
-import { SIGNOUT_PATH } from "../../constants/const";
+import { SIGNOUT_PATH } from "../../const";
 import { Modal } from "antd";
 
 class Logout extends Component {
