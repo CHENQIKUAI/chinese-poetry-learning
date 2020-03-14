@@ -8,5 +8,9 @@ export default {
     getWriter: (writer) => {
         const url = '/poetryLearning/getWriter';
         return axios(url, { writer }, POST)
+    },
+    compute: (fstStr, secStr) => {
+        const url = '/poetryLearning/compute';
+        return axios(url, { fstStr, secStr }, POST)
     }
 } 

@@ -16,7 +16,6 @@ export const deletePoetry = (_id) => {
 export const editPoetry = (poetry) => {
     const url = "/poetry/modifyPoetry";
     return axios(url, { poetry }, POST);
-
 }
 
 

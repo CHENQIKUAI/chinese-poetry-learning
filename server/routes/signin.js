@@ -12,45 +12,49 @@ const EXPIRESIN = config.EXPIRESIN;
 
 //登录
 router.post('/', async (req, res, next) => {
-
-    const user = {
-        username: req.body.username,
-        password: req.body.password,
-    }
-
-    const theUser = await userModel.findOne({ username: user.username });
-
-    if (theUser !== null) {
-        const isEqual = sha1(user.password) === theUser.password;
-        if (isEqual) {
-            const payload = {
-                username: user.username,
-                type: theUser.type,
-                _id: theUser._id,
-            };
-            jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
-
-                res.json({
-                    ...SUCCESS_MSG,
-                    token,
-                    type: theUser.type,
-                    username: user.username,
-                });
-
-
-            });
-        } else {
-            res.json({
-                ...FAIL_MSG,
-                message: '密码或账号错误'
-            })
+    try {
+        const user = {
+            username: req.body.username,
+            password: req.body.password,
         }
 
-    } else {
-        res.send({
-            ...FAIL_MSG,
-            message: '用户名不存在'
-        });
+        const theUser = await userModel.findOne({ username: user.username });
+
+        if (theUser !== null) {
+            const isEqual = sha1(user.password) === theUser.password;
+            if (isEqual) {
+                const payload = {
+                    username: user.username,
+                    type: theUser.type,
+                    _id: theUser._id,
+                };
+                jwt.sign(payload, SECRETKEY, { expiresIn: EXPIRESIN }, (err, token) => {
+
+                    res.json({
+                        ...SUCCESS_MSG,
+                        token,
+                        type: theUser.type,
+                        username: user.username,
+                    });
+
+
+                });
+            } else {
+                res.json({
+                    ...FAIL_MSG,
+                    message: '密码或账号错误'
+                })
+            }
+        } else {
+            res.send({
+                ...FAIL_MSG,
+                message: '用户名不存在'
+            });
+        }
+    } catch (error) {
+        res.json({
+            message: "这里出错啦"
+        })
     }
 });
 

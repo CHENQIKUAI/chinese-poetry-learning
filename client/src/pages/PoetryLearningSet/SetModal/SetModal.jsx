@@ -26,7 +26,7 @@ export default class SetModal extends React.Component {
                 if (ret && ret.code === 1) {
                     this.props.hideModal();
                     this.props.refreshFunction();
-
+                    this.resetValue(value);
                 }
             })
         } else {
@@ -34,16 +34,22 @@ export default class SetModal extends React.Component {
                 if (ret && ret.code === 1) {
                     this.props.hideModal();
                     this.props.refreshFunction();
+                    this.resetValue(value);
                 }
             })
         }
-        this.resetValue();
     }
 
-    resetValue = () => {
-        this.setState({
-            value: this.props.title
-        })
+    resetValue = (value) => {
+        if (value) {
+            this.setState({
+                value
+            })
+        } else {
+            this.setState({
+                value: this.props.title
+            })
+        }
     }
 
     handleCancel = () => {
@@ -77,7 +83,7 @@ export default class SetModal extends React.Component {
                     <label htmlFor="title">
                         学习集名称：
                     </label>
-                    <Input style={{width:"300px"}} value={this.state.value} onChange={this.handleValueChange} />
+                    <Input style={{ width: "300px" }} value={this.state.value} onChange={this.handleValueChange} />
                 </Modal>
             </div>
         )

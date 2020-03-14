@@ -1,0 +1,53 @@
+.dictate-box {
+    background-color: #F0EFE2;
+    border: 1px solid #C8C7BC;
+    padding: 20px 20px;
+    margin: 10px 0px;
+    border-radius: 5px;
+    min-height: 300px;
+
+    .first-line {
+        display: flex;
+        align-items: center;
+        padding-bottom: 10px;
+
+        .title {
+            color: #19537D;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .mark {
+            display: flex;
+            align-items: center;
+            margin-left: 70px;
+            color: red;
+            font-size: 20px;
+
+            span {
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .content {
+        display: flex;
+        padding-top: 20px;
+
+        .content-original {
+            margin: 0 5px;
+            flex-basis: 1px;
+            flex-grow: 1;
+        }
+        
+        .content-input {
+            white-space: pre-line;
+            margin: 0 5px;
+            flex-basis: 1px;
+            flex-grow: 1;
+        }
+    }
+
+
+
+}

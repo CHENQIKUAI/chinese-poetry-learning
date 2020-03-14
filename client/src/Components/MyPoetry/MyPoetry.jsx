@@ -7,6 +7,7 @@ import { message, Icon } from "antd";
 import ImgLike from "../../img/like.png";
 import ImgDislike from "../../img/dislike.png";
 import Highlighter from "react-highlight-words";
+import urlUtil from "../../utils/urlUtil";
 
 class MyPoetry extends Component {
 
@@ -52,7 +53,7 @@ class MyPoetry extends Component {
 
     handleClick = () => {
         const { _id } = this.getData();
-        this.props.history.push(`${POETRY_LEARNING}?_id=${_id}`)
+        this.props.history.push(urlUtil.getPoetryLearningPoetryUrl(_id))
     }
 
     handlePostLike = (_id) => { //一个有副作用的函数
@@ -116,7 +117,7 @@ class MyPoetry extends Component {
 
     handleClickWriter = () => {
         const { writer } = this.props.data;
-        this.props.history.push(`${POETRY_LEARNING}?writer=${writer}`)
+        this.props.history.push(urlUtil.getPoetryLearningWriterUrl(writer))
         this.props.goToWriter && this.props.goToWriter();
     }
 

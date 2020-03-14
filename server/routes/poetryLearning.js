@@ -7,6 +7,7 @@ const { WriterModel } = require("../models/Writer")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 var router = express.Router();
 
+
 router.post('/getPoetry', verifyToken, verifyUser, async (req, res, next) => {
 
     const { id } = req.body;
@@ -48,7 +49,6 @@ router.post('/getPoetry', verifyToken, verifyUser, async (req, res, next) => {
 });
 
 
-
 router.post('/getWriter', verifyToken, verifyUser, async (req, res, next) => {
     const { writer } = req.body;
 
@@ -68,6 +68,54 @@ router.post('/getWriter', verifyToken, verifyUser, async (req, res, next) => {
             },
         })
     }
+});
+
+
+router.post('/compute', verifyToken, verifyUser, async (req, res, next) => {
+    let { fstStr, secStr } = req.body;
+    fstStr = fstStr.replace(/[，|。|？|\n]/g, "");
+    secStr = secStr.replace(/[，|。|？|\n]/g, "");
+
+    // 计算字符串长度
+    const fstStrLen = fstStr.length;
+    const secStrLen = secStr.length;
+
+    // 初始化二维表
+    let similaritys = [[]];
+
+    // X方向
+    for (let i = 0; i <= fstStrLen; i++) {
+        if (similaritys[i] === undefined) {
+            similaritys[i] = [];
+        }
+        similaritys[i][0] = i;
+    }
+
+    // Y方向
+    for (let i = 0; i <= secStrLen; i++) {
+        similaritys[0][i] = i;
+    }
+
+    for (let i = 1; i <= fstStrLen; i++) {
+        let x = i - 1;
+        let fstChar = fstStr.substr(x, 1);
+        for (let j = 1; j <= secStrLen; j++) {
+            let y = j - 1;
+            let secChar = secStr.substr(y, 1);
+            let left = similaritys[x][j] + 1;
+            let top = similaritys[i][y] + 1;
+            let leftTop = fstChar == secChar ? similaritys[x][y] : similaritys[x][y] + 1;
+            similaritys[i][j] = left < top ? (left < leftTop ? left : leftTop) : (top < leftTop ? top : leftTop);
+        }
+    }
+
+    let maxLen = fstStrLen > secStrLen ? fstStrLen : secStrLen;
+    let similarity = ((1 - (similaritys[fstStrLen][secStrLen] / maxLen)) * 100).toFixed(2);
+    res.json({
+        ...SUCCESS_MSG,
+        result: similarity
+    })
+
 });
 
 

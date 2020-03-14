@@ -46,29 +46,39 @@ class LearnPoetry extends Component {
         return null;
     }
 
-    componentWillMount() {
-        if (this.props.history.location.search.match(/writer/)) {
+    fetchAccordingToUrl = (url) => {
+        if (url.match('_id')) {
             this.setState({
-                mode: WRITER_MODE
+                mode: POETRY_MODE,
+            }, () => {
+                const id = this.getPoetryIdFromUrl(url)
+                if (id) {
+                    this.fetchPoetry(id);
+                }
+            })
+        }
+        else if (url.match('writer')) {
+            this.setState({
+                mode: WRITER_MODE,
+            }, () => {
+                const name = this.getWriterNameFromUrl(url)
+                if (name) {
+                    this.fetchWriter(name);
+                }
             })
         }
     }
 
     componentDidMount() {
-        const url = window.location.href;
-        switch (this.state.mode) {
-            case POETRY_MODE:
-                const id = this.getPoetryIdFromUrl(url)
-                if (id) {
-                    this.fetchPoetry(id);
-                }
-                break;
-            case WRITER_MODE:
-                const name = this.getWriterNameFromUrl(url)
-                if (name) {
-                    this.fetchWriter(name);
-                }
-        }
+        const href = window.location.href;
+        this.fetchAccordingToUrl(href);
+        this.unregisterHistoryListener = this.props.history.listen((location) => {
+            this.fetchAccordingToUrl(location.search);
+        })
+    }
+
+    componentWillUnmount() {
+        this.unregisterHistoryListener();
     }
 
     fetchWriter = (name) => {
@@ -136,6 +146,7 @@ class LearnPoetry extends Component {
             mode: WRITER_MODE,
         })
     }
+
 
     getDetailInfo = () => {
         return this.state.writer && this.state.writer.detailIntro;

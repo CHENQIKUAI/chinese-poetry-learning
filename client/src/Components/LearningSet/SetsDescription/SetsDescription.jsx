@@ -12,8 +12,8 @@ export default function SetsDescription({ clickAdd, checkInNumber, consecutiveDa
                 <Col span={7}>
                     <DataBox
                         number={checkInNumber}
-                        unit={'天'}
-                        belong={'打卡'}
+                        unit={'篇'}
+                        belong={'已学诗词'}
                     />
                 </Col>
                 <Col span={7}>

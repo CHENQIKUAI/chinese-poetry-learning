@@ -52,7 +52,7 @@ export default function SetDescription(
         }
 
         function addPoetryToCollection(poetry_id) {
-            
+
             return addNewPoetry(_id, poetry_id);
         }
 
@@ -68,12 +68,19 @@ export default function SetDescription(
         }
     }
 
+    function getTitle() {
+        const len = 20;
+        if (title && title.length > len) {
+            return title.substr(0, len) + "...";
+        }
+        return title;
+    }
     return (
         <div className="set-description" >
             <Row type="flex" align="middle">
                 <Col span={20}>
                     <div className="container">
-                        <p className="title">{title}</p>
+                        <p className="title">{getTitle()}</p>
                     </div>
                     <div className="progress">
                         <Progress percent={parseFloat((learningProgress * 100).toFixed(2))} />
