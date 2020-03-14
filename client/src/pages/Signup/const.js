@@ -27,9 +27,11 @@ export const typeArray = [
     }
 ]
 
+
 export const gradeLabel = "年级";
 export const gradeField = "grade";
 export const gradeRequireMessage = "请选择年级";
+
 export const gradeOptions = [
     {
         label: "小学",
@@ -103,6 +105,18 @@ export const gradeOptions = [
         value: 'D'
     }
 ]
+
+export const getGradeOptions = (grade) => {
+    if (grade === null) {
+        return ['D'];
+    } else if (grade <= 6) {
+        return ['A', grade];
+    } else if (grade <= 9) {
+        return ['B', grade];
+    } else if (grade <= 12) {
+        return ['C', grade];
+    }
+}
 
 export const submitName = "注册"
 

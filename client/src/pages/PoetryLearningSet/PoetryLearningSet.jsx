@@ -39,9 +39,6 @@ class PoetryLearningSet extends Component {
         })
     }
 
-    componentWillMount() {
-
-    }
 
     componentDidMount() {
         if (this.state.mode === SETS_MODE) {

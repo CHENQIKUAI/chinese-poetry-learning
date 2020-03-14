@@ -4,6 +4,7 @@ import PersonalSettingService from "../../services/PersonalSettingService";
 import { checkUsername } from "../../services/SignupService";
 import { gradeOptions } from "../Signup/const";
 import { USERNAME_TITLE, USERNAME, GRADE_TITLE, GRADE, PASSWORD_TITLE, MAIN_MODE, PWD_MODE } from "./cons";
+import { getGradeOptions } from "../Signup/const"
 import UpdatePwd from "./component/UpdatePwd";
 import "./PersonalSetting.less"
 
@@ -51,21 +52,9 @@ class PersonalSetting extends Component {
         this.fetchUsername();
     }
 
-    getGradeArr = (grade) => {
-        if (grade === -1) {
-            return ['D'];
-        } else if (grade <= 6) {
-            return ['A', grade];
-        } else if (grade <= 9) {
-            return ['B', grade];
-        } else if (grade <= 12) {
-            return ['C', grade];
-        }
-    }
-
     getCascaderOptions = () => {
         const { grade } = this.state
-        return this.getGradeArr(grade);
+        return getGradeOptions(grade);
     }
 
     getCardTitle = () => {
@@ -98,8 +87,6 @@ class PersonalSetting extends Component {
             }
             if (count === rets.length) {
                 message.success("个人设置保存成功")
-                console.log(username.trim());
-
                 this.setState({
                     username: username.trim(),
                     grade
@@ -114,7 +101,7 @@ class PersonalSetting extends Component {
         validateFields([USERNAME, GRADE], (errors, values) => {
             if (!errors) {
                 const username = values[USERNAME].trim();
-                const grade = values[GRADE].length === 2 ? values[GRADE][1] : -1;
+                const grade = values[GRADE].length === 2 ? values[GRADE][1] : null;
                 this.handleSaveSettings({ username, grade })
             }
         })

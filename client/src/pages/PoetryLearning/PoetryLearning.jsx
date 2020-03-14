@@ -5,6 +5,7 @@ import LearnPoetry from "../../Components/LearnPoetry/LearnPoetry";
 import { withRouter } from "react-router-dom"
 import Recite from "./components/Recite/Recite";
 import Dictate from "./components/Dictate/Dictate";
+import "./style.less"
 
 const MODE_RECITE = Symbol.for("recite")
 const MODE_DICTATE = Symbol.for("dictate");
@@ -64,11 +65,13 @@ class PoetryLearning extends Component {
     }
 
     isReciteVisible = () => {
-        return this.state.mode === MODE_RECITE;
+        const isEmpty = this.isEmpty();
+        return !isEmpty && this.state.mode === MODE_RECITE;
     }
 
     isDictateVisible = () => {
-        return this.state.mode === MODE_DICTATE;
+        const isEmpty = this.isEmpty();
+        return !isEmpty && this.state.mode === MODE_DICTATE;
     }
 
     isBtnsVisible = () => {
@@ -106,8 +109,8 @@ class PoetryLearning extends Component {
                 }
                 {
                     (this.isEmpty() && (
-                        <div>
-                            请先选择一首诗词后再来
+                        <div className="tips">
+                            请先选择一首诗词或者一位作者
                         </div>
                     ))
                 }

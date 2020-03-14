@@ -8,6 +8,7 @@ const { CollectedPoetryModel } = require("../models/CollectedPoetry")
 const { PoetryModel } = require("../models/Poetry")
 const { userModel } = require("../models/User")
 const { MustLearnPoetryModel } = require("../models/MustLearn")
+const { getFirstGradeYear, getGrade, getGradeSemester } = require("../utils/grade")
 
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 var router = express.Router();
@@ -27,40 +28,20 @@ function DoSetsHaveMustLearnInThisGradeSemester(user_id, grade_semester) {
     })
 }
 
-function getGradeSemester(grade) {
-    const d = new Date();
-    const month = d.getMonth() + 1;
-    if (month >= 9 || month < 3) {
-        return `${grade},1`
-    } else {
-        return `${grade},2`
-    }
-}
 
 function getUserGrade(user_id) {
-
     return new Promise((resolve) => {
         userModel.findOne({ _id: user_id }).then((doc) => {
             const year_first_grade = doc._doc.year_first_grade;
-            const d = new Date();
-            const year = d.getFullYear();
-            const month = d.getMonth() + 1;
-
-            let grade = year - year_first_grade;
-            if (month >= 9) {
-                resolve(grade + 1);
-            } else {
-                resolve(grade)
-            }
+            let grade = getGrade(year_first_grade);
+            resolve(grade);
         })
     });
-
 }
 
 
 
 function insertMustLearnPoetryList(user_id, grade_semester, title) {
-
     return new Promise((resolve) => {
         MustLearnPoetryModel.find({ grade_semester }).then(docsAboutMustLearn => {
             CreatedPoetryListModel.create({
@@ -70,7 +51,6 @@ function insertMustLearnPoetryList(user_id, grade_semester, title) {
             }).then(doc => {
                 const created_poetry_list_id = doc._id
                 const poetryArr = [];
-
                 for (let i = 0; i < docsAboutMustLearn.length; ++i) {
                     const poetry_id = docsAboutMustLearn[i]._doc.poetry_id;
 
@@ -288,17 +268,14 @@ async function getSetPoetryList(created_poetry_list_id) {
 }
 
 
-
-
 router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) => {
     const { _id } = req.body.user;
 
     const grade = await getUserGrade(_id);
 
-    if (grade >= 1 && grade <= 12) {
+    if (grade) {
         const grade_semester = getGradeSemester(grade);
         const judge = await DoSetsHaveMustLearnInThisGradeSemester(_id, grade_semester);
-
         if (!judge) {
             // 先插入再返回集合
             const title = getMustLearnTitle(grade_semester);
@@ -308,7 +285,6 @@ router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) 
 
 
     const list = await getCreatedPoetryList(_id);
-
     const description = await getListDescription(list);
 
     res.json({
@@ -320,8 +296,6 @@ router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) 
         },
     })
 });
-
-
 
 
 
@@ -372,19 +346,19 @@ router.post('/addNewPoetry', verifyToken, verifyUser, async (req, res, next) => 
                     error
                 })
             })
-        }else{
+        } else {
             res.json({
                 ...FAIL_MSG,
                 message: "诗词已存在学习集中"
             })
         }
-    }).catch(error=>{
+    }).catch(error => {
         res.json({
             ...FAIL_MSG,
             error,
         })
     })
-    
+
 });
 
 

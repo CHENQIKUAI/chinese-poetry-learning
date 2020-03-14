@@ -2,14 +2,23 @@ var express = require('express');
 const config = require('config-lite')(__dirname);//读取配置
 const verifyToken = require("../middlewares/verifyToken")
 const verifyAdmin = require("../middlewares/verifyAdmin")
-const verifyUser = require("../middlewares/verifyUser");
 const { PoetryModel } = require("../models/Poetry")
-const { FavoritePoetryModel } = require("../models/FavoritePoetry")
 const { MustLearnPoetryModel } = require("../models/MustLearn")
+const { FavoritePoetryModel } = require("../models/FavoritePoetry")
+const { CollectedPoetryModel } = require("../models/CollectedPoetry")
+
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 const { getFuzzyMatchingFilterObj } = require("../utils/filter")
 var router = express.Router();
 
+function deletePoetryRef(_id) {
+    const promise_arr = [
+        MustLearnPoetryModel.remove({ poetry_id: _id }),
+        FavoritePoetryModel.remove({ poetry_id: _id }),
+        CollectedPoetryModel.remove({ poetry_id: _id })
+    ];
+    return Promise.all(promise_arr)
+}
 
 router.post('/getPoetries', verifyToken, async (req, res, next) => {
     const { current, pageSize, filterObj } = req.body;
@@ -78,12 +87,7 @@ router.post('/createPoetry', verifyToken, verifyAdmin, async (req, res, next) =>
 });
 
 
-function deletePoetryRef(_id) {
-    const promise_arr = [
-        MustLearnPoetryModel.remove({ poetry_id: _id }),
-    ];
-    return Promise.all(promise_arr)
-}
+
 
 
 // 删除

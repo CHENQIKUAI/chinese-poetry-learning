@@ -1,18 +1,16 @@
 import React from 'react'
 import { Popconfirm, Row, Col, Button } from 'antd'
-import "./style.less"
 import { Link } from "react-router-dom"
 import { poetryCheckIn, deletePoetryFromCollection } from '../../../services/LearningSetService';
-import { POETRY_LEARNING } from '../../Menu/menuConstants';
-import getPoetryLearningUrl from '../../../utils/urlUtil';
 import urlUtil from '../../../utils/urlUtil';
+import "./style.less"
 
 function Poetry({ refreshFunction, created_poetry_list_id, _id, title, content, check_in }) {
     //取得第一句诗词，
     // const pattern = /(.*?[\n].*?[\n？！。])/;
     const pattern = /(.*?[。？！])/;
-    const showContent = content.match(pattern)[1];
-
+    const result = content.match(pattern);
+    const showContent = result ? result[1] : content;
 
     function checkInPoetry() {
         poetryCheckIn(created_poetry_list_id, _id).then(ret => {

@@ -2,6 +2,7 @@ var express = require('express');
 const verifyToken = require("../middlewares/verifyToken")
 const verifyUser = require("../middlewares/verifyUser");
 const { userModel } = require("../models/User")
+const { getFirstGradeYear, getGrade } = require("../utils/grade")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 var router = express.Router();
 
@@ -74,20 +75,12 @@ router.post('/updatePwd', verifyToken, verifyUser, async (req, res, next) => {
 });
 
 
+
 router.post('/updateGrade', verifyToken, verifyUser, async (req, res, next) => {
     const { grade } = req.body;
     const { _id } = req.body.user;
 
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-
-    let year_first_grade;
-    if (month > 9) {
-        year_first_grade = year - grade + 1;
-    } else {
-        year_first_grade = year - grade;
-    }
+    const year_first_grade = getFirstGradeYear(grade);
 
     userModel.findByIdAndUpdate(_id, { year_first_grade }).then((doc) => {
         res.json({
@@ -107,18 +100,15 @@ router.post('/updateGrade', verifyToken, verifyUser, async (req, res, next) => {
 router.post('/fetchGrade', verifyToken, verifyUser, (req, res, next) => {
     const { user } = req.body;
     const _id = user._id;
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
 
     userModel.findById(_id, { year_first_grade: 1 }).then((doc) => {
-        const grade = year - doc._doc.year_first_grade + (month >= 9 && month <= 12 ? 1 : 0);
+        const grade = getGrade(doc._doc.year_first_grade);
 
         res.json({
             ...SUCCESS_MSG,
             grade,
         })
-    }).catch(err=>({
+    }).catch(err => ({
         ...FAIL_MSG,
         err
     }))
@@ -134,7 +124,7 @@ router.post('/fetchUsername', verifyToken, verifyUser, (req, res, next) => {
             ...SUCCESS_MSG,
             username
         })
-    }).catch(err=>{
+    }).catch(err => {
         res.json({
             ...FAIL_MSG,
             err

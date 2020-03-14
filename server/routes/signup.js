@@ -3,6 +3,7 @@ const config = require('config-lite')(__dirname);//读取配置
 const jwt = require("jsonwebtoken");
 const { userModel } = require("../models/User")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
+const { getFirstGradeYear } = require("../utils/grade")
 
 var router = express.Router();
 
@@ -17,22 +18,12 @@ const EXPIRESIN = config.EXPIRESIN;
 router.post('/', async (req, res, next) => {
 
     try {
-        let year_first_grade = undefined;
 
         const username = req.body.username;
         const password = req.body.password;
         const grade = req.body.grade;
 
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-
-
-        if (month > 9) {
-            year_first_grade = year - grade + 1;
-        } else {
-            year_first_grade = year - grade;
-        }
+        const year_first_grade = getFirstGradeYear(grade);
 
         const user = {
             username,
@@ -71,8 +62,6 @@ router.post('/', async (req, res, next) => {
             });
         }
     } catch (e) {
-        console.error(e);
-
         res.json({
             ...FAIL_MSG,
             message: "后端错误!!!!!!!!!!!!"
