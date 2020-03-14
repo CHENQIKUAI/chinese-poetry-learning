@@ -22,26 +22,24 @@ router.post('/getPoetries', verifyToken, verifyUser, async (req, res, next) => {
     }
 
     if (total - (current - 1) * pageSize > 0) {
-        FavoritePoetryModel.find(findObj).skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
-            const promises = [];
+        FavoritePoetryModel.find(findObj).skip((current - 1) * pageSize).limit(pageSize).then(async (docs) => {
+            const poetryArr = [];
             for (let i = 0; i < docs.length; ++i) {
                 const poetry_id = docs[i]._doc.poetry_id;
-                promises.push(PoetryModel.findById(poetry_id));
+                const currentPoetry = await PoetryModel.findById(poetry_id)
+                if (currentPoetry) {
+                    currentPoetry._doc.like = true;
+                    poetryArr.push(currentPoetry);
+                }
             }
 
-            Promise.all(promises).then((rets) => {
-                for (let i = 0; i < rets.length; ++i) {
-                    if (rets[i]) {
-                        rets[i]._doc.like = true;
-                    }
-                }
-                res.json({
-                    ...SUCCESS_MSG,
-                    current,
-                    result: rets,
-                    total,
-                })
+            res.json({
+                ...SUCCESS_MSG,
+                current,
+                result: poetryArr,
+                total,
             })
+
         }).catch((e) => {
             res.json({
                 ...FAIL_MSG,
