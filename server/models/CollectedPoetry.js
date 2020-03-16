@@ -5,6 +5,7 @@ const ObjectId = mongoose.SchemaTypes.ObjectId;
 const CreatedPoetryListSchema = mongoose.Schema({
     title: { type: String, required: true },
     user_id: { type: Object, required: true },
+    cron: { type: String, required: false },
     grade_semester: { type: String, required: false },
 })
 

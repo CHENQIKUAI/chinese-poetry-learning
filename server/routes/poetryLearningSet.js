@@ -258,9 +258,9 @@ async function getSetPoetryList(created_poetry_list_id) {
         const poetryContainer = [];
         CollectedPoetryModel.find({ created_poetry_list_id }).then(async docs => {
             for (let i = 0; i < docs.length; ++i) {
-                const { poetry_id, check_in } = docs[i]._doc;
+                const { poetry_id, check_in, cron } = docs[i]._doc;
                 const poetry = await getPoetrySpecificValue(poetry_id, { _id: 1, title: 1, content: 1 });
-                poetryContainer.push({ ...poetry._doc, check_in });
+                poetryContainer.push({ ...poetry._doc, check_in, cron });
             }
             resolve(poetryContainer);
         })
