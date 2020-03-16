@@ -22,7 +22,7 @@ class PoetryLearningSet extends Component {
         loading: true,
         setModalVisible: false,
         created_poetry_list_id: null,
-        setMsg: { title: "", _id: "" },
+        setMsg: { title: "", _id: "", cron: null },
         modalMode: "",
     }
 
@@ -164,11 +164,12 @@ class PoetryLearningSet extends Component {
         };
     }
 
-    setIdAndTitle = (_id, title) => {
+    setSelectedSet = (_id, title, cron) => {
         this.setState({
             setMsg: {
                 _id,
-                title
+                title,
+                cron,
             },
             setModalVisible: true,
             modalMode: "edit"
@@ -199,7 +200,7 @@ class PoetryLearningSet extends Component {
                             mode === SETS_MODE && (
                                 <div>
                                     <SetsDescription {...this.getSetsProps()} />
-                                    <SetsList refreshFunction={this.refresh} setIdAndTitle={this.setIdAndTitle} list={this.getSetsData()} handleGoToSet={this.handleGoToSet} />
+                                    <SetsList refreshFunction={this.refresh} setSelectedSet={this.setSelectedSet} list={this.getSetsData()} handleGoToSet={this.handleGoToSet} />
                                     <SetModal {...this.getSetModalProps()} />
                                 </div>
                             )

@@ -12,10 +12,11 @@ import DataBox from '../DataBox/DataBox'
 export default function SetDescription(
     {
         refreshFunction,
-        setIdAndTitle,
+        setSelectedSet,
         handleGoToSet,
         _id,
         title,
+        cron,
         learnedCount,
         cumulativeDays,
         learningProgress,
@@ -30,7 +31,7 @@ export default function SetDescription(
     }
 
     function handleClickModify() {
-        setIdAndTitle && setIdAndTitle(_id, title)
+        setSelectedSet && setSelectedSet(_id, title, cron)
     }
 
     function handleClickDelete() {

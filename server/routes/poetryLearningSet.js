@@ -80,11 +80,13 @@ function getCreatedPoetryList(user_id) {
             for (let i = 0; i < docs.length; ++i) {
                 const _id = docs[i]._id;
                 const title = docs[i]._doc.title;
+                const cron = docs[i]._doc.cron;
                 const setDescription = await getSpecificSetDescription(_id)
                 list.push({
                     ...setDescription,
                     title,
                     _id,
+                    cron
                 })
             }
             resolve(list);
@@ -386,9 +388,9 @@ router.post('/deletePoetryFromCollection', verifyToken, verifyUser, async (req, 
  * 
  */
 
-router.post('/updateSetName', verifyToken, verifyUser, async (req, res, next) => {
-    const { created_poetry_list_id, title } = req.body;
-    CreatedPoetryListModel.findByIdAndUpdate(created_poetry_list_id, { title }).then(ret => {
+router.post('/updateSet', verifyToken, verifyUser, async (req, res, next) => {
+    const { created_poetry_list_id, title, cron } = req.body;
+    CreatedPoetryListModel.findByIdAndUpdate(created_poetry_list_id, { title, cron }).then(ret => {
         res.json({
             ...SUCCESS_MSG,
             message: "名字修改"

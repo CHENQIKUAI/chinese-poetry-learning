@@ -11,9 +11,9 @@ export const getSpeificSet = (created_poetry_list_id) => {
 }
 
 // 学习集相关
-export const updateSetName = (created_poetry_list_id, title) => {
-    const url = "/poetryLearningSet/updateSetName";
-    return axios(url, { created_poetry_list_id, title }, POST);
+export const updateSet = (created_poetry_list_id, title, cron) => {
+    const url = "/poetryLearningSet/updateSet";
+    return axios(url, { created_poetry_list_id, title, cron}, POST);
 }
 
 export const deleteSet = (created_poetry_list_id) => {
@@ -21,9 +21,9 @@ export const deleteSet = (created_poetry_list_id) => {
     return axios(url, { created_poetry_list_id }, POST);
 }
 
-export const createSet = (title) => {
+export const createSet = (title, cron) => {
     const url = "/poetryLearningSet/createSet";
-    return axios(url, { title }, POST);
+    return axios(url, { title, cron}, POST);
 }
 
 // 学习集中的诗词相关

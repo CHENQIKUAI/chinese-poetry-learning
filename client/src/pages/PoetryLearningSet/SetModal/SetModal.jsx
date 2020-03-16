@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Modal } from 'antd'
-import { createSet, updateSetName } from "../../../services/LearningSetService"
+import { Input, Modal, Checkbox } from 'antd'
+import { weekOptions } from "./const"
+import { createSet, updateSet } from "../../../services/LearningSetService"
+import "./style.less";
 
 export default class SetModal extends React.Component {
 
@@ -8,47 +10,78 @@ export default class SetModal extends React.Component {
         super(props);
         this.state = {
             value: "",
+            weekValues: [],
+        }
+    }
+
+    initState = () => {
+        const state = {
+            value: this.props.title,
+            weekValues: this.getWeekValuesByCron(this.props.cron),
+        }
+        this.setState({
+            ...state
+        })
+    }
+
+    getCronByWeek = (weekValues) => {
+        if (weekValues.length !== 0)
+            return `0 0 * * * ${weekValues}`;
+        else {
+            return `0 0 * * * *`;
+        }
+    }
+
+    getWeekValuesByCron = (cron) => {
+        if (!cron) {
+            return [];
+        } else {
+            const week = cron.split(' ')[5];
+            if (week === '*') {
+                return [0, 1, 2, 3, 4, 5, 6];
+            } else {
+                return week.split(',').map(str => Number(str));
+            }
         }
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps._id !== this.props._id) {
-            this.setState({
-                value: this.props.title,
-            })
+            this.initState();
         }
     }
+
 
     handleOk = () => {
-        const { value } = this.state;
+        const { value, weekValues } = this.state;
+        const cron = this.getCronByWeek(weekValues);
         if (this.props.mode === "create") {
-            createSet(value).then(ret => {
+            createSet(value, cron).then(ret => {
                 if (ret && ret.code === 1) {
                     this.props.hideModal();
                     this.props.refreshFunction();
-                    this.resetValue(value);
+                    this.resetValue(value, cron);
                 }
             })
         } else {
-            updateSetName(this.props._id, value).then(ret => {
+            updateSet(this.props._id, value, cron).then(ret => {
                 if (ret && ret.code === 1) {
                     this.props.hideModal();
                     this.props.refreshFunction();
-                    this.resetValue(value);
+                    this.resetValue(value, cron);
                 }
             })
         }
     }
 
-    resetValue = (value) => {
-        if (value) {
+    resetValue = (value, cron) => {
+        if (value || cron) {
             this.setState({
-                value
+                value,
+                cron
             })
         } else {
-            this.setState({
-                value: this.props.title
-            })
+            this.initState();
         }
     }
 
@@ -71,6 +104,14 @@ export default class SetModal extends React.Component {
         }
     }
 
+    handleWeekChange = (values) => {
+        this.setState({
+            weekValues: values
+        })
+    }
+
+
+
     render() {
         return (
             <div>
@@ -80,10 +121,18 @@ export default class SetModal extends React.Component {
                     onCancel={this.handleCancel}
                     title={this.getTitle()}
                 >
-                    <label htmlFor="title">
-                        学习集名称：
-                    </label>
-                    <Input style={{ width: "300px" }} value={this.state.value} onChange={this.handleValueChange} />
+                    <div className="title-container">
+                        <div className="title-label">
+                            学习集名称：
+                        </div>
+                        <Input className="title-value" value={this.state.value} onChange={this.handleValueChange} />
+                    </div>
+                    <div className="week-container">
+                        <div className="week-label">
+                            提醒日期：
+                        </div>
+                        <Checkbox.Group className="week-value" options={weekOptions} value={this.state.weekValues} onChange={this.handleWeekChange} />
+                    </div>
                 </Modal>
             </div>
         )

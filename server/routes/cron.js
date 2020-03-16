@@ -8,7 +8,7 @@ const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 var router = express.Router();
 
 
-router.get('/cron', verifyToken, verifyUser, async (req, res, next) => {
+router.get('/getCron', verifyToken, verifyUser, async (req, res, next) => {
     CreatedPoetryListModel.find({}, { cron: 1, _id: 1 }).then(ret => {
         let result = [];
         for (let i = 0; i < ret.length; ++i) {
@@ -29,7 +29,7 @@ router.get('/cron', verifyToken, verifyUser, async (req, res, next) => {
 });
 
 
-router.put('/cron', verifyToken, verifyUser, async (req, res, next) => {
+router.put('/updateCron', verifyToken, verifyUser, async (req, res, next) => {
     const { created_poetry_list_id, cron } = req.body;
     CreatedPoetryListModel.findByIdAndUpdate(created_poetry_list_id, { cron }).then(ret => {
         res.json({
@@ -40,9 +40,11 @@ router.put('/cron', verifyToken, verifyUser, async (req, res, next) => {
 });
 
 
-router.get('/poetryMsg', verifyToken, verifyUser, async (req, res, next) => {
+router.get('/getPoetryMsg', verifyToken, verifyUser, async (req, res, next) => {
     const { created_poetry_list_id } = req.body;
-    CollectedPoetryModel.find({ created_poetry_list_id }).then(ret => {
+    CollectedPoetryModel.find({ created_poetry_list_id }).then(async ret => {
+        const set = await CreatedPoetryListModel.findById(created_poetry_list_id);
+        const title = set._doc.title;
         let listLen = ret.length;
         checkInNum = 0;
         for (let i = 0; i < listLen; ++i) {
@@ -54,6 +56,7 @@ router.get('/poetryMsg', verifyToken, verifyUser, async (req, res, next) => {
         res.json({
             ...SUCCESS_MSG,
             result: {
+                title,
                 checkInNum,
                 notCheckInNum: listLen - checkInNum,
                 total: listLen
