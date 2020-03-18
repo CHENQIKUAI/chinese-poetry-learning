@@ -13,22 +13,41 @@ import Time from '../../Components/Time/Time';
 
 import "./Home.less"
 import { MENU_ADMIN, MENU_USER } from "../../Components/Menu/menuConstants";
+import { getNotify } from "../../services/cron";
+import Cron from "../../Components/Cron/Cron";
 
 const { Header, Content, Sider } = Layout;
 
 class Home extends Component {
+    state = {
+        crons: []
+    }
 
     UNSAFE_componentWillMount() {
         this.checkToken();
     }
 
-    async componentDidMount() {
+    fetchProfile = async () => {
         const ret = await profile();
-
         if (ret.code === -1) {
             this.props.history.push("/signin");
             message.error("请先登录")
         }
+    }
+
+    fetchCrons = () => {
+        getNotify().then(ret => {
+            if (ret && ret.code === 1) {
+                this.setState({
+                    crons: ret.result
+                })
+            }
+        })
+    }
+
+    componentDidMount() {
+        this.fetchProfile();
+        this.fetchCrons();
     }
 
     checkToken = () => {
@@ -52,7 +71,7 @@ class Home extends Component {
                     {TYPE === USER_TYPE ?
                         (<div className="sider-logo" >
                             中小学生古诗词学习系统
-                    </div>) :
+                        </div>) :
                         (<div className="sider-logo" >
                             古诗学习后台管理
                         </div>)
@@ -91,7 +110,7 @@ class Home extends Component {
                                 })
                             }
                         </div>
-
+                        <Cron crons={this.state.crons} />
                     </Content>
                 </Layout>
             </Layout>

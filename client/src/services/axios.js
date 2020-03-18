@@ -42,4 +42,3 @@ export default function ajax(url, data = {}, type = 'GET') {
 }
 export const POST = "POST";
 export const GET = "GET";
-export const PUT = "PUT";
