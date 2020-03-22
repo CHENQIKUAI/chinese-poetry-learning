@@ -174,9 +174,11 @@ class MyPoetry extends Component {
                     }
                     <audio className="audio" style={{ display: this.state.audioVisible ? "inline" : "none" }} src={audioUrl} controls ref={this.audioRef}></audio>
                 </div>
-                {Array.isArray(type) && type.map((item, index) => (
-                    item + "   "
-                ))}
+                <Highlighter
+                    highlightClassName="high-light-text"
+                    searchWords={this.props.searchWords || []}
+                    textToHighlight={type.join(' ') || ""}
+                />
             </div>
         )
     }

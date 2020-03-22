@@ -1,8 +1,8 @@
 import axios, { POST } from "./axios"
 
-export const getPoetryList = (current, pageSize, value) => {
+export const getPoetryList = (current, pageSize, filterObj) => {
     const url = "/poetrySearch/getPoetries";
-    return axios(url, { current, pageSize, value }, POST);
+    return axios(url, { current, pageSize, filterObj }, POST);
 }
 
 export const likePoetry = (poetry_id) => {

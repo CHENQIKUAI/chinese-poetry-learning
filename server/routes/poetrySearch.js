@@ -4,15 +4,14 @@ const verifyUser = require("../middlewares/verifyUser");
 const { PoetryModel } = require("../models/Poetry")
 const { FavoritePoetryModel } = require("../models/FavoritePoetry")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
-const { getPoetrySearchFilterObj } = require("../utils/filter")
+const { getMatchingFilterObj } = require("../utils/filter")
 var router = express.Router();
 
-
 router.post('/getPoetries', verifyToken, async (req, res, next) => {
-    const { current, pageSize, value } = req.body;
+    const { current, pageSize, filterObj } = req.body;
     const { _id: user_id } = req.body.user;
 
-    const findObj = getPoetrySearchFilterObj(value);
+    const findObj = getMatchingFilterObj(filterObj);
 
     const total = await PoetryModel.find(findObj).countDocuments();
     if (total === 0) {
