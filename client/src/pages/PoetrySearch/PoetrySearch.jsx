@@ -24,6 +24,14 @@ class PoetrySearch extends Component {
         type: "",
     }
 
+    getSearchWordsArray = (filterObj) => {
+        let arr = [];
+        for (const key in filterObj) {
+            arr = arr.concat(filterObj[key].split(/\s|，/));
+        }
+        return arr;
+    }
+
     fetchPoetryList = (current, pageSize, filterObj) => {
         this.setState({
             loading: true,
@@ -35,7 +43,10 @@ class PoetrySearch extends Component {
                     total,
                     current,
                     loading: false,
+                    highLightWorlds: this.getSearchWordsArray(filterObj)
                 })
+
+
             }).catch((error) => {
                 console.error(error);
                 message.error("error in fetching!");
@@ -77,7 +88,6 @@ class PoetrySearch extends Component {
     handleSearch = () => {
         const { title, dynasty, writer, content, type, pageSize } = this.state;
         this.fetchPoetryList(1, pageSize, { title, dynasty, writer, content, type });
-
     }
 
     handleInputPressEnter = () => {
@@ -101,17 +111,6 @@ class PoetrySearch extends Component {
             return false;
     }
 
-    setHighlightWords = (value) => {
-        if (value) {
-            this.setState({
-                highLightWorlds: value.split(' '),
-            })
-        } else {
-            this.setState({
-                highLightWorlds: []
-            })
-        }
-    }
 
     handleChange = (e) => {
         const value = e.target.value;
