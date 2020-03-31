@@ -121,7 +121,6 @@ class MyPoetry extends Component {
         this.props.goToWriter && this.props.goToWriter();
     }
 
-
     render() {
         let {
             title,
@@ -131,7 +130,6 @@ class MyPoetry extends Component {
             type,
             audioUrl,
         } = this.props.data || {};
-
 
         return (
             <div className="my-poetry">
