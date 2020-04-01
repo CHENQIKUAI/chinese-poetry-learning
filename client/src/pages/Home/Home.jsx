@@ -78,7 +78,7 @@ class Home extends Component {
                     }
                     <MyMenu history={this.props.history} menuConfig={MENU_CONFIG} />
                 </Sider>
-                <Layout>
+                <Layout id="my-layout">
                     <Header style={{ background: '#fff', padding: 0 }} className="header">
                         <div>
                             <Time style={{ marginLeft: "16px" }} />

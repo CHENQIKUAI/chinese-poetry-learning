@@ -10,17 +10,20 @@ import { POETRY_MODE, WRITER_MODE } from './const';
 import DetailWriter from './Components/DetailWriter/DetailWriter';
 import NotFindWriter from './Components/NotFindWriter/NotFindWriter';
 import { Spin } from 'antd'
-import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 
 class LearnPoetry extends Component {
-
-    state = {
-        poetry: null,
-        writer: null,
-        mode: POETRY_MODE,
-        loading: true,
+    constructor(props) {
+        super(props);
+        this.state = {
+            poetry: null,
+            writer: null,
+            mode: POETRY_MODE,
+            loading: true,
+        }
+        this.ref = React.createRef();
     }
+
 
     getLoading = () => {
         return this.state.loading;
@@ -152,32 +155,52 @@ class LearnPoetry extends Component {
         return this.state.writer && this.state.writer.detailIntro;
     }
 
+    getSnapshotBeforeUpdate(prevProps, prevState) {
+        if (this.state.mode !== prevState.mode) {
+            return true;
+        }
+        return null;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.mode !== prevState.mode) {
+            const node = document.querySelector("#my-layout")
+            node.scrollTop = 0;
+        }
+    }
+
     render() {
         const { poetry, mode, writer } = this.state;
 
         return (
             <Spin spinning={this.getLoading()}>
-                {
-                    mode === POETRY_MODE ? (poetry && (
-                        <div>
-                            <MyPoetry data={this.getPoetryData()} goToWriter={this.handleGoToWriter} />
-                            <Translation translation={this.getTranslation()} />
-                            <Remark remark={this.getPoetryRemark()} />
-                            <Appreciation appreciation={this.getPoetryAppreciation()} />
-                            {
-                                writer &&
-                                <AboutWriter {...this.getAboutWriterProps()} />
-                            }
-                        </div>
-                    )) : (
-                            writer ?
-                                (<div>
-                                    <AboutWriter {...this.getAboutWriterProps()} goToWriter={this.handleGoToWriter} />
-                                    <DetailWriter detailIntro={this.getDetailInfo()} />
-                                </div>) : <NotFindWriter />
-                        )
-                }
-                <ScrollToTop />
+                <div ref={this.ref}>
+                    {
+                        mode === POETRY_MODE ?
+                            (poetry && (
+                                <div>
+                                    <MyPoetry data={this.getPoetryData()} goToWriter={this.handleGoToWriter} />
+                                    <Translation translation={this.getTranslation()} />
+                                    <Remark remark={this.getPoetryRemark()} />
+                                    <Appreciation appreciation={this.getPoetryAppreciation()} />
+                                    {
+                                        writer &&
+                                        <AboutWriter {...this.getAboutWriterProps()} />
+                                    }
+                                </div>
+                            ))
+                            :
+                            (
+                                writer ?
+                                    (<div>
+                                        <AboutWriter {...this.getAboutWriterProps()} goToWriter={this.handleGoToWriter} />
+                                        <DetailWriter detailIntro={this.getDetailInfo()} />
+                                    </div>)
+                                    :
+                                    <NotFindWriter />
+                            )
+                    }
+                </div>
             </Spin>
         )
     }
