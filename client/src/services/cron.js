@@ -1,21 +1,16 @@
 import axios, { POST } from "./axios"
 
 export function getCron() {
-    const url = "/cron/getCron";
+    const url = "/poetryLearningSet/getCron";
     return axios(url, {}, POST);
 }
 
-export function updateCron(created_poetry_list_id, cron) {
-    const url = "/cron/updateCron";
-    return axios(url, { created_poetry_list_id, cron }, POST);
-}
-
 export function getPoetryMsg(created_poetry_list_id) {
-    const url = '/cron/getPoetryMsg'
+    const url = '/poetryLearningSet/getPoetryMsg'
     return axios(url, { created_poetry_list_id }, POST);
 }
 
 export function getNotify() {
-    const url = '/cron/getNotify';
+    const url = '/poetryLearningSet/getNotify';
     return axios(url, {}, POST);
 }

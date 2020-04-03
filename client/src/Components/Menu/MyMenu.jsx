@@ -15,7 +15,7 @@ class MyMenu extends Component {
         return path;
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
 
         const menuConfig = this.props.menuConfig;
         const pathname = this.props.history.location.pathname;
@@ -42,7 +42,6 @@ class MyMenu extends Component {
             openKeys
         })
 
-
         window.onhashchange = (e) => {
             const pathname = this.props.history.location.pathname;
             this.setState({
@@ -52,6 +51,9 @@ class MyMenu extends Component {
 
     }
 
+    componentWillUnmount() {
+        window.onhashchange = null;
+    }
 
     handleClickMenuItem = (param) => {
         const path = param.key;

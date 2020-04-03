@@ -23,10 +23,6 @@ class Home extends Component {
         crons: []
     }
 
-    UNSAFE_componentWillMount() {
-        this.checkToken();
-    }
-
     fetchProfile = async () => {
         const ret = await profile();
         if (ret.code === -1) {
@@ -45,16 +41,23 @@ class Home extends Component {
         })
     }
 
-    componentDidMount() {
-        this.fetchProfile();
-        this.fetchCrons();
+    notifyToLogin = () => {
+        message.info("请先登录")
     }
 
-    checkToken = () => {
+    componentDidMount() {
         const token = getToken();
         if (!token) {
-            this.props.history.push("/signin");
+            this.notifyToLogin();
+            this.goToSignin();
+        } else {
+            this.fetchProfile();
+            this.fetchCrons();
         }
+    }
+
+    goToSignin = () => {
+        this.props.history.push("/signin");
     }
 
     render() {

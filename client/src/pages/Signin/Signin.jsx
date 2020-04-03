@@ -37,7 +37,7 @@ class Signin extends Component {
                         setUsername(username);
 
                         this.props.history.push("/");
-                        message.info(LOGIN_SUCCESS_MESSAGE);
+                        message.success(LOGIN_SUCCESS_MESSAGE);
                     } else {
                         this.setState({
                             loginStatus: ERROR

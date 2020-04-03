@@ -1,5 +1,5 @@
 import React from 'react'
-import LearnPoetryService from '../../../../services/LearnPoetryService';
+import LearningCenterService from '../../../../services/LearningCenterService';
 import "./style.less";
 import { Input, Button } from 'antd';
 
@@ -14,7 +14,7 @@ class Dictate extends React.Component {
 
     fetchPoetry = () => {
         const id = window.location.href.match(/_id=(.*)/)[1];
-        LearnPoetryService.getPoetry(id).then(ret => {
+        LearningCenterService.getPoetry(id).then(ret => {
             if (ret && ret.code === 1) {
                 const { title, dynasty, writer, content } = ret.result;
                 this.setState({
@@ -29,7 +29,7 @@ class Dictate extends React.Component {
     }
 
     handleCompute = () => {
-        LearnPoetryService.compute(this.state.value, this.state.poetry.content).then(ret => {
+        LearningCenterService.compute(this.state.value, this.state.poetry.content).then(ret => {
             if (ret && ret.code === 1) {
                 this.setState({
                     output: ret.result

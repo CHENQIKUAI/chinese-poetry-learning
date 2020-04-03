@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import MyPoetry from '../MyPoetry/MyPoetry'
-import LearnPoetryService from '../../services/LearnPoetryService';
+import LearningCenterService from '../../services/LearningCenterService';
 import Appreciation from './Components/Appreciation/Appreciation';
 import Translation from './Components/Translation/Translation';
 import Remark from './Components/Remark/Remark';
@@ -88,7 +88,7 @@ class LearnPoetry extends Component {
         this.setState({
             loading: true,
         }, () => {
-            LearnPoetryService.getWriter(name).then(ret => {
+            LearningCenterService.getWriter(name).then(ret => {
                 if (ret && ret.code === 1) {
                     this.setState({
                         writer: ret.result,
@@ -104,7 +104,7 @@ class LearnPoetry extends Component {
         this.setState({
             loading: true,
         }, () => {
-            LearnPoetryService.getPoetry(id).then(ret => {
+            LearningCenterService.getPoetry(id).then(ret => {
                 if (ret && ret.code === 1) {
                     this.setState({
                         poetry: ret.result,

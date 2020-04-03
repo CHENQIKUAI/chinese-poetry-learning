@@ -41,7 +41,7 @@ class Time extends Component {
     }
 
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         this.clockID = setInterval(() => {
             const time = this.getTime();
             this.setState({

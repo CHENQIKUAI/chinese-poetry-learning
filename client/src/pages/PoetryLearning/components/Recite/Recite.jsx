@@ -4,7 +4,7 @@ import Base64 from 'crypto-js/enc-base64';
 import HmacSHA256 from "crypto-js/hmac-sha256"
 import "./style.less"
 import textContent from "./transformpcm.worker"
-import LearnPoetryService from '../../../../services/LearnPoetryService';
+import LearningCenterService from '../../../../services/LearningCenterService';
 
 var blob = new Blob([textContent]); // textContent为字符串脚本
 var url = window.URL.createObjectURL(blob);
@@ -250,7 +250,7 @@ class Recite extends React.Component {
 
     fetchPoetry = () => {
         const id = window.location.href.match(/_id=(.*)/)[1];
-        LearnPoetryService.getPoetry(id).then(ret => {
+        LearningCenterService.getPoetry(id).then(ret => {
             if (ret && ret.code === 1) {
                 const { title, dynasty, writer, content } = ret.result;
                 this.setState({
@@ -384,7 +384,7 @@ class Recite extends React.Component {
     }
 
     handleCompute = () => {
-        LearnPoetryService.compute(this.state.reciteValue, this.state.poetry.content).then(ret => {
+        LearningCenterService.compute(this.state.reciteValue, this.state.poetry.content).then(ret => {
             if (ret && ret.code === 1) {
                 this.setState({
                     output: ret.result
