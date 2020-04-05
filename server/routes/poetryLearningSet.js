@@ -419,10 +419,10 @@ router.post('/deleteSet', verifyToken, verifyUser, async (req, res, next) => {
 });
 
 router.post('/createSet', verifyToken, verifyUser, async (req, res, next) => {
-    const { title, user } = req.body;
+    const { title, user, cron } = req.body;
     const user_id = user._id;
 
-    CreatedPoetryListModel.create({ title, user_id }).then(doc => {
+    CreatedPoetryListModel.create({ title, user_id, cron }).then(doc => {
         res.json({
             ...SUCCESS_MSG,
             result: doc
@@ -434,7 +434,6 @@ router.post('/createSet', verifyToken, verifyUser, async (req, res, next) => {
         })
     })
 });
-
 
 
 
@@ -566,17 +565,6 @@ router.post('/getPoetryMsg', verifyToken, verifyUser, async (req, res, next) => 
     })
 });
 
-
-
-// router.post('/updateCron', verifyToken, verifyUser, async (req, res, next) => {
-//     const { created_poetry_list_id, cron } = req.body;
-//     CreatedPoetryListModel.findByIdAndUpdate(created_poetry_list_id, { cron }).then(ret => {
-//         res.json({
-//             ...SUCCESS_MSG,
-//             message: "更新成功"
-//         })
-//     })
-// });
 
 
 

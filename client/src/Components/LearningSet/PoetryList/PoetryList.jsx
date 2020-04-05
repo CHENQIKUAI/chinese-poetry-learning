@@ -67,7 +67,11 @@ function Poetry({ refreshFunction, created_poetry_list_id, _id, title, content, 
 export default function PoetryList({ refreshFunction, data, created_poetry_list_id }) {
     return (
         data.map(item => {
-            return <Poetry key={item._id} {...item} refreshFunction={refreshFunction} created_poetry_list_id={created_poetry_list_id} />
+            return <Poetry
+                key={item._id}
+                {...item}
+                refreshFunction={refreshFunction}
+                created_poetry_list_id={created_poetry_list_id} />
         })
     )
 

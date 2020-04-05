@@ -63,7 +63,7 @@ class PoetryList extends Component {
             {
                 title: TITLE_TITLE,
                 dataIndex: TITLE,
-                width: 10,
+                width: 20,
                 align: "center",
                 ...this.getColumnSearchProps(TITLE)
             },
@@ -471,12 +471,12 @@ class PoetryList extends Component {
                         />
                     )}
                 </FormItem>
-                <FormItem label="标题" labelCol={{ span: 2 }} wrapperCol={{ span: 10 }}>
+                <FormItem label="题目" labelCol={{ span: 2 }} wrapperCol={{ span: 10 }}>
                     {getFieldDecorator("title", {
                         rules: [
                             {
                                 required: true,
-                                message: "请输入标题",
+                                message: "请输入题目",
                             }
                         ],
                     })(

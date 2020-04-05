@@ -25,7 +25,9 @@ router.post('/getPoetries', verifyToken, async (req, res, next) => {
 
     const findObj = getFuzzyMatchingFilterObj(filterObj);
 
-    const total = await PoetryModel.find(findObj).count()
+    console.info(findObj);
+    
+    const total = await PoetryModel.find(findObj).countDocuments()
 
     if (total === 0) {
         res.json({
@@ -101,7 +103,7 @@ router.post('/deletePoetry', verifyToken, verifyAdmin, (req, res, next) => {
         })
 
     PoetryModel.remove({ _id }).then(async (result) => {
-        const total = await PoetryModel.find().count()
+        const total = await PoetryModel.find().countDocuments()
         await deletePoetryRef(_id);
 
         res.json({

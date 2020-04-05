@@ -2,24 +2,24 @@ import axios, { POST } from "./axios"
 
 
 export const createPoetry = (poetry) => {
-    const url = "/poetry/createPoetry";
+    const url = "/poetryManagement/createPoetry";
     return axios(url, { poetry }, POST);
 }
 
 
 export const deletePoetry = (_id) => {
-    const url = "/poetry/deletePoetry";
+    const url = "/poetryManagement/deletePoetry";
     return axios(url, { _id }, POST);
 }
 
 
 export const editPoetry = (poetry) => {
-    const url = "/poetry/modifyPoetry";
+    const url = "/poetryManagement/modifyPoetry";
     return axios(url, { poetry }, POST);
 }
 
 
 export const getPoetryList = (current, pageSize, filterObj) => {
-    const url = "/poetry/getPoetries";
+    const url = "/poetryManagement/getPoetries";
     return axios(url, { current, pageSize, filterObj }, POST);
 }

@@ -1,12 +1,12 @@
 import React from 'react'
 import { withRouter } from "react-router-dom"
 import "./style.less"
-import { POETRY_LEARNING } from '../../../Menu/menuConstants'
+import { LEARNING_CENTER } from '../../../Menu/menuConstants'
 
 function AboutWriter({ name, headImageUrl, simpleIntro, history, goToWriter }) {
 
     function handleClickWriter() {
-        history && history.push(`${POETRY_LEARNING}?writer=${name}`)
+        history && history.push(`${LEARNING_CENTER}?writer=${name}`)
         goToWriter && goToWriter();
 
         window.scrollTo({

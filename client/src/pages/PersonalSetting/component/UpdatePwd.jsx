@@ -77,7 +77,7 @@ class UpdatePwd extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const labelColSpan = 2;
-        const formLayout = { labelCol: { span: labelColSpan }, wrapperCol: { span: 10 } };
+        const formLayout = { labelCol: { span: labelColSpan }, wrapperCol: { span: 7 } };
         const buttonLayout = { wrapperCol: { span: 4, offset: labelColSpan } };
 
         return (

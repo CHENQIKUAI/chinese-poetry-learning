@@ -12,7 +12,7 @@ router.post('/getWriters', verifyToken, verifyAdmin, async (req, res, next) => {
 
     const findObj = getFuzzyMatchingFilterObj(filterObj);
 
-    const total = await WriterModel.find(findObj).count()
+    const total = await WriterModel.find(findObj).countDocuments()
 
     if (total === 0) {
         res.json({
@@ -73,7 +73,7 @@ router.post('/createWriter', verifyToken, verifyAdmin, async (req, res, next) =>
 //删除
 router.post('/deleteWriter', verifyToken, verifyAdmin, async (req, res, next) => {
     const { _id } = req.body;
-    const total = await WriterModel.find().count();
+    const total = await WriterModel.find().countDocuments();
     WriterModel.findByIdAndRemove(_id).then((doc) => {
         res.json({
             ...SUCCESS_MSG,

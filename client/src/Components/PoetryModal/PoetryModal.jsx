@@ -45,12 +45,12 @@ class PoetryModal extends Component {
                     onCancel={this.handleCancel}
                 >
                     <Form layout="horizontal" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-                        <FormItem label="标题" >
+                        <FormItem label="题目" >
                             {getFieldDecorator("title", {
                                 rules: [
                                     {
                                         required: true,
-                                        message: "请输入标题",
+                                        message: "请输入题目",
                                     }
                                 ],
                                 initialValue: title,
@@ -143,7 +143,7 @@ class PoetryModal extends Component {
                                 rules: [
                                     {
                                         required: false,
-                                        message: "请输入标题",
+                                        message: "请输入赏析",
                                     }
                                 ]
                             })(

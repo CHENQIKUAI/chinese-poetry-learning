@@ -162,7 +162,7 @@ class PoetryMustLearn extends Component {
                 }
             },
             {
-                title: "诗词标题",
+                title: "诗词题目",
                 dataIndex: "title",
                 align: "center",
             },

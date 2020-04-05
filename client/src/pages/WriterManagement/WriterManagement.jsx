@@ -107,7 +107,7 @@ class AuthorManagement extends Component {
 
     getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
+            <div style={{ padding: 8}}>
                 <Input
                     ref={node => {
                         this.searchInput = node;
@@ -116,20 +116,20 @@ class AuthorManagement extends Component {
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    style={{ width: 90, marginBottom: 8, display: 'block' }}
                 />
                 <Button
                     type="primary"
                     onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
                     icon="search"
                     size="small"
-                    style={{ width: 90, marginRight: 8 }}
+                    style={{ width: 90, display:"block"}}
                 >
                     搜索
-            </Button>
+                </Button>
                 <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
                     重置
-            </Button>
+                </Button>
             </div>
         ),
         filterIcon: filtered => (
@@ -163,7 +163,7 @@ class AuthorManagement extends Component {
                 title: NAME_TITLE,
                 dataIndex: NAME,
                 ...this.getColumnSearchProps(NAME),
-                width: 1,
+                width: '10%',
                 align: "center",
             },
             {

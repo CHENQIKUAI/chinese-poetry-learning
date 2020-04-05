@@ -7,7 +7,7 @@ function getFirstGradeYear(grade) {
     const month = date.getMonth() + 1;
 
     let year_first_grade;
-    if (month > 9) {
+    if (month >= 9) {
         year_first_grade = year - grade + 1;
     } else {
         year_first_grade = year - grade;
@@ -22,7 +22,7 @@ function getGrade(year_first_grade) {
     const date = new Date();
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
-    return year - year_first_grade + (month >= 9 && month <= 12 ? 1 : 0);
+    return year - year_first_grade + (month >= 9 ? 1 : 0);
 }
 
 function getGradeSemester(grade) {

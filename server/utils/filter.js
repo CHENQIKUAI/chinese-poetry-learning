@@ -17,9 +17,11 @@ exports.getFuzzyMatchingFilterObj = (filterObj) => {
                 [propertyName]: propertyValue,
             }
         } else if (Array.isArray(propertyValue)) {
-            findObj = {
-                ...findObj,
-                [propertyName]: { $in: propertyValue },
+            if (propertyValue.length !== 0) {
+                findObj = {
+                    ...findObj,
+                    [propertyName]: { $in: propertyValue },
+                }
             }
         }
     })
@@ -57,9 +59,11 @@ exports.getMatchingFilterObj = (filterObj) => {
                 [propertyName]: propertyValue,
             }
         } else if (Array.isArray(propertyValue)) {
-            findObj = {
-                ...findObj,
-                [propertyName]: { $in: propertyValue },
+            if (propertyValue.length !== 0) {
+                findObj = {
+                    ...findObj,
+                    [propertyName]: { $in: propertyValue },
+                }
             }
         }
     })

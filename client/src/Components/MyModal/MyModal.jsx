@@ -70,9 +70,9 @@ class MyModal extends Component {
 
     getModalTitle = () => {
         if (this.props.mode === 1) {
-            return <div className="modal-my-modal-title">编辑作者信息</div>
+            return <div className="modal-my-modal-title">编辑作者</div>
         } else if (this.props.mode === 2) {
-            return <div className="modal-my-modal-title">添加作者信息</div>
+            return <div className="modal-my-modal-title">添加作者</div>
         }
     }
 

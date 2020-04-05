@@ -163,6 +163,7 @@ class PersonalSetting extends Component {
                                     {getFieldDecorator(USERNAME, {
                                         initialValue: this.state.username,
                                         rules: [
+                                            { required: true, message:"请输入用户名"},
                                             { min: 6, message: "密码至少为六位" },
                                             { pattern: /^[a-zA-Z0-9_]+$/, message: "请输入由英文字母、数字或下划线组成的字符" }
                                         ],

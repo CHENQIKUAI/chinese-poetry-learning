@@ -83,7 +83,7 @@ class SeachPoetryModal extends React.Component {
             columns: [
                 {
                     dataIndex: "title",
-                    title: "标题",
+                    title: "题目",
                     align: "center",
                 },
                 {
@@ -157,7 +157,7 @@ class SeachPoetryModal extends React.Component {
             onChange: handleInputChange,
             onPressEnter: handlePressEnter,
             value: this.state.searchText,
-            placeholder: "请输入诗词标题",
+            placeholder: "请输入诗词题目",
         }
     }
 

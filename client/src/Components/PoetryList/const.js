@@ -1,5 +1,5 @@
 export const TITLE = "title";
-export const TITLE_TITLE = "标题";
+export const TITLE_TITLE = "题目";
 
 export const DYNASTY = "dynasty"
 export const DYNASTY_TITLE = "朝代";

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Card, Button, Affix } from "antd";
-import "./PoetryLearning.less"
 import LearnPoetry from "../../Components/LearnPoetry/LearnPoetry";
 import { withRouter } from "react-router-dom"
 import Recite from "./components/Recite/Recite";
@@ -10,7 +9,7 @@ import "./style.less"
 const MODE_RECITE = Symbol.for("recite")
 const MODE_DICTATE = Symbol.for("dictate");
 
-class PoetryLearning extends Component {
+class LearningCenter extends Component {
 
     constructor(props) {
         super(props);
@@ -79,7 +78,7 @@ class PoetryLearning extends Component {
     }
 
     isEmpty = () => {
-        return window.location.href.match(/poetryLearning$/)
+        return window.location.href.match(/learningCenter$/)
     }
 
     render() {
@@ -119,4 +118,4 @@ class PoetryLearning extends Component {
     }
 }
 
-export default withRouter(PoetryLearning);
+export default withRouter(LearningCenter);

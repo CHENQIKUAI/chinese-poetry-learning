@@ -1,39 +1,68 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Input, Modal, Checkbox } from 'antd'
 import { weekOptions } from "./const"
 import { createSet, updateSet } from "../../../services/LearningSetService"
 import "./style.less";
 
+const MODE_CREATE = "create";
+const MODE_EDIT = "edit";
+
+
 export default class SetModal extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: "",
-            weekValues: [],
+    getSetId = () => {
+        return this.props._id;
+    }
+
+    getMode = () => {
+        const id = this.getSetId();
+        if (id === null) {
+            return MODE_CREATE;
+        } else {
+            return MODE_EDIT;
         }
     }
 
-    initState = () => {
-        const state = {
-            value: this.props.title,
-            weekValues: this.getWeekValuesByCron(this.props.cron),
-        }
-        this.setState({
-            ...state
-        })
+    getInputValue = () => {
+        return this.props.title;
     }
+
+    getCheckboxValue = () => {
+        return this.getWeekValuesByCron(this.props.cron);
+    }
+
+    handleChange = ({ title, cron }) => {
+        this.props.handleChangeSetMsg({ title, cron });
+    }
+
+    handleHideModal = () => {
+        this.props.hideModal();
+    }
+
+    handleRefresh = () => {
+        this.props.refreshFunction();
+    }
+
+    getTitle = () => {
+        const mode = this.getMode();
+        if (mode === MODE_EDIT) {
+            return <div>新建学习集</div>
+        } else {
+            return <div>修改学习集</div>
+        }
+    }
+
 
     getCronByWeek = (weekValues) => {
         if (weekValues.length !== 0)
             return `0 0 * * * ${weekValues}`;
         else {
-            return `0 0 * * * *`;
+            return null;
         }
     }
 
     getWeekValuesByCron = (cron) => {
-        if (!cron) {
+        if (cron === null || cron === undefined) {
             return [];
         } else {
             const week = cron.split(' ')[5];
@@ -45,72 +74,41 @@ export default class SetModal extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
-        if (prevProps._id !== this.props._id) {
-            this.initState();
-        }
-    }
-
-
     handleOk = () => {
-        const { value, weekValues } = this.state;
-        const cron = this.getCronByWeek(weekValues);
-        if (this.props.mode === "create") {
-            createSet(value, cron).then(ret => {
+        const title = this.getInputValue()
+        const cron = this.getCronByWeek(this.getCheckboxValue());
+        const mode = this.getMode();
+        if (mode === MODE_CREATE) {
+            createSet(title, cron).then(ret => {
                 if (ret && ret.code === 1) {
-                    this.props.hideModal();
-                    this.props.refreshFunction();
-                    this.resetValue(value, cron);
+                    this.handleHideModal();
+                    this.handleRefresh();
                 }
             })
-        } else {
-            updateSet(this.props._id, value, cron).then(ret => {
+        } else if (mode === MODE_EDIT) {
+            const id = this.getSetId();
+            updateSet(id, title, cron).then(ret => {
                 if (ret && ret.code === 1) {
-                    this.props.hideModal();
-                    this.props.refreshFunction();
-                    this.resetValue(value, cron);
+                    this.handleHideModal();
+                    this.handleRefresh();
                 }
             })
-        }
-    }
-
-    resetValue = (value, cron) => {
-        if (value || cron) {
-            this.setState({
-                value,
-                cron
-            })
-        } else {
-            this.initState();
         }
     }
 
     handleCancel = () => {
-        this.props.hideModal();
-        this.resetValue();
+        this.handleHideModal();
     }
 
-    handleValueChange = (e) => {
-        this.setState({
-            value: e.target.value,
-        })
+    handleChangeInput = (e) => {
+        const value = e.target.value;
+        this.handleChange({ title: value })
     }
 
-    getTitle = () => {
-        if (this.props.mode === "create") {
-            return <div>新建学习集</div>
-        } else {
-            return <div>修改学习集</div>
-        }
+    handleChangeCheckBox = (value) => {
+        const cron = this.getCronByWeek(value);
+        this.handleChange({ cron });
     }
-
-    handleWeekChange = (values) => {
-        this.setState({
-            weekValues: values
-        })
-    }
-
-
 
     render() {
         return (
@@ -119,19 +117,29 @@ export default class SetModal extends React.Component {
                     visible={this.props.setModalVisible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    title={this.getTitle()}
-                >
+                    title={this.getTitle()}>
+
                     <div className="title-container">
                         <div className="title-label">
                             学习集名称：
                         </div>
-                        <Input className="title-value" value={this.state.value} onChange={this.handleValueChange} />
+                        <Input
+                            ref={this.setInputRef}
+                            className="title-value"
+                            value={this.getInputValue()}
+                            onChange={this.handleChangeInput}
+                        />
                     </div>
                     <div className="week-container">
                         <div className="week-label">
                             提醒日期：
                         </div>
-                        <Checkbox.Group className="week-value" options={weekOptions} value={this.state.weekValues} onChange={this.handleWeekChange} />
+                        <Checkbox.Group
+                            className="week-value"
+                            options={weekOptions}
+                            value={this.getCheckboxValue()}
+                            onChange={this.handleChangeCheckBox}
+                        />
                     </div>
                 </Modal>
             </div>

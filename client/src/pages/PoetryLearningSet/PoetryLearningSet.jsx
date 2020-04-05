@@ -23,7 +23,6 @@ class PoetryLearningSet extends Component {
         setModalVisible: false,
         created_poetry_list_id: null,
         setMsg: { title: "", _id: "", cron: null },
-        modalMode: "",
     }
 
     handleGoToSets = () => {
@@ -38,7 +37,6 @@ class PoetryLearningSet extends Component {
             created_poetry_list_id
         })
     }
-
 
     componentDidMount() {
         if (this.state.mode === SETS_MODE) {
@@ -94,11 +92,11 @@ class PoetryLearningSet extends Component {
             ...this.state.setsDescription,
             clickAdd: () => {
                 this.setState({
-                    modalMode: "create",
                     setModalVisible: true,
                     setMsg: {
-                        _id: "",
+                        _id: null,
                         title: "",
+                        cron: null,
                     }
                 })
             }
@@ -153,14 +151,13 @@ class PoetryLearningSet extends Component {
         }
     }
 
-
     getSetModalProps = () => {
         return {
             ...this.state.setMsg,
             setModalVisible: this.state.setModalVisible,
             refreshFunction: this.refresh,
             hideModal: this.hideModal,
-            mode: this.state.modalMode,
+            handleChangeSetMsg: this.handleChangeSetMsg
         };
     }
 
@@ -172,7 +169,6 @@ class PoetryLearningSet extends Component {
                 cron,
             },
             setModalVisible: true,
-            modalMode: "edit"
         })
     }
 
@@ -190,6 +186,33 @@ class PoetryLearningSet extends Component {
         })
     }
 
+    handleChangeSetMsg = ({ title, cron }) => {
+
+        if (title) {
+            this.setState((state) => {
+                return {
+                    ...state,
+                    setMsg: {
+                        ...state.setMsg,
+                        title
+                    }
+                }
+            })
+        }
+
+        if (cron) {
+            this.setState((state) => {
+                return {
+                    ...state,
+                    setMsg: {
+                        ...state.setMsg,
+                        cron
+                    }
+                }
+            })
+        }
+    }
+
     render() {
         const { mode } = this.state;
         return (
@@ -201,6 +224,7 @@ class PoetryLearningSet extends Component {
                                 <div>
                                     <SetsDescription {...this.getSetsProps()} />
                                     <SetsList refreshFunction={this.refresh} setSelectedSet={this.setSelectedSet} list={this.getSetsData()} handleGoToSet={this.handleGoToSet} />
+                                    {/* <SetModal {...this.getSetModalProps()} /> */}
                                     <SetModal {...this.getSetModalProps()} />
                                 </div>
                             )

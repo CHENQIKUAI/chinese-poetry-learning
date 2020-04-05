@@ -11,7 +11,6 @@ import DetailWriter from './Components/DetailWriter/DetailWriter';
 import NotFindWriter from './Components/NotFindWriter/NotFindWriter';
 import { Spin } from 'antd'
 
-
 class LearnPoetry extends Component {
     constructor(props) {
         super(props);
