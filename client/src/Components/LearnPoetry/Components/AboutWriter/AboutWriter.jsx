@@ -8,10 +8,8 @@ function AboutWriter({ name, headImageUrl, simpleIntro, history, goToWriter }) {
     function handleClickWriter() {
         history && history.push(`${LEARNING_CENTER}?writer=${name}`)
         goToWriter && goToWriter();
-
         window.scrollTo({
             top: 0,
-            behavior: "smooth"
         });
     }
 

@@ -154,39 +154,37 @@ class PersonalSetting extends Component {
         const formLayout = { labelCol: { span: labelColSpan }, wrapperCol: { span: 5 } }
         const buttonLayout = { wrapperCol: { offset: labelColSpan } }
         return (
-            <div>
-                <Card {...this.getCardProps()}>
-                    {
-                        mode === MAIN_MODE ?
-                            <Form {...formLayout}>
-                                <Form.Item label={USERNAME_TITLE} hasFeedback>
-                                    {getFieldDecorator(USERNAME, {
-                                        initialValue: this.state.username,
-                                        rules: [
-                                            { required: true, message:"请输入用户名"},
-                                            { min: 6, message: "密码至少为六位" },
-                                            { pattern: /^[a-zA-Z0-9_]+$/, message: "请输入由英文字母、数字或下划线组成的字符" }
-                                        ],
-                                        validate: [{ trigger: "onBlur", rules: [{ validator: this.handleCheckUsername }] }],
-                                    })(<Input placeholder="请输入用户名" autoComplete="off" />)}
-                                </Form.Item>
-                                <Form.Item label={PASSWORD_TITLE}>
-                                    <Button onClick={this.handleClickModifyPwd}>修改密码</Button>
-                                </Form.Item>
-                                <Form.Item label={GRADE_TITLE}>
-                                    {getFieldDecorator(GRADE, {
-                                        initialValue: this.getCascaderOptions(),
-                                        rules: [{ required: true, message: '请选择年级' }]
-                                    })(<Cascader options={gradeOptions}></Cascader>)}
-                                </Form.Item>
-                                <Form.Item {...buttonLayout}>
-                                    <Button type="primary" className="btn-save" onClick={this.handleClickSave}>保存</Button>
-                                </Form.Item>
-                            </Form> :
-                            <UpdatePwd changeMode={this.handleChangeMode} />
-                    }
-                </Card>
-            </div>
+            <Card {...this.getCardProps()}>
+                {
+                    mode === MAIN_MODE ?
+                        <Form {...formLayout}>
+                            <Form.Item label={USERNAME_TITLE} hasFeedback>
+                                {getFieldDecorator(USERNAME, {
+                                    initialValue: this.state.username,
+                                    rules: [
+                                        { required: true, message: "请输入用户名" },
+                                        { min: 6, message: "密码至少为六位" },
+                                        { pattern: /^[a-zA-Z0-9_]+$/, message: "请输入由英文字母、数字或下划线组成的字符" }
+                                    ],
+                                    validate: [{ trigger: "onBlur", rules: [{ validator: this.handleCheckUsername }] }],
+                                })(<Input placeholder="请输入用户名" autoComplete="off" />)}
+                            </Form.Item>
+                            <Form.Item label={PASSWORD_TITLE}>
+                                <Button onClick={this.handleClickModifyPwd}>修改密码</Button>
+                            </Form.Item>
+                            <Form.Item label={GRADE_TITLE}>
+                                {getFieldDecorator(GRADE, {
+                                    initialValue: this.getCascaderOptions(),
+                                    rules: [{ required: true, message: '请选择年级' }]
+                                })(<Cascader options={gradeOptions}></Cascader>)}
+                            </Form.Item>
+                            <Form.Item {...buttonLayout}>
+                                <Button type="primary" className="btn-save" onClick={this.handleClickSave}>保存</Button>
+                            </Form.Item>
+                        </Form> :
+                        <UpdatePwd changeMode={this.handleChangeMode} />
+                }
+            </Card>
         )
     }
 }

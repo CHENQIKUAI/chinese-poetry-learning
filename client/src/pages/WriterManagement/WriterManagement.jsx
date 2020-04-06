@@ -107,7 +107,7 @@ class AuthorManagement extends Component {
 
     getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8}}>
+            <div style={{ padding: 8 }}>
                 <Input
                     ref={node => {
                         this.searchInput = node;
@@ -123,7 +123,7 @@ class AuthorManagement extends Component {
                     onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
                     icon="search"
                     size="small"
-                    style={{ width: 90, display:"block"}}
+                    style={{ width: 90, display: "block" }}
                 >
                     搜索
                 </Button>
@@ -399,12 +399,12 @@ class AuthorManagement extends Component {
 
     render() {
         return (
-            <div>
+            <>
                 <Card {...this.getCardProps()}>
                     <Table {...this.getTableProps()} />
                 </Card>
                 <MyModal {...this.getMyModalProps()} />
-            </div>
+            </>
         )
     }
 

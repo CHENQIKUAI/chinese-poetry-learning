@@ -5,16 +5,15 @@ import {
 } from "react-router-dom";
 import { getToken, getType, USER_TYPE, ADMIN_TYPE } from "../../utils/localStorageManagement";
 import { profile } from "../../services/HomeService";
-
 import MyMenu from "../../Components/Menu/MyMenu";
 import Logout from '../../Components/Logout/Logout';
 import Time from '../../Components/Time/Time';
-
-
 import "./Home.less"
 import { MENU_ADMIN, MENU_USER } from "../../Components/Menu/menuConstants";
 import { getNotify } from "../../services/cron";
 import Cron from "../../Components/Cron/Cron";
+import logoStudent from "../../img/logo-student.png"
+import logoAdmin from "../../img/logo-admin.png"
 
 const { Header, Content, Sider } = Layout;
 
@@ -61,27 +60,22 @@ class Home extends Component {
     }
 
     render() {
-
         const TYPE = getType();
         const MENU_CONFIG = TYPE === ADMIN_TYPE ? MENU_ADMIN : MENU_USER;
-
         return (
-            <Layout>
-                <Sider
-                    breakpoint="lg"
-                    collapsedWidth="0"
-                >
+            <Layout style={{ minHeight: "100vh" }}>
+                <Sider style={{ position: "fixed", minHeight: "100vh" }}>
                     {TYPE === USER_TYPE ?
                         (<div className="sider-logo" >
-                            中小学生古诗词学习系统
+                            <img src={logoStudent} />
                         </div>) :
                         (<div className="sider-logo" >
-                            古诗学习后台管理
+                            <img src={logoAdmin} />
                         </div>)
                     }
                     <MyMenu history={this.props.history} menuConfig={MENU_CONFIG} />
                 </Sider>
-                <Layout id="my-layout">
+                <Layout id="my-layout" style={{ marginLeft: "200px" }}>
                     <Header style={{ background: '#fff', padding: 0 }} className="header">
                         <div>
                             <Time style={{ marginLeft: "16px" }} />
@@ -89,13 +83,10 @@ class Home extends Component {
                         </div>
                     </Header>
                     <Content style={{ margin: '24px 16px 0' }}>
-
                         <div style={{ padding: 24, background: '#fff' }}>
                             {
-
                                 MENU_CONFIG.map((menuItem) => {
                                     if (menuItem.children && menuItem.children.length !== 0) {
-
                                         return menuItem.children.map(i => {
                                             return <Route
                                                 path={i.key}

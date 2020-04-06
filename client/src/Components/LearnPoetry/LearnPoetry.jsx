@@ -161,16 +161,8 @@ class LearnPoetry extends Component {
         return null;
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.mode !== prevState.mode) {
-            const node = document.querySelector("#my-layout")
-            node.scrollTop = 0;
-        }
-    }
-
     render() {
         const { poetry, mode, writer } = this.state;
-
         return (
             <Spin spinning={this.getLoading()}>
                 <div ref={this.ref}>

@@ -28,7 +28,7 @@ export const AUDIOURL_TITLE = "音频"
 export const OPERATION = "operation";
 export const OPERATION_TITLE = " 操作"
 
-export const pageSizeOptions = ["10", "20", "50"];
+export const pageSizeOptions = ['5', "10", "20", "50"];
 
 export const CREATE_MODE = 1;
 export const EDIT_MODE = 2;

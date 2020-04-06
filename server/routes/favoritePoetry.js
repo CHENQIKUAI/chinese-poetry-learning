@@ -11,7 +11,6 @@ router.post('/getPoetries', verifyToken, verifyUser, async (req, res, next) => {
     const { current, pageSize } = req.body;
     const findObj = { user_id: _id };
     const total = await FavoritePoetryModel.find(findObj).countDocuments();
-
     if (total === 0) {
         res.json({
             ...SUCCESS_MSG,
@@ -20,7 +19,6 @@ router.post('/getPoetries', verifyToken, verifyUser, async (req, res, next) => {
             total: 0,
         })
     }
-
     if (total - (current - 1) * pageSize > 0) {
         FavoritePoetryModel.find(findObj).skip((current - 1) * pageSize).limit(pageSize).then(async (docs) => {
             const poetryArr = [];
@@ -32,7 +30,6 @@ router.post('/getPoetries', verifyToken, verifyUser, async (req, res, next) => {
                     poetryArr.push(currentPoetry);
                 }
             }
-
             res.json({
                 ...SUCCESS_MSG,
                 current,

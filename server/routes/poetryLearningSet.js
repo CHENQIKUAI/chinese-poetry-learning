@@ -129,24 +129,18 @@ function getSetSpecificValue(created_poetry_list_id, { check_in = 0, check_in_da
 
 
 function getListDescription(list) {
-
     return new Promise(async (resolve) => {
         const specificValuesArrOfOneSetContainer = [];//包含各个集合的字段信息。
-
         for (let i = 0; i < list.length; ++i) {
             const created_poetry_list_id = list[i]._id;
             const specificValuesArrOfOneSet = await getSetSpecificValue(created_poetry_list_id, { check_in: 1, check_in_date: 1, poetry_id: 1 })
             specificValuesArrOfOneSetContainer.push(specificValuesArrOfOneSet);
         }
-
         // 计算已经打卡的诗词数目
         let poetryIdArr = [];
-
         // 计算连续几天学习了
         // 计算累计打卡天数
         let timeArr = [];
-
-
         specificValuesArrOfOneSetContainer.forEach(specificValuesArrOfOneSet => {
             specificValuesArrOfOneSet.map((specificValues) => {
                 const poetry_id = specificValues.poetry_id;
@@ -160,18 +154,14 @@ function getListDescription(list) {
                     timeArr.push(check_in_date);
             })
         })
-
         const timeContainer = {};
         for (let i = 0; i < timeArr.length; ++i) {
             const timeStr = `${timeArr[i].getFullYear()},${timeArr[i].getMonth() + 1},${timeArr[i].getDate()}`;
             timeContainer[timeStr] = 1;
         }
-
         timeArr.sort();
         timeArr.reverse();
-
         let count = 0;
-
         let day = new Date();
         let dayStr = `${day.getFullYear()},${day.getMonth() + 1},${day.getDate()}`;
         if (timeContainer[dayStr]) {
@@ -186,14 +176,11 @@ function getListDescription(list) {
                 break;
             }
         }
-
-
         const description = {
             checkInNumber: poetryIdArr.length,
             consecutiveDays: count,
             cumulativeDays: Object.keys(timeContainer).length,
         }
-
         resolve(description);
     })
 }
@@ -223,7 +210,6 @@ async function getSpecificSetDescription(created_poetry_list_id) {
                 timeContainer[dateStr] = 1;
             }
         }
-
         const learnedCount = Object.keys(poetryIdContainer).length
         const cumulativeDays = Object.keys(timeContainer).length
         const learningProgress = learnedCount / (specificValuesArrOfThisSet.length)
@@ -266,11 +252,8 @@ async function getSetPoetryList(created_poetry_list_id) {
 }
 
 
-
 router.post('/getSetPoetryList', verifyToken, verifyUser, async (req, res, next) => {
     const { user, created_poetry_list_id } = req.body;
-    const { _id: user_id } = user;
-
     const description = await getSpecificSetDescription(created_poetry_list_id);
     const list = await getSetPoetryList(created_poetry_list_id)
 
@@ -283,7 +266,6 @@ router.post('/getSetPoetryList', verifyToken, verifyUser, async (req, res, next)
 
     })
 })
-
 
 
 // 关于学习集中诗词的操作
@@ -300,9 +282,7 @@ router.post('/poetryCheckIn', verifyToken, verifyUser, async (req, res, next) =>
 
 router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) => {
     const { _id } = req.body.user;
-
     const grade = await getUserGrade(_id);
-
     if (grade) {
         const grade_semester = getGradeSemester(grade);
         const judge = await DoSetsHaveMustLearnInThisGradeSemester(_id, grade_semester);
@@ -312,11 +292,8 @@ router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) 
             await insertMustLearnPoetryList(_id, grade_semester, title);
         }
     }
-
-
     const list = await getCreatedPoetryList(_id);
     const description = await getListDescription(list);
-
     res.json({
         ...SUCCESS_MSG,
         grade,
@@ -326,8 +303,6 @@ router.post('/getLearningSets', verifyToken, verifyUser, async (req, res, next) 
         },
     })
 });
-
-
 
 
 router.post('/addNewPoetry', verifyToken, verifyUser, async (req, res, next) => {
@@ -359,7 +334,6 @@ router.post('/addNewPoetry', verifyToken, verifyUser, async (req, res, next) => 
     })
 
 });
-
 
 
 router.post('/deletePoetryFromCollection', verifyToken, verifyUser, async (req, res, next) => {
@@ -485,7 +459,6 @@ async function getMsgOfSet(created_poetry_list_id) {
                     checkInNum++;
                 }
             }
-
             const notCheckInNum = listLen - checkInNum;
             const total = listLen;
             const msg = {

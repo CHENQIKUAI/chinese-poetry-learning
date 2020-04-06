@@ -18,7 +18,7 @@ class PoetryList extends Component {
         this.state = {
             poetryList: [],
             current: 1,
-            pageSize: 10,
+            pageSize: parseInt(pageSizeOptions[0]),
             total: 0,
             poetryModalVisible: false,
             modalMode: 0,
@@ -311,12 +311,12 @@ class PoetryList extends Component {
 
 
     getPagination = () => {
-
         return {
             current: this.state.current,
             showSizeChanger: true,
             total: this.getPageTotal(),
             pageSizeOptions: pageSizeOptions,
+            defaultPageSize: parseInt(pageSizeOptions[0]),
             onChange: this.handlePageChange,
             onShowSizeChange: this.handleSizeChange,
             showQuickJumper: true,
@@ -458,7 +458,6 @@ class PoetryList extends Component {
         this.hideModal();
     }
 
-
     getModalContent = () => {
         const { getFieldDecorator } = this.props.form;
 
@@ -570,14 +569,12 @@ class PoetryList extends Component {
         )
     }
 
-
     render() {
         return (
             <>
                 <Card {...this.getCardProps()}>
                     <Table {...this.getTableProps()} />
                 </Card>
-
                 <Modal
                     title={this.getTitle()}
                     visible={this.getModalVisible()}

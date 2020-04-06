@@ -46,9 +46,9 @@ export default class SetModal extends React.Component {
     getTitle = () => {
         const mode = this.getMode();
         if (mode === MODE_EDIT) {
-            return <div>新建学习集</div>
-        } else {
             return <div>修改学习集</div>
+        } else {
+            return <div>新建学习集</div>
         }
     }
 

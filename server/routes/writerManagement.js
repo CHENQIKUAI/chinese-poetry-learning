@@ -1,5 +1,4 @@
 var express = require('express');
-const config = require('config-lite')(__dirname);//读取配置
 const verifyToken = require("../middlewares/verifyToken")
 const verifyAdmin = require("../middlewares/verifyAdmin")
 const { WriterModel } = require("../models/Writer")
@@ -9,11 +8,8 @@ var router = express.Router();
 
 router.post('/getWriters', verifyToken, verifyAdmin, async (req, res, next) => {
     const { current, pageSize, filterObj } = req.body;
-
     const findObj = getFuzzyMatchingFilterObj(filterObj);
-
     const total = await WriterModel.find(findObj).countDocuments()
-
     if (total === 0) {
         res.json({
             ...SUCCESS_MSG,
@@ -23,7 +19,6 @@ router.post('/getWriters', verifyToken, verifyAdmin, async (req, res, next) => {
             total: 0,
         })
     }
-
     if (total - (current - 1) * pageSize > 0) {
         WriterModel.find(findObj).skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
             res.json({
@@ -52,7 +47,6 @@ router.post('/getWriters', verifyToken, verifyAdmin, async (req, res, next) => {
 //增加
 router.post('/createWriter', verifyToken, verifyAdmin, async (req, res, next) => {
     const { writer } = req.body;
-
     WriterModel.create(writer).then((doc) => {
         res.json({
             ...SUCCESS_MSG,
@@ -94,7 +88,6 @@ router.post('/deleteWriter', verifyToken, verifyAdmin, async (req, res, next) =>
 router.post('/modifyWriter', verifyToken, verifyAdmin, async (req, res, next) => {
     const { writer } = req.body;
     const _id = writer._id;
-
     WriterModel.findByIdAndUpdate(_id, writer).then((doc) => {
         res.json({
             ...SUCCESS_MSG,
@@ -108,6 +101,5 @@ router.post('/modifyWriter', verifyToken, verifyAdmin, async (req, res, next) =>
         })
     })
 });
-
 
 module.exports = router;

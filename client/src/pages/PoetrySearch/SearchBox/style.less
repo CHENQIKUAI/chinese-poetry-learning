@@ -1,0 +1,45 @@
+.search-box {
+    margin-bottom: 20px;
+
+    .search-items {
+        display: flex;
+        flex-wrap: wrap;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+
+        @item-with: 310px;
+
+        .search-button {
+            width: @item-with;
+
+            button {
+                margin-left: 70px;
+            }
+        }
+
+        .search-item {
+            display: flex;
+            width: @item-with;
+            margin: 5px 0;
+            align-items: center;
+
+            label::after {
+                content: ":";
+            }
+
+            label {
+                flex-basis: 70px;
+                flex-grow: 0;
+                padding-left: 7%;
+                padding-right: 5%;
+            }
+
+            input {
+                flex-basis: 0;
+                flex-grow: 1;
+            }
+        }
+
+    }
+}

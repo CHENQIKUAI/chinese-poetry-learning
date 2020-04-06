@@ -187,8 +187,7 @@ class PoetryLearningSet extends Component {
     }
 
     handleChangeSetMsg = ({ title, cron }) => {
-
-        if (title) {
+        if (title !== undefined) {
             this.setState((state) => {
                 return {
                     ...state,
@@ -199,8 +198,7 @@ class PoetryLearningSet extends Component {
                 }
             })
         }
-
-        if (cron) {
+        if (cron !== undefined) {
             this.setState((state) => {
                 return {
                     ...state,
@@ -213,33 +211,39 @@ class PoetryLearningSet extends Component {
         }
     }
 
+    getSetsListProps = () => {
+        return {
+            refreshFunction: this.refresh,
+            setSelectedSet: this.setSelectedSet,
+            list: this.getSetsData(),
+            handleGoToSet: this.handleGoToSet
+        }
+    }
+
     render() {
-        const { mode } = this.state;
+        const { mode, loading } = this.state;
         return (
-            <div>
-                <Card {...this.getCardProps()}>
-                    <Spin spinning={this.state.loading}>
-                        {
-                            mode === SETS_MODE && (
-                                <div>
-                                    <SetsDescription {...this.getSetsProps()} />
-                                    <SetsList refreshFunction={this.refresh} setSelectedSet={this.setSelectedSet} list={this.getSetsData()} handleGoToSet={this.handleGoToSet} />
-                                    {/* <SetModal {...this.getSetModalProps()} /> */}
-                                    <SetModal {...this.getSetModalProps()} />
-                                </div>
-                            )
-                        }
-                        {
-                            mode === SET_MODE && (
-                                <div>
-                                    <SetDescription {...this.getSetProps()} />
-                                    <PoetryList {...this.getPoetryListProps()} />
-                                </div>
-                            )
-                        }
-                    </Spin>
-                </Card>
-            </div>
+            <Card {...this.getCardProps()}>
+                <Spin spinning={loading}>
+                    {
+                        mode === SETS_MODE && (
+                            <>
+                                <SetsDescription {...this.getSetsProps()} />
+                                <SetsList {...this.getSetsListProps()} />
+                                <SetModal {...this.getSetModalProps()} />
+                            </>
+                        )
+                    }
+                    {
+                        mode === SET_MODE && (
+                            <>
+                                <SetDescription {...this.getSetProps()} />
+                                <PoetryList {...this.getPoetryListProps()} />
+                            </>
+                        )
+                    }
+                </Spin>
+            </Card>
         )
     }
 }

@@ -10,9 +10,7 @@ var router = express.Router();
 router.post('/getPoetries', verifyToken, async (req, res, next) => {
     const { current, pageSize, filterObj } = req.body;
     const { _id: user_id } = req.body.user;
-
     const findObj = getMatchingFilterObj(filterObj);
-
     const total = await PoetryModel.find(findObj).countDocuments();
     if (total === 0) {
         res.json({
@@ -22,7 +20,6 @@ router.post('/getPoetries', verifyToken, async (req, res, next) => {
             total: 0,
         })
     }
-
     if (total - (current - 1) * pageSize > 0) {
         PoetryModel.find(
             findObj,
@@ -39,7 +36,6 @@ router.post('/getPoetries', verifyToken, async (req, res, next) => {
                         FavoritePoetryModel.findOne(poetry_like)
                     );
                 }
-
                 Promise.all(poetry_like_arr).then((like_docs) => {
                     for (let i = 0; i < like_docs.length; ++i) {
                         if (like_docs[i]) {
@@ -53,7 +49,6 @@ router.post('/getPoetries', verifyToken, async (req, res, next) => {
                         total,
                     })
                 })
-
             }).catch((e) => {
                 res.json({
                     ...FAIL_MSG,
@@ -75,7 +70,6 @@ router.post('/getPoetries', verifyToken, async (req, res, next) => {
 router.post('/like', verifyToken, verifyUser, async (req, res, next) => {
     const { _id: user_id } = req.body.user; //用户id
     const { poetry_id } = req.body; // 前端发送来的诗词id
-
     FavoritePoetryModel.create({ user_id, poetry_id }).then((doc) => {
         res.json({
             ...SUCCESS_MSG,
@@ -91,14 +85,12 @@ router.post('/like', verifyToken, verifyUser, async (req, res, next) => {
 router.post('/dislike', verifyToken, verifyUser, async (req, res, next) => {
     const { _id: user_id } = req.body.user; //用户id
     const { poetry_id } = req.body; // 前端发送来的诗词id
-
     FavoritePoetryModel.remove({ user_id, poetry_id }).then((doc) => {
         res.json({
             ...SUCCESS_MSG,
             message: "取消收藏成功",
         })
     })
-
 });
 
 

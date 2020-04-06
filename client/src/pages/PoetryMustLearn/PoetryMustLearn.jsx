@@ -4,18 +4,20 @@ import { getGradeSemester, getMustLearnPoetryList, getPoetryByTitle, addPoetry, 
 import "./PoetryMustLearn.less"
 import SeachPoetryModal from "./SearchPoetryModal/SearchPoetryModal";
 class PoetryMustLearn extends Component {
-
-    state = {
-        gradeSemesterList: [], // 级联选择器的options
-        gradeSemester: "0,0", // 年级＋学期的表示
-        poetryList: [], //主页面下方的诗词列表的数据
-        loading: true, // 加载中？
-        modalVisible: false, //modal可视？
-        searchText: "", // 搜索标题的字符
-        searchedPoetryList: [],
-        searchedLoading: false,
-        gradeColRowSpan: [],
-        semesterColRowSpan: [],
+    constructor(props) {
+        super(props);
+        this.state = {
+            gradeSemesterList: [], // 级联选择器的options
+            gradeSemester: "0,0", // 年级＋学期的表示
+            poetryList: [], //主页面下方的诗词列表的数据
+            loading: true, // 加载中？
+            modalVisible: false, //modal可视？
+            searchText: "", // 搜索标题的字符
+            searchedPoetryList: [],
+            searchedLoading: false,
+            gradeColRowSpan: [],
+            semesterColRowSpan: [],
+        }
     }
 
     componentDidMount() {
@@ -70,7 +72,6 @@ class PoetryMustLearn extends Component {
                     }, () => {
                         const gradeColRowSpan = this.calcColRowSpan(this.state.poetryList, "grade");
                         const semesterColRowSpan = this.calcColRowSpan(this.state.poetryList, "semester");
-
                         this.setState({
                             gradeColRowSpan,
                             semesterColRowSpan
@@ -106,11 +107,9 @@ class PoetryMustLearn extends Component {
     calcColRowSpan = (dataList, dataIndex) => {
         const colRowSpanArr = [];
         const len = dataList.length
-
         if (len === 0) {
             return [];
         }
-
         let count = 0;
         for (let i = len - 1; i > 0; --i) {
             if (dataList[i][dataIndex] === dataList[i - 1][dataIndex]) {
@@ -236,7 +235,6 @@ class PoetryMustLearn extends Component {
         const hideModal = () => {
             this.setModalVisible(false)
         }
-
         return {
             visible: this.state.modalVisible,
             hideModal: hideModal,
@@ -252,14 +250,14 @@ class PoetryMustLearn extends Component {
     render() {
         const showBtn = this.state.gradeSemester === "0,0" ? false : true;
         return (
-            <div>
+            <>
                 <Card {...this.getCardProps()}>
                     <Cascader {...this.getCascaderProps()} />
                     {showBtn && <Button type="primary" className="btn-search" onClick={this.handleClickAdd}>添加诗词</Button>}
                     <Table {...this.getTableProps()} />
                 </Card>
                 <SeachPoetryModal {...this.getSeachPoetryModalProps()} />
-            </div>
+            </>
         )
     }
 }

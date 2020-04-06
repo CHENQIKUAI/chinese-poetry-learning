@@ -1,5 +1,4 @@
 var express = require('express');
-const config = require('config-lite')(__dirname);//读取配置
 const verifyToken = require("../middlewares/verifyToken")
 const verifyAdmin = require("../middlewares/verifyAdmin")
 const { PoetryModel } = require("../models/Poetry")
@@ -22,13 +21,9 @@ function deletePoetryRef(_id) {
 
 router.post('/getPoetries', verifyToken, async (req, res, next) => {
     const { current, pageSize, filterObj } = req.body;
-
     const findObj = getFuzzyMatchingFilterObj(filterObj);
-
     console.info(findObj);
-    
     const total = await PoetryModel.find(findObj).countDocuments()
-
     if (total === 0) {
         res.json({
             ...SUCCESS_MSG,
@@ -37,7 +32,6 @@ router.post('/getPoetries', verifyToken, async (req, res, next) => {
             total: 0,
         })
     }
-
     if (total - (current - 1) * pageSize > 0) {
         PoetryModel.find(findObj).skip((current - 1) * pageSize).limit(pageSize).then((docs) => {
             res.json({

@@ -1,7 +1,6 @@
 import React, { Component, createRef } from "react";
 import { withRouter } from "react-router-dom"
 import "./MyPoetry.less"
-import { POETRY_LEARNING } from "../Menu/menuConstants";
 import { likePoetry, dislikePoetry } from "../../services/PoetrySearchService";
 import { message, Icon } from "antd";
 import ImgLike from "../../img/like.png";
@@ -29,7 +28,6 @@ class MyPoetry extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.data !== this.props.data) {
-
             const { like } = nextProps.data;
             if (like) {
                 this.setState({
@@ -101,7 +99,6 @@ class MyPoetry extends Component {
 
     handleClickSound = () => {
         const audio = this.audioRef.current;
-
         this.setState((state) => ({
             audioVisible: !state.audioVisible,
         }), () => {
@@ -130,7 +127,6 @@ class MyPoetry extends Component {
             type,
             audioUrl,
         } = this.props.data || {};
-
         return (
             <div className="my-poetry">
                 <div>

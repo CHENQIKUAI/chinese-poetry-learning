@@ -82,16 +82,18 @@ class LearningCenter extends Component {
     }
 
     render() {
-
         return (
-            <div>
+            <div className="learning-center-container">
                 {
-                    (this.isBtnsVisible() && (<Affix offsetBottom="100px" style={{ zIndex: "1000", position: 'absolute', bottom: "100px", right: "100px" }}>
-                        <div>
-                            <Button type={this.state.mode === MODE_RECITE ? "primary" : "default"} onClick={this.handleClickRecite} shape="circle-outline">背</Button>
-                            <Button type={this.state.mode === MODE_DICTATE ? "primary" : "default"} onClick={this.handleClickDictate} shape="circle">默</Button>
-                        </div>
-                    </Affix>))
+                    this.isBtnsVisible() &&
+                    (
+                        <Affix style={{ zIndex: "1000", position: 'fixed', bottom: "100px", right: "100px" }}>
+                            <div>
+                                <Button type={this.state.mode === MODE_RECITE ? "primary" : "default"} onClick={this.handleClickRecite} shape="circle-outline">背</Button>
+                                <Button type={this.state.mode === MODE_DICTATE ? "primary" : "default"} onClick={this.handleClickDictate} shape="circle">默</Button>
+                            </div>
+                        </Affix>
+                    )
                 }
                 {
                     (this.isReciteVisible() && <Recite />)

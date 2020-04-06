@@ -6,7 +6,6 @@ const { PoetryModel } = require("../models/Poetry")
 const { FAIL_MSG, SUCCESS_MSG } = require('../constants');
 var router = express.Router();
 
-
 /**
  * poetry_id, grade_semester
  */
@@ -71,17 +70,7 @@ router.post('/getMustLearnPoetryList', verifyToken, verifyAdmin, async (req, res
             }
 
             MustLearnPoetryModel.find(findObj).then((docs) => {
-                /**
-                 * docs数组中每项的内容
-                 * 
-                 * grade_semester
-                 * poetry_id
-                 * 是以上两个字段
-                 */
-
-
                 const requestArr = [];
-
                 for (let i = 0; i < docs.length; ++i) {
                     const poetry_id = docs[i].poetry_id;
                     requestArr.push(
@@ -95,7 +84,6 @@ router.post('/getMustLearnPoetryList', verifyToken, verifyAdmin, async (req, res
                             })
                     );
                 }
-
                 Promise.all(requestArr).then((poetry_docs) => {
                     const arr = poetry_docs.map((item, index) => {
                         const str = docs[index]._doc.grade_semester;
@@ -106,12 +94,9 @@ router.post('/getMustLearnPoetryList', verifyToken, verifyAdmin, async (req, res
                             _id: docs[index]._doc._id,
                         }
                     })
-
                     arr.sort((pa, pb) => {
-
                         const aGrade = pa.grade;
                         const aSemester = pa.semester
-
                         const bGrade = pb.grade;
                         const bSemester = pb.semester;
                         if (aGrade < bGrade) {
@@ -128,12 +113,10 @@ router.post('/getMustLearnPoetryList', verifyToken, verifyAdmin, async (req, res
                             return 1;
                         }
                     })
-
                     res.json({
                         ...SUCCESS_MSG,
                         result: arr,
                     })
-
                 }).catch((error) => {
                     res.json({
                         ...FAIL_MSG,
@@ -141,7 +124,6 @@ router.post('/getMustLearnPoetryList', verifyToken, verifyAdmin, async (req, res
                         error,
                     })
                 })
-
             }).catch((error) => {
                 res.json({
                     ...FAIL_MSG,
@@ -149,14 +131,12 @@ router.post('/getMustLearnPoetryList', verifyToken, verifyAdmin, async (req, res
                     error,
                 })
             })
-
         }
     }
 });
 
 
 router.post('/getGradeSemester', verifyToken, verifyAdmin, async (req, res, next) => {
-
     const gradeSemesterArr = [
         {
             label: "小学",
@@ -174,17 +154,14 @@ router.post('/getGradeSemester', verifyToken, verifyAdmin, async (req, res, next
             children: [],
         }
     ];
-
     const gradeName = [
         '一年级', '二年级', '三年级', '四年级', '五年级', '六年级',
         '初一', '初二', '初三',
         '高一', '高二', '高三',
     ];
-
     const semesterName = [
         '上册', '下册'
     ]
-
     for (let grade = 1; grade <= 12; ++grade) {
         let tempArr;
         if (grade <= 6) {
@@ -194,7 +171,6 @@ router.post('/getGradeSemester', verifyToken, verifyAdmin, async (req, res, next
         } else {
             tempArr = gradeSemesterArr[2].children;
         }
-
         tempArr.push({
             value: `${grade}`,
             label: `${gradeName[grade - 1]}`,
@@ -210,7 +186,6 @@ router.post('/getGradeSemester', verifyToken, verifyAdmin, async (req, res, next
             ]
         });
     }
-
     res.json({
         ...SUCCESS_MSG,
         result: gradeSemesterArr
@@ -223,10 +198,8 @@ router.post('/getGradeSemester', verifyToken, verifyAdmin, async (req, res, next
  * searchText
  */
 router.post('/findByTitle', verifyToken, (req, res, next) => {
-
     const { searchText } = req.body;
     const text = (searchText + "").trim();
-
     PoetryModel.find(
         {
             title: new RegExp(text, "g")
