@@ -1,0 +1,5 @@
+{"_id":{"$oid":"5e528d7b1175e653e0fe4970"},"username":"chenqikuai","password":"601f1889667efaebb33b8c12572835da3f027f78","year_first_grade":2019,"type":1,"__v":0}
+{"_id":{"$oid":"5e528e2cb845b78c7c92893b"},"username":"admin","password":"601f1889667efaebb33b8c12572835da3f027f78","year_first_grade":2008,"type":0,"__v":0}
+{"_id":{"$oid":"5e6cd757448a9a0aec060fcb"},"username":"AppleOfMyEye","password":"601f1889667efaebb33b8c12572835da3f027f78","year_first_grade":2018,"type":1,"__v":0}
+{"_id":{"$oid":"5e6cd8ae27c2792834443a6a"},"username":"lkajsdf","password":"601f1889667efaebb33b8c12572835da3f027f78","year_first_grade":2012,"type":1,"__v":0}
+{"_id":{"$oid":"5e89a1791fb27b2d9cd20b4b"},"username":"user_007","password":"601f1889667efaebb33b8c12572835da3f027f78","year_first_grade":2012,"type":1,"__v":0}

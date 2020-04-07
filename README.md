@@ -1,22 +1,39 @@
-# what is it ?
-It's my graduation project's demo
+# 1. 环境安装
+nodejs 
+mongodb
 
-# how to start it?
-You should install mongodb before you take the steps.
+# 2. 数据导入
+打开database文件夹, 执行脚本mongoimport.sh
+```shell
+sh mongoimport.sh
 ```
+
+# 安装nppm包
+```shell
 cd client
-yarn
-yarn start
+npm install
+
+cd server 
+npm install
+
 ```
-```
+
+# 启动项目
+
+```shell
+cd client 
+npm start
+
 cd server
-yarn
-yarn start
+npm start
 ```
 
-# 2019.10.27 
-The front end has not yet started.
-The backend part of the database is already connected.
-The registration, login, personal information, and exit interface have been preliminarily written.
+# 账号
 
+1. 管理员账号
+username: admin
+password: 123123
 
+2. 学生用户账号（可注册）
+username: chenqikuai
+password: 123123

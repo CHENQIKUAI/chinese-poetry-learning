@@ -1,0 +1,7 @@
+{"_id":{"$oid":"5e6cd834781ca431c8b2aaa8"},"title":"二年级下册必学诗词","user_id":"5e6cd757448a9a0aec060fcb","grade_semester":"2,2","__v":0,"cron":"0 0 * * * 3"}
+{"_id":{"$oid":"5e6cd8b627c2792834443a6b"},"title":"一年级下册必学诗词","user_id":"5e6cd8ae27c2792834443a6a","grade_semester":"1,2","__v":0,"cron":"0 0 * * * 3"}
+{"_id":{"$oid":"5e897430db525934f4ec052a"},"title":"初二下册必学诗词","user_id":"5e6cd8ae27c2792834443a6a","grade_semester":"8,2","__v":0}
+{"_id":{"$oid":"5e89beeed03cba423477df43"},"title":"一年级下册必学诗词","user_id":"5e89a1791fb27b2d9cd20b4b","grade_semester":"1,2","__v":0,"cron":"0 0 * * * 1"}
+{"_id":{"$oid":"5e89f7acd03cba423477df58"},"title":"初二下册必学诗词","user_id":"5e89a1791fb27b2d9cd20b4b","grade_semester":"8,2","__v":0}
+{"_id":{"$oid":"5e8ab94b84e90821b440c887"},"title":"一年级下册必学诗词","user_id":"5e528d7b1175e653e0fe4970","grade_semester":"1,2","__v":0,"cron":null}
+{"_id":{"$oid":"5e8abcafcc97f204b0b8e6b9"},"title":"活到老学到老","user_id":"5e528d7b1175e653e0fe4970","cron":"0 0 * * * 0,1,2,3,4,5,6","__v":0}
