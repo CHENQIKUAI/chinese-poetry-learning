@@ -3,8 +3,8 @@ nodejs
 mongodb
 
 # 2. 数据导入
-打开database文件夹, 执行脚本mongoimport.sh
 ```shell
+cd database
 sh mongoimport.sh
 ```
 
