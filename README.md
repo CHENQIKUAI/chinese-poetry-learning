@@ -1,6 +1,6 @@
 # 1. 环境安装
-nodejs 
-mongodb
+Node.js 
+MongoDB
 
 # 2. 数据导入
 ```shell
