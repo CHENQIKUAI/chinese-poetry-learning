@@ -1,17 +1,11 @@
-import React, { Component } from "react"
+import React, { useState, useEffect } from "react"
 import "./Time.less";
 
-class Time extends Component {
+export default function Time(props) {
+    const date = new Date();
+    const [time, setTime] = useState(date)
 
-    constructor(props) {
-        super(props);
-        const time = this.getTime();
-        this.state = {
-            time
-        }
-    }
-
-    getTime = () => {
+    const getTime = () => {
         var date = new Date();
         var week = date.getDay();
         var weekday;
@@ -40,30 +34,19 @@ class Time extends Component {
         return time;
     }
 
-
-    componentDidMount() {
-        this.clockID = setInterval(() => {
-            const time = this.getTime();
-            this.setState({
-                time: time
-            })
-
+    useEffect(() => {
+        const clockID = setInterval(() => {
+            setTime(new Date());
         }, 1000);
-    }
 
-    componentWillUnmount() {
-        clearInterval(this.clockID);
-    }
+        return () => {
+            clearInterval(clockID);
+        }
+    }, [])
 
-    render() {
-        return (
-            <div className="cmp-time" style={this.props.style}>
-                {
-                    this.state.time
-                }
-            </div>
-        )
-    }
+    return (
+        <div className="cmp-time" style={props.style}>
+            {getTime(time)}
+        </div>
+    )
 }
-
-export default Time;
