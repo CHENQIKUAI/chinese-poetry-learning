@@ -1,6 +1,6 @@
 # 1. 环境安装
-nodejs 
-mongodb
+Node.js 
+MongoDB
 
 # 2. 数据导入
 ```shell
@@ -8,7 +8,7 @@ cd database
 sh mongoimport.sh
 ```
 
-# 安装nppm包
+# 3. 安装npm包
 ```shell
 cd client
 npm install
@@ -18,7 +18,7 @@ npm install
 
 ```
 
-# 启动项目
+# 4. 启动项目
 
 ```shell
 cd client 
@@ -28,7 +28,7 @@ cd server
 npm start
 ```
 
-# 账号
+# 登录账号
 
 1. 管理员账号
 username: admin
