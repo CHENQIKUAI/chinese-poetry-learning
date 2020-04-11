@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import { Modal, Form, message } from "antd"
-import "./MyModal.less"
+import "./style.less"
 
 const FormItem = Form.Item;
 
-class MyModal extends Component {
+class WriterModal extends Component {
 
     onOkCallback = () => {
         this.props.callback();
@@ -40,7 +40,6 @@ class MyModal extends Component {
                 console.log(errors);
             }
         })
-
     }
 
     handleClearMemory = () => {
@@ -90,7 +89,6 @@ class MyModal extends Component {
         return this.props.fieldsConfig;
     }
 
-
     render() {
         const fieldsConfig = this.getFielsConfig();
         const form = this.getForm();
@@ -100,24 +98,26 @@ class MyModal extends Component {
             <Modal {...this.getModalProps()}>
                 <Form>
                     {
-                        fieldsConfig && fieldsConfig.map((item) => (
-                            <FormItem
-                                key={item.id}
-                                label={item.label}
-                                labelCol={item.labelCol}
-                                wrapperCol={item.wrapperCol}
-                                style={{ display: (item.hide ? "none" : "") }}
-                            >
-                                {
-                                    getFieldDecorator(item.id, {
-                                        rules: item.rules,
-                                        initialValue: null,
-                                    })(
-                                        item.formControl
-                                    )
-                                }
-                            </FormItem>
-                        ))
+                        fieldsConfig && fieldsConfig.map((item) => {
+                            return (
+                                <FormItem
+                                    key={item.id}
+                                    label={item.label}
+                                    labelCol={item.labelCol}
+                                    wrapperCol={item.wrapperCol}
+                                    style={{ display: (item.hide ? "none" : "") }}
+                                >
+                                    {
+                                        getFieldDecorator(item.id, {
+                                            rules: item.rules,
+                                            initialValue: null,
+                                        })(
+                                            item.formControl
+                                        )
+                                    }
+                                </FormItem>
+                            )
+                        })
                     }
                 </Form>
             </Modal>
@@ -125,4 +125,4 @@ class MyModal extends Component {
     }
 }
 
-export default MyModal;
+export default WriterModal;

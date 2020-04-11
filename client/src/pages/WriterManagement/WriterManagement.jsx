@@ -3,8 +3,9 @@ import { Card, Table, Popconfirm, message, Button, Form, Input, Icon } from "ant
 import { pageSizeOptions, NAME_TITLE, NAME, HEADIMAGEURL_TITLE, HEADIMAGEURL, SIMPLEINTRO_TITLE, SIMPLEINTRO, DETAILINTRO_TITLE, DETAILINTRO, OPERATION_TITLE } from "./const";
 import { getWriters, deleteWriter, modifyWriter, createWriter } from "../../services/WriterService";
 import Highlighter from 'react-highlight-words';
-import MyModal from "../../Components/MyModal/MyModal";
+import WriterModal from "../../Components/WriterModal/WriterModal";
 import TextArea from "antd/lib/input/TextArea";
+import DetailIntro from "./Components/DetailIntro"
 import "./WriterManagement.less"
 
 class AuthorManagement extends Component {
@@ -342,7 +343,7 @@ class AuthorManagement extends Component {
             {
                 label: "详细介绍",
                 id: "detailIntro",
-                formControl: <TextArea rows={6} autoComplete="off" />,
+                formControl: <DetailIntro />,
                 labelCol: { span: 4 },
                 wrapperCol: { span: 20 },
             },
@@ -403,12 +404,10 @@ class AuthorManagement extends Component {
                 <Card {...this.getCardProps()}>
                     <Table {...this.getTableProps()} />
                 </Card>
-                <MyModal {...this.getMyModalProps()} />
+                <WriterModal {...this.getMyModalProps()} />
             </>
         )
     }
-
 }
 
-
-export default Form.create({ name: "my-modal" })(AuthorManagement)
+export default Form.create({ name: "writer-modal" })(AuthorManagement)
