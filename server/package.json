@@ -7,7 +7,7 @@
     "npm": "6.4.1"
   },
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "config-lite": "2.1.0",
