@@ -34,36 +34,45 @@ class Signup extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            loading: false
+        }
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const { validateFields } = this.props.form;
-        validateFields((errors, values) => {
-            if (!errors) {
-                const name = values[nameField];
-                const password = values[passwordField];
-                const grade = values[gradeField][1];
+        this.setState({
+            loading: true
+        }, () => {
+            setTimeout(() => {
+                const { validateFields } = this.props.form;
+                validateFields((errors, values) => {
+                    if (!errors) {
+                        const name = values[nameField];
+                        const password = values[passwordField];
+                        const grade = values[gradeField][1];
 
-                SignupService.signup(name, password, grade).then((res_data) => {
-                    const { token, type, username } = res_data;
-                    if (token) {
-                        setToken(token);
-                        setType(type);
-                        setUsername(username);
-                        this.props.history.push(HOME_PATH);
-                        message.info(SIGNUP_SUCCESS_MESSAGE);
+                        SignupService.signup(name, password, grade).then((res_data) => {
+                            const { token, type, username } = res_data;
+                            if (token) {
+                                setToken(token);
+                                setType(type);
+                                setUsername(username);
+                                this.props.history.push(HOME_PATH);
+                                message.info(SIGNUP_SUCCESS_MESSAGE);
+                            }
+
+                            if (res_data.code === -1) {
+                                message.error(res_data.message)
+                            }
+                        }).catch((err) => {
+                            message.error("出错啦", JSON.stringify(err));
+                        })
+
                     }
-
-                    if (res_data.code === -1) {
-                        message.error(res_data.message)
-                    }
-                }).catch((err) => {
-                    message.error("出错啦", JSON.stringify(err));
-                })
-
-            }
-        });
+                });
+            }, 500);
+        })
     }
 
 
@@ -197,7 +206,7 @@ class Signup extends Component {
                         </FormItem>
                         <div className="text-align-div">
                             <h1 className="signup-tips">已有帐号？<span className="btn-go-to-signin" onClick={this.handleGoToSignin}>直接登录»</span></h1>
-                            <Button htmlType="submit">{submitName}</Button>
+                            <Button loading={this.state.loading} htmlType="submit">{submitName}</Button>
                         </div>
                     </Form>
                 </div>
