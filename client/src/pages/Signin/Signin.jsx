@@ -14,7 +14,8 @@ class Signin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loginStatus: SUCCESS
+            loginStatus: SUCCESS,
+            loading: false,
         }
 
     }
@@ -22,38 +23,43 @@ class Signin extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+        this.setState({
+            loading: true
+        }, () => {
+            setTimeout(() => {
+                const { validateFields } = this.props.form;
+                validateFields((errors, values) => {
+                    if (!errors) {
+                        const name = values[nameField];
+                        const password = values[passwordField];
 
-        const { validateFields } = this.props.form;
-        validateFields((errors, values) => {
-            if (!errors) {
-                const name = values[nameField];
-                const password = values[passwordField];
+                        signin(name, password).then((data) => {
+                            if (data.code === 1) {
+                                const { token, type, username } = data;
+                                setToken(token);
+                                setType(type);
+                                setUsername(username);
 
-                signin(name, password).then((data) => {
-                    if (data.code === 1) {
-                        const { token, type, username } = data;
-                        setToken(token);
-                        setType(type);
-                        setUsername(username);
-
-                        this.props.history.push("/");
-                        message.success(LOGIN_SUCCESS_MESSAGE);
-                    } else {
-                        this.setState({
-                            loginStatus: ERROR
+                                this.props.history.push("/");
+                                message.success(LOGIN_SUCCESS_MESSAGE);
+                            } else {
+                                this.setState({
+                                    loginStatus: ERROR
+                                })
+                                setTimeout(() => {
+                                    this.setState({
+                                        loginStatus: SUCCESS
+                                    })
+                                }, 1500);
+                            }
+                        }).catch((err) => {
+                            console.error(err, "web")
+                            message.error(err)
                         })
-                        setTimeout(() => {
-                            this.setState({
-                                loginStatus: SUCCESS
-                            })
-                        }, 1500);
                     }
-                }).catch((err) => {
-                    console.error(err, "web")
-                    message.error(err)
-                })
-            }
-        });
+                });
+            }, 500);
+        })
     }
 
 
@@ -103,7 +109,7 @@ class Signin extends Component {
                         </FormItem>
                         <div className="text-align-div">
                             <h1 className="signin-tips">还没有账号？<span className="go-to-signup" onClick={this.handleGoToSignup}>立即注册!</span></h1>
-                            <Button htmlType="submit" className="btn-signin">登录</Button>
+                            <Button loading={this.state.loading} htmlType="submit" className="btn-signin">登录</Button>
                         </div>
                     </Form>
                 </div>
