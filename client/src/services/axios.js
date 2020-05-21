@@ -21,9 +21,14 @@ export default function ajax(url, data = {}, type = 'GET') {
         } else { // 发POST请求
             // 把token放在请求参数中
             if (token) {
-                data = { ...data, token };
+                promise = axios.post(url, data, {
+                    headers: {
+                        "authorization": 'bearer ' + token,
+                    }
+                })
+            } else {
+                promise = axios.post(url, data)
             }
-            promise = axios.post(url, data)
         }
         promise.then(response => {
             // 2. 如果成功了, 调用resolve(value),传递结果
