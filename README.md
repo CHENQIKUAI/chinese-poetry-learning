@@ -37,3 +37,6 @@ password: 123123
 2. 学生用户账号（可注册）
 username: chenqikuai
 password: 123123
+
+# 演示网址
+https://learn-poetry-frontend.herokuapp.com/
